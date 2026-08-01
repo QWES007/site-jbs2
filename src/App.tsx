@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 
 // ============================================================================
-// CONFIGURATION CENTRALISÉE DES MÉDIAS
+// CONFIGURATION CENTRALISÉE DES MÉDIAS (PHOTOS & LOGO)
+// Fichiers stockés dans le dossier public/ (ex: public/facade.jpg, public/technique.jpg)
 // ============================================================================
 const MEDIA_CONFIG = {
   logo: "/logo.png",
   heroBackground: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1600",
   facadeCard: "/facade.jpg",
   generalImage: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&q=80&w=800",
-  techniqueImage: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800",
+  techniqueImage: "/technique.jpg", // <--- Votre nouvelle photo locale
   actu1: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=600",
   actu2: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=600",
   actu3: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=600",
@@ -197,7 +198,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 3. SECTION FORMATIONS AVEC BOUTONS INTERACTIFS */}
+      {/* 3. SECTION FORMATIONS */}
       <section id="formations" className="max-w-7xl mx-auto px-4 lg:px-10 py-16 space-y-10">
         <div className="grid lg:grid-cols-2 gap-8">
           
@@ -242,7 +243,7 @@ export default function App() {
             </div>
           </div>
 
-          {/* Carte Technique Tertiaire */}
+          {/* Carte Technique Tertiaire (avec /technique.jpg) */}
           <div className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between">
             <div>
               <div className="relative h-64 overflow-hidden">
@@ -492,9 +493,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* ==================================================================== */}
-      {/* MODAL 1 : DÉTAILS DU CURSUS (ENSEIGNEMENT GÉNÉRAL OU TECHNIQUE) */}
-      {/* ==================================================================== */}
+      {/* MODAL : DÉTAILS CURSUS */}
       {detailsModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-6 shadow-2xl relative">
@@ -559,14 +558,11 @@ export default function App() {
         </div>
       )}
 
-      {/* ==================================================================== */}
-      {/* MODAL 2 : FORMULAIRE DE PRÉ-INSCRIPTION EN 4 ÉTAPES (CONFORME AI STUDIO) */}
-      {/* ==================================================================== */}
+      {/* MODAL : FORMULAIRE DE PRÉ-INSCRIPTION EN 4 ÉTAPES */}
       {inscriptionModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative border border-slate-100">
             
-            {/* Header Modal */}
             <div className="flex items-start justify-between border-b pb-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-[#0a2540] text-white rounded-xl flex items-center justify-center font-bold">
@@ -583,7 +579,6 @@ export default function App() {
               </button>
             </div>
 
-            {/* Barre de Progression */}
             <div className="space-y-1.5">
               <div className="flex justify-between text-xs font-bold text-[#0a2540]">
                 <span>Étape {inscriptionStep} sur 4 : {
@@ -598,7 +593,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* --- ÉTAPE 1 : CHOIX DE LA FILIÈRE --- */}
             {inscriptionStep === 1 && (
               <div className="space-y-4">
                 <h4 className="font-bold text-sm text-slate-800">1. Choisissez le parcours de formation souhaité :</h4>
@@ -630,7 +624,6 @@ export default function App() {
               </div>
             )}
 
-            {/* --- ÉTAPE 2 : NIVEAU & SERVICES --- */}
             {inscriptionStep === 2 && (
               <div className="space-y-4 text-xs">
                 <h4 className="font-bold text-sm text-slate-800">2. Sélectionnez la classe demandée et les options :</h4>
@@ -701,7 +694,6 @@ export default function App() {
               </div>
             )}
 
-            {/* --- ÉTAPE 3 : ÉTAT CIVIL --- */}
             {inscriptionStep === 3 && (
               <div className="space-y-4 text-xs">
                 <h4 className="font-bold text-sm text-slate-800">3. Renseignez l'état civil de l'élève et du tuteur :</h4>
@@ -747,7 +739,6 @@ export default function App() {
               </div>
             )}
 
-            {/* --- ÉTAPE 4 : RÉCAPITULATIF ET VALIDATION --- */}
             {inscriptionStep === 4 && (
               <div className="space-y-4 text-xs">
                 <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-center space-y-2">
@@ -769,7 +760,6 @@ export default function App() {
               </div>
             )}
 
-            {/* Boutons de navigation Modal */}
             <div className="flex justify-between pt-4 border-t">
               {inscriptionStep > 1 && inscriptionStep < 4 ? (
                 <button onClick={() => setInscriptionStep(prev => prev - 1)} className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold">
