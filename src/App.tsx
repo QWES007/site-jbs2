@@ -62,13 +62,8 @@ export default function App() {
           <a href="#contact" className="hover:text-[#0a2540] transition-colors pb-1">Nous Trouver</a>
         </nav>
 
-        {/* Boutons d'actions header */}
+        {/* Boutons d'actions header (Sans le bouton HTML Autonome) */}
         <div className="flex items-center gap-2 sm:gap-3">
-          <button className="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all">
-            <span className="material-symbols-outlined text-base">download</span>
-            <span>Fichier HTML Autonome</span>
-          </button>
-          
           <button 
             onClick={() => setAiOpen(true)}
             className="flex items-center gap-1.5 px-3 py-2 bg-[#f59e0b] hover:bg-[#d97706] text-white rounded-xl text-xs font-bold transition-all shadow-sm"
