@@ -1,14 +1,19 @@
-// Configuration des médias (Photos locales dans public/ + Fallbacks Unsplash)
+import React, { useState } from 'react';
+
+// ============================================================================
+// CONFIGURATION CENTRALISÉE DES MÉDIAS (PHOTOS & LOGO)
+// Placez vos fichiers dans le dossier public/ (ex: public/facade.jpg)
+// ============================================================================
 const MEDIA_CONFIG = {
-    logo: "/logo.png",
-    heroBackground: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1600",
-    facadeCard: "/facade.jpg", // <--- Remplacé par votre photo locale dans public/facade.jpg
-    generalImage: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&q=80&w=800",
-    techniqueImage: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800",
-    actu1: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=600",
-    actu2: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=600",
-    actu3: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=600",
-  };
+  logo: "/logo.png",
+  heroBackground: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1600",
+  facadeCard: "/facade.jpg", // <--- Votre photo locale dans public/facade.jpg
+  generalImage: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&q=80&w=800",
+  techniqueImage: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800",
+  actu1: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=600",
+  actu2: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=600",
+  actu3: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=600",
+};
 
 export default function App() {
   const [aiOpen, setAiOpen] = useState(false);
@@ -27,7 +32,7 @@ export default function App() {
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         sender: 'assistant',
-        text: 'Merci pour votre message ! Le secrétariat d\'Attécoubé Santé 3 est également joignable au +225 07 00 00 00 00.'
+        text: 'Merci pour votre message ! Le secrétariat d\'Attécoubé Santé 3 reste joignable pour tout complément d\'information.'
       }]);
     }, 600);
   };
@@ -461,7 +466,7 @@ export default function App() {
             </div>
           </div>
 
-          {/* Simulateur Carte Google Maps (Droite) */}
+          {/* Carte Google Maps (Droite) */}
           <div className="lg:col-span-8 bg-slate-200 rounded-3xl h-72 lg:h-80 border border-slate-300 relative overflow-hidden flex items-center justify-center shadow-inner">
             <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#0a2540_1px,transparent_1px)] [background-size:16px_16px]" />
             <div className="bg-white p-6 rounded-3xl shadow-xl text-center space-y-3 z-10 max-w-sm border border-slate-100">
