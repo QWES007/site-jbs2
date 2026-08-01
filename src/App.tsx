@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 
-// --- DONNÉES STATIQUES ---
+// --- DONNÉES STATIQUES DU COLLÈGE ---
 const SCHOOL_INFO = {
   name: "Collège Privé Technique Jean Baptiste de La Salle 2",
   shortName: "J.B. de La Salle 2",
@@ -13,11 +13,11 @@ const SCHOOL_INFO = {
   phone1: "+225 07 00 00 00 01",
   phone2: "+225 05 00 00 00 02",
   email: "contact@lasalle2-attecoube.ci",
+  logoUrl: "/logo.png", // <--- Fichier logo placé dans public/
+  heroImage: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1000",
   generalImage: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&q=80&w=1000",
   technicalImage: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1000",
 };
-
-const schoolFacadeImg = "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1000";
 
 const FORMATIONS_DATA = {
   general: {
@@ -37,7 +37,6 @@ const FORMATIONS_DATA = {
 };
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('accueil');
   const [aiOpen, setAiOpen] = useState(false);
   const [messages, setMessages] = useState([
     { id: '1', sender: 'assistant', text: 'Bonjour ! Je suis l\'Assistant Virtuel Officiel de Jean Baptiste de La Salle 2. Posez-moi vos questions sur nos séries, nos tarifs ou les inscriptions !' }
@@ -60,15 +59,17 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] text-[#191c1d] font-sans">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 px-4 sm:px-8 py-3 flex items-center justify-between">
+      {/* Header avec Logo */}
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 px-4 sm:px-8 py-3 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#002046] flex items-center justify-center text-white font-bold">
-            <span className="material-symbols-outlined text-2xl">school</span>
-          </div>
+          <img 
+            src={SCHOOL_INFO.logoUrl} 
+            alt="Logo Collège JBS2" 
+            className="h-12 w-auto object-contain"
+          />
           <div>
-            <span className="font-extrabold text-lg text-[#002046]">J.B. de La Salle 2</span>
-            <p className="text-xs text-gray-500">Attécoubé Santé 3 • DRENA 3</p>
+            <span className="font-extrabold text-lg text-[#002046] block leading-tight">{SCHOOL_INFO.shortName}</span>
+            <p className="text-xs text-gray-500">{SCHOOL_INFO.district} • {SCHOOL_INFO.drena}</p>
           </div>
         </div>
 
@@ -81,16 +82,16 @@ export default function App() {
         </button>
       </header>
 
-      {/* Hero */}
-      <section className="relative min-h-[500px] flex items-center bg-[#002046] text-white px-4 sm:px-12 py-12">
+      {/* Hero Section */}
+      <section className="relative min-h-[480px] flex items-center bg-[#002046] text-white px-4 sm:px-12 py-12">
         <div className="max-w-3xl space-y-4 z-10">
-          <span className="px-3 py-1 bg-[#cba72f] text-[#241a00] text-xs font-extrabold rounded-full uppercase">
+          <span className="px-3 py-1 bg-[#cba72f] text-[#241a00] text-xs font-extrabold rounded-full uppercase tracking-wider">
             Établissement d'Excellence • DRENA 3
           </span>
           <h1 className="text-3xl sm:text-5xl font-extrabold leading-tight">
             L'Excellence Éducative et Technique au Cœur d'Attécoubé
           </h1>
-          <p className="text-gray-200 text-sm sm:text-base font-serif">
+          <p className="text-gray-200 text-sm sm:text-base font-serif leading-relaxed">
             Le Collège Privé Technique Jean Baptiste de La Salle 2 forme les leaders de demain à travers un enseignement général rigoureux et un pôle technique tertiaire de haut niveau.
           </p>
         </div>
@@ -110,16 +111,16 @@ export default function App() {
               <div className="p-5 space-y-2">
                 <span className="text-[11px] font-bold text-[#046c50] uppercase">{data.badge}</span>
                 <h3 className="text-xl font-bold text-[#002046]">{data.title}</h3>
-                <p className="text-xs text-gray-600 font-serif">{data.description}</p>
+                <p className="text-xs text-gray-600 font-serif leading-relaxed">{data.description}</p>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Modal AI Assistant */}
+      {/* Modal IA */}
       {aiOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-2xl max-w-md w-full h-[500px] flex flex-col shadow-2xl overflow-hidden">
             <div className="p-4 bg-[#002046] text-white flex justify-between items-center">
               <span className="font-bold text-sm flex items-center gap-2">
