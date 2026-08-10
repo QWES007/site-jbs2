@@ -27,6 +27,188 @@ const SCHOOL_INFO = {
   mapsUrl: "https://www.google.com/maps?q=5.340777,-4.052753",
 };
 
+// ============================================================================
+// COMPOSANT: RECHERCHE DE BULLETIN NUMÉRIQUE (Lit le notes.json)
+// ============================================================================
+function BulletinNumeriqueSearch() {
+  const [query, setQuery] = useState('');
+  const [searching, setSearching] = useState(false);
+  const [student, setStudent] = useState<any | null>(null);
+  const [error, setError] = useState('');
+
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!query.trim()) return;
+    setSearching(true);
+    setError('');
+    setStudent(null);
+
+    try {
+      // Chargement instantané du fichier JSON généré
+      const res = await fetch('/notes.json');
+      if (!res.ok) throw new Error("Fichier introuvable");
+      const data = await res.json();
+      
+      const searchTerm = query.toLowerCase().trim();
+      
+      // Recherche par matricule ou par nom
+      const found = data.find((s: any) => 
+        s.matricule.toLowerCase().includes(searchTerm) || 
+        s.nom.toLowerCase().includes(searchTerm)
+      );
+
+      if (found) {
+        setStudent(found);
+      } else {
+        setError(`Aucun élève trouvé pour "${query}". Vérifiez le matricule ou l'orthographe du nom.`);
+      }
+    } catch (err) {
+      setError("Impossible de charger les notes. Assurez-vous que les notes ont été exportées (fichier notes.json manquant).");
+    } finally {
+      setSearching(false);
+    }
+  };
+
+  return (
+    <div className="bg-[#0a2540] p-6 sm:p-8 rounded-3xl space-y-6 shadow-xl border border-white/10 mt-8">
+      <div className="flex flex-col md:flex-row items-center gap-4 border-b border-white/10 pb-6 text-center md:text-left">
+        <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-[#f59e0b] shrink-0">
+          <span className="material-symbols-outlined text-2xl">school</span>
+        </div>
+        <div>
+          <span className="bg-[#047857] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-md uppercase">
+            3ème TRIMESTRE 2025-2026
+          </span>
+          <h4 className="font-bold text-lg mt-1 text-white">Consulter le Bulletin Numérique</h4>
+          <p className="text-xs text-slate-300">Entrez le matricule ou le nom de l'élève pour générer le récapitulatif des moyennes.</p>
+        </div>
+      </div>
+
+      <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3">
+        <input
+          type="text"
+          placeholder="Ex: 25170040G ou BABOYEHE CHRIST..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="flex-1 p-3 bg-white/10 border border-white/20 rounded-xl text-xs text-white outline-none focus:border-[#f59e0b] placeholder-slate-400"
+        />
+        <button type="submit" disabled={searching} className="px-6 py-3 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors disabled:opacity-50">
+          {searching ? <span className="material-symbols-outlined animate-spin text-base">sync</span> : <span className="material-symbols-outlined text-base">search</span>}
+          Rechercher
+        </button>
+      </form>
+
+      {error && (
+        <div className="p-3 bg-red-500/20 text-red-200 text-xs rounded-xl flex items-center gap-2 border border-red-500/30">
+          <span className="material-symbols-outlined text-base">error</span> {error}
+        </div>
+      )}
+
+      {/* AFFICHAGE DU BULLETIN GÉNÉRÉ */}
+      {student && (
+        <div className="mt-6 bg-white rounded-2xl p-6 sm:p-8 text-slate-800 shadow-2xl relative overflow-hidden">
+          {/* Entête du bulletin */}
+          <div className="text-center border-b-2 border-slate-200 pb-4 mb-6 space-y-1">
+            <h3 className="font-extrabold text-xl text-[#0a2540]">{SCHOOL_INFO.shortName}</h3>
+            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Bulletin Récapitulatif - 3ème Trimestre</p>
+          </div>
+
+          {/* Infos Élève */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6 bg-slate-50 p-4 rounded-xl border border-slate-100">
+            <div className="col-span-2">
+              <p className="text-[10px] font-bold text-slate-400 uppercase">Nom & Prénoms</p>
+              <p className="font-bold text-sm text-[#0a2540]">{student.nom}</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold text-slate-400 uppercase">Matricule</p>
+              <p className="font-bold text-sm text-[#0a2540]">{student.matricule}</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold text-slate-400 uppercase">Classe</p>
+              <p className="font-bold text-sm text-[#047857]">{student.classe}</p>
+            </div>
+          </div>
+
+          {/* Tableau des notes */}
+          <div className="border border-slate-200 rounded-xl overflow-hidden mb-6">
+            <table className="w-full text-xs text-left">
+              <thead className="bg-[#0a2540] text-white">
+                <tr>
+                  <th className="p-3 font-bold">Matière</th>
+                  <th className="p-3 font-bold text-center w-24">Note / 20</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                
+                {/* Logique Spéciale pour le Français */}
+                {student.francais && student.francais.globale && (
+                  <>
+                    <tr className="bg-slate-50">
+                      <td className="p-3 font-bold text-[#0a2540]">Français (Moyenne Globale)</td>
+                      <td className={`p-3 font-bold text-center ${Number(student.francais.globale) >= 10 ? 'text-[#047857]' : 'text-red-600'}`}>
+                        {student.francais.globale}
+                      </td>
+                    </tr>
+                    {student.francais.comp && (
+                      <tr className="text-slate-500 text-[11px]">
+                        <td className="p-2 pl-8 flex items-center gap-2"><span className="w-1.5 h-1.5 bg-slate-300 rounded-full"></span> Composition Française</td>
+                        <td className="p-2 text-center">{student.francais.comp}</td>
+                      </tr>
+                    )}
+                    {student.francais.ortho && (
+                      <tr className="text-slate-500 text-[11px]">
+                        <td className="p-2 pl-8 flex items-center gap-2"><span className="w-1.5 h-1.5 bg-slate-300 rounded-full"></span> Orthographe-Grammaire</td>
+                        <td className="p-2 text-center">{student.francais.ortho}</td>
+                      </tr>
+                    )}
+                    {student.francais.oral && (
+                      <tr className="text-slate-500 text-[11px]">
+                        <td className="p-2 pl-8 flex items-center gap-2"><span className="w-1.5 h-1.5 bg-slate-300 rounded-full"></span> Expression Orale</td>
+                        <td className="p-2 text-center">{student.francais.oral}</td>
+                      </tr>
+                    )}
+                  </>
+                )}
+
+                {/* Autres Matières */}
+                {student.notes && Object.entries(student.notes).map(([matiere, note]) => (
+                  <tr key={matiere} className="hover:bg-slate-50 transition-colors">
+                    <td className="p-3 font-medium text-slate-700">{matiere}</td>
+                    <td className={`p-3 font-bold text-center ${Number(note) >= 10 ? 'text-[#047857]' : (Number(note) < 10 ? 'text-red-600' : 'text-slate-400')}`}>
+                      {note as React.ReactNode}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Résultat Final */}
+          <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-emerald-50 p-4 rounded-xl border border-emerald-100">
+            <div className="flex items-center gap-4 text-center sm:text-left">
+              <div className="w-16 h-16 bg-[#047857] text-white rounded-full flex items-center justify-center font-black text-xl shadow-md border-4 border-white">
+                {student.moyenne}
+              </div>
+              <div>
+                <p className="text-xs font-bold text-[#047857] uppercase tracking-wider">Moyenne Trimestrielle</p>
+                <p className="text-sm font-extrabold text-[#0a2540]">
+                  Rang : {student.rang !== 'N/A' && student.rang !== 'nan' ? student.rang : 'Non classé'}
+                </p>
+              </div>
+            </div>
+            <button onClick={() => window.print()} className="w-full sm:w-auto px-6 py-3 bg-[#0a2540] hover:bg-[#061726] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 transition-all shadow-md">
+              <span className="material-symbols-outlined text-base">print</span> Imprimer le bulletin
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ============================================================================
+// COMPOSANT PRINCIPAL
+// ============================================================================
 export default function App() {
   // --- ÉTATS DES MODALS ---
   const [aiOpen, setAiOpen] = useState(false);
@@ -301,7 +483,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 4. PORTAILS NUMÉRIQUES (MIS À JOUR AVEC VOS LIENS OFFICIELS) */}
+      {/* 4. PORTAILS NUMÉRIQUES */}
       <section id="portails" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
@@ -336,7 +518,6 @@ export default function App() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           
-          {/* Rubrique 1: Site de la DESPS */}
           <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 hover:shadow-md transition-shadow">
             <div className="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center text-[#0a2540]">
               <span className="material-symbols-outlined text-2xl">domain</span>
@@ -348,7 +529,6 @@ export default function App() {
             </a>
           </div>
 
-          {/* Rubrique 2: Calcul de Moyenne d'Orientation */}
           <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 hover:shadow-md transition-shadow">
             <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-[#f59e0b]">
               <span className="material-symbols-outlined text-2xl">calculate</span>
@@ -360,7 +540,6 @@ export default function App() {
             </a>
           </div>
 
-          {/* Rubrique 3: Enseignement Technique (ERSYS-CI) */}
           <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 hover:shadow-md transition-shadow">
             <div className="w-12 h-12 bg-[#0b3c5d]/10 rounded-2xl flex items-center justify-center text-[#0b3c5d]">
               <span className="material-symbols-outlined text-2xl">engineering</span>
@@ -372,7 +551,6 @@ export default function App() {
             </a>
           </div>
 
-          {/* Rubrique 4: Clubs & Vie Sociale */}
           <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 hover:shadow-md transition-shadow">
             <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-[#047857]">
               <span className="material-symbols-outlined text-2xl">groups</span>
@@ -381,31 +559,11 @@ export default function App() {
             <p className="text-xs text-slate-500 leading-relaxed">Rejoignez nos clubs sportifs, d'art oratoire, de génie en herbe et informatique.</p>
             <button className="text-xs font-bold text-[#047857] flex items-center gap-1 hover:underline">Découvrir les clubs →</button>
           </div>
-
         </div>
 
-        <div className="bg-[#0a2540] text-white p-6 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-[#f59e0b]">
-              <span className="material-symbols-outlined text-2xl">badge</span>
-            </div>
-            <div>
-              <span className="bg-[#047857] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-md uppercase">
-                EXEMPLE DE BULLETIN NUMÉRIQUE
-              </span>
-              <h4 className="font-bold text-lg mt-1">Consulter le Bulletin Scolaire DRENA 3</h4>
-              <p className="text-xs text-slate-300">Affichez la simulation complète du bulletin avec moyennes pondérées et appréciations.</p>
-            </div>
-          </div>
-          <div className="flex gap-2 w-full md:w-auto">
-            <button className="flex-1 md:flex-initial px-4 py-2.5 bg-white text-[#0a2540] rounded-xl text-xs font-bold hover:bg-slate-100 transition-all">
-              3ème 1 (Kouassi Jean)
-            </button>
-            <button className="flex-1 md:flex-initial px-4 py-2.5 bg-[#047857] text-white rounded-xl text-xs font-bold hover:bg-[#065f46] transition-all">
-              Tle G2 (Yao Marie)
-            </button>
-          </div>
-        </div>
+        {/* L'APPEL AU NOUVEAU COMPOSANT EST ICI ! */}
+        <BulletinNumeriqueSearch />
+
       </section>
 
       {/* 5. ACTUALITÉS */}
@@ -825,7 +983,7 @@ export default function App() {
               ) : <div />}
 
               {inscriptionStep < 3 && (
-                <button onClick={() => setInscriptionStep(prev => prev + 1)} className="px-6 py-2.5 bg-[#0a2540] text-[#ffffff] rounded-xl text-xs font-bold flex items-center gap-1.5 ml-auto">
+                <button onClick={() => setInscriptionStep(prev => prev + 1)} className="px-6 py-2.5 bg-[#0a2540] text-white rounded-xl text-xs font-bold flex items-center gap-1.5 ml-auto">
                   <span>Étape Suivante</span>
                   <span className="material-symbols-outlined text-base">arrow_forward</span>
                 </button>
