@@ -1,62 +1,54 @@
-const xlsx = require('xlsx');
 const fs = require('fs');
+const XLSX = require('xlsx');
 
-const EXCEL_FILE = 'COLLECTE_MOYENNES_COLLEGE JEAN BAPTISTE DE LA SALLE 2 YOPOUGON MOSSIKRO_3è Trimestre_2025-2026.xlsx';
-const JSON_OUTPUT = 'public/notes.json';
+const workbook = XLSX.readFile('COLLECTE_MOYENNES_COLLEGE JEAN BAPTISTE DE LA SALLE 2 YOPOUGON MOSSIKRO_3è Trimestre_2025-2026.xlsx');
+const sheetName = workbook.SheetNames[0];
+const worksheet = workbook.Sheets[sheetName];
+const data = XLSX.utils.sheet_to_json(worksheet);
 
-function convertExcelToJson() {
-    try {
-        console.log(`Lecture du fichier ${EXCEL_FILE}...`);
-        
-        const workbook = xlsx.readFile(EXCEL_FILE);
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        
-        const rawData = xlsx.utils.sheet_to_json(worksheet, { defval: "" });
-        
-        console.log(`${rawData.length} lignes lues.`);
+const students = data.map((row, index) => {
+    return {
+        id: index + 1,
+        matricule: String(row['Matricule'] || ''),
+        nom: String(row['nom et prenoms'] || ''),
+        prenom: '',
+        classe: String(row['Classe'] || ''),
+        niveau: String(row['Niveau'] || ''),
+        moyenne: String(row['Moy Trim'] || '0'),
+        rang: String(row['Rang'] || 'N/A'),
+        francais: {
+            globale: row['Français'] !== undefined ? String(row['Français']) : null,
+            comp: row['Composition Française'] !== undefined ? String(row['Composition Française']) : null,
+            ortho: row['Orthographe-Grammaire'] !== undefined ? String(row['Orthographe-Grammaire']) : null,
+            oral: row['Expression Orale'] !== undefined ? String(row['Expression Orale']) : null
+        },
+        notes: {
+            Philosophie: row['Philosophie'] !== undefined ? String(row['Philosophie']) : undefined,
+            Anglais: row['Anglais'] !== undefined ? String(row['Anglais']) : undefined,
+            Maths: row['Maths'] !== undefined ? String(row['Maths']) : undefined,
+            Physique: row['Physique'] !== undefined ? String(row['Physique']) : undefined,
+            SVT: row['SVT'] !== undefined ? String(row['SVT']) : undefined,
+            HG: row['HG'] !== undefined ? String(row['HG']) : undefined,
+            All: row['All'] !== undefined ? String(row['All']) : undefined,
+            Esp: row['Esp'] !== undefined ? String(row['Esp']) : undefined,
+            EDHC: row['EDHC'] !== undefined ? String(row['EDHC']) : undefined,
+            AP: row['AP'] !== undefined ? String(row['AP']) : undefined,
+            Mus: row['Mus'] !== undefined ? String(row['Mus']) : undefined,
+            Tic: row['Tic'] !== undefined ? String(row['Tic']) : undefined,
+            Conduite: row['Conduite'] !== undefined ? String(row['Conduite']) : undefined,
+            EPS: row['EPS'] !== undefined ? String(row['EPS']) : undefined
+        }
+    };
+});
 
-        const processedData = rawData.map((row, index) => {
-            // Récupère la valeur complète depuis la colonne unique
-            const nomComplet = row['Nom & Prénoms'] || row['Nom'] || '';
-            
-            return {
-                id: index + 1,
-                matricule: String(row['Matricule'] || '').trim(),
-                nom: String(nomComplet).trim(), // Le nom complet est stocké ici
-                prenom: "", // Laissé vide puisque tout est regroupé dans 'nom'
-                classe: String(row['Classe'] || '').trim(),
-                niveau: String(row['Niveau'] || '').trim(),
-                moyenne: row['Moy Trim'] !== undefined ? String(row['Moy Trim']) : 'N/A',
-                rang: row['Rang'] !== undefined ? String(row['Rang']) : 'N/A',
-                francais: {
-                    globale: row['Français'] !== undefined ? String(row['Français']) : null,
-                    comp: row['Composition Française'] !== undefined ? String(row['Composition Française']) : null,
-                    ortho: row['Orthographe-Grammaire'] !== undefined ? String(row['Orthographe-Grammaire']) : null,
-                    oral: row['Expression Orale'] !== undefined ? String(row['Expression Orale']) : null
-                },
-                notes: {
-                    Anglais: row['Anglais'] !== undefined ? String(row['Anglais']) : null,
-                    Maths: row['Maths'] !== undefined ? String(row['Maths']) : null,
-                    Physique: row['Physique'] !== undefined ? String(row['Physique']) : null,
-                    SVT: row['SVT'] !== undefined ? String(row['SVT']) : null,
-                    HG: row['HG'] !== undefined ? String(row['HG']) : null,
-                    Philosophie: row['Philosophie'] !== undefined ? String(row['Philosophie']) : null,
-                    All: row['All'] !== undefined ? String(row['All']) : null,
-                    Esp: row['Esp'] !== undefined ? String(row['Esp']) : null,
-                    EDHC: row['EDHC'] !== undefined ? String(row['EDHC']) : null,
-                    Tic: row['Tic'] !== undefined ? String(row['Tic']) : null,
-                    Conduite: row['Conduite'] !== undefined ? String(row['Conduite']) : null,
-                    EPS: row['EPS'] !== undefined ? String(row['EPS']) : null
-                }
-            };
-        });
+// Nettoyage des notes non définies
+students.forEach(s => {
+    Object.keys(s.notes).forEach(key => {
+        if (s.notes[key] === undefined) {
+            delete s.notes[key];
+        }
+    });
+});
 
-        fs.writeFileSync(JSON_OUTPUT, JSON.stringify(processedData, null, 2), 'utf-8');
-        console.log(`Conversion réussie ! ${processedData.length} élèves exportés vers ${JSON_OUTPUT}`);
-    } catch (error) {
-        console.error('Erreur lors de la conversion :', error.message);
-    }
-}
-
-convertExcelToJson();
+fs.writeFileSync('./public/notes.json', JSON.stringify(students, null, 2), 'utf-8');
+console.log('Conversion réussie : ' + students.length + ' élèves exportés.');
