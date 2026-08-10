@@ -24,7 +24,7 @@ const SCHOOL_INFO = {
   phone: "07 48 627 869",
   phoneFormatted: "+225 07 48 62 78 69",
   email: "college.jbs2@gmail.com",
-  mapsUrl: "https://www.google.com/maps?q=5.340777,-4.052753", // <--- Coordonnées GPS exactes (L 14)
+  mapsUrl: "https://www.google.com/maps?q=5.340777,-4.052753",
 };
 
 export default function App() {
@@ -301,7 +301,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 4. PORTAILS NUMÉRIQUES */}
+      {/* 4. PORTAILS NUMÉRIQUES (MIS À JOUR AVEC VOS LIENS OFFICIELS) */}
       <section id="portails" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
@@ -309,7 +309,7 @@ export default function App() {
               ESPACE NUMÉRIQUE SÉCURISÉ
             </span>
             <h2 className="text-3xl font-extrabold text-[#0a2540] mt-2">Portails Numériques</h2>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1">Accédez à votre espace dédié et suivez la vie scolaire en temps réel.</p>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1">Accédez directement aux plateformes gouvernementales et scolaires officielles.</p>
           </div>
 
           <div className="bg-white p-1.5 rounded-2xl border border-slate-200 flex gap-1 shadow-sm">
@@ -335,33 +335,44 @@ export default function App() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          
+          {/* Rubrique 1: Site de la DESPS */}
           <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 hover:shadow-md transition-shadow">
             <div className="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center text-[#0a2540]">
-              <span className="material-symbols-outlined text-2xl">calendar_month</span>
+              <span className="material-symbols-outlined text-2xl">domain</span>
             </div>
-            <h3 className="font-bold text-base text-[#0a2540]">Emploi du Temps</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">Consultez vos horaires hebdomadaires et les salles de cours par classe.</p>
-            <button className="text-xs font-bold text-[#0a2540] flex items-center gap-1 hover:underline">Voir le planning →</button>
+            <h3 className="font-bold text-base text-[#0a2540]">Site de la DESPS</h3>
+            <p className="text-xs text-slate-500 leading-relaxed">Portail officiel de la Direction des Établissements Privés Scolaires de Côte d'Ivoire.</p>
+            <a href="https://mena-desps.org/" target="_blank" rel="noreferrer" className="text-xs font-bold text-[#0a2540] flex items-center gap-1 hover:underline">
+              Visiter le site →
+            </a>
           </div>
 
+          {/* Rubrique 2: Calcul de Moyenne d'Orientation */}
           <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 hover:shadow-md transition-shadow">
             <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-[#f59e0b]">
               <span className="material-symbols-outlined text-2xl">calculate</span>
             </div>
-            <h3 className="font-bold text-base text-[#0a2540]">Simulateur de Moyenne</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">Testez vos notes avec les coefficients BEPC & BAC G1/G2 pour estimer votre moyenne.</p>
-            <button className="text-xs font-bold text-[#f59e0b] flex items-center gap-1 hover:underline">Calculer ma moyenne →</button>
+            <h3 className="font-bold text-base text-[#0a2540]">Moyenne d'Orientation</h3>
+            <p className="text-xs text-slate-500 leading-relaxed">Consultez et calculez vos notes d'orientation BEPC sur le serveur officiel DOB.</p>
+            <a href="https://bourses.mendob.ci/index.php?adr=consultnotesbepc.inc" target="_blank" rel="noreferrer" className="text-xs font-bold text-[#f59e0b] flex items-center gap-1 hover:underline">
+              Calculer ma moyenne →
+            </a>
           </div>
 
+          {/* Rubrique 3: Enseignement Technique (ERSYS-CI) */}
           <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center text-[#0a2540]">
-              <span className="material-symbols-outlined text-2xl">gavel</span>
+            <div className="w-12 h-12 bg-[#0b3c5d]/10 rounded-2xl flex items-center justify-center text-[#0b3c5d]">
+              <span className="material-symbols-outlined text-2xl">engineering</span>
             </div>
-            <h3 className="font-bold text-base text-[#0a2540]">Règlement Intérieur</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">Les valeurs Lasalliennes, le port de l'uniforme et les règles de vie au collège.</p>
-            <button className="text-xs font-bold text-[#0a2540] flex items-center gap-1 hover:underline">Consulter le règlement →</button>
+            <h3 className="font-bold text-base text-[#0a2540]">Enseignement Technique</h3>
+            <p className="text-xs text-slate-500 leading-relaxed">Plateforme ERSYS-CI dédiée aux informations et diplômes de la formation technique.</p>
+            <a href="https://www.ersys-ci.net/" target="_blank" rel="noreferrer" className="text-xs font-bold text-[#0b3c5d] flex items-center gap-1 hover:underline">
+              Accéder à ERSYS-CI →
+            </a>
           </div>
 
+          {/* Rubrique 4: Clubs & Vie Sociale */}
           <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 hover:shadow-md transition-shadow">
             <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-[#047857]">
               <span className="material-symbols-outlined text-2xl">groups</span>
@@ -370,6 +381,7 @@ export default function App() {
             <p className="text-xs text-slate-500 leading-relaxed">Rejoignez nos clubs sportifs, d'art oratoire, de génie en herbe et informatique.</p>
             <button className="text-xs font-bold text-[#047857] flex items-center gap-1 hover:underline">Découvrir les clubs →</button>
           </div>
+
         </div>
 
         <div className="bg-[#0a2540] text-white p-6 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
@@ -813,7 +825,7 @@ export default function App() {
               ) : <div />}
 
               {inscriptionStep < 3 && (
-                <button onClick={() => setInscriptionStep(prev => prev + 1)} className="px-6 py-2.5 bg-[#0a2540] text-white rounded-xl text-xs font-bold flex items-center gap-1.5 ml-auto">
+                <button onClick={() => setInscriptionStep(prev => prev + 1)} className="px-6 py-2.5 bg-[#0a2540] text-[#ffffff] rounded-xl text-xs font-bold flex items-center gap-1.5 ml-auto">
                   <span>Étape Suivante</span>
                   <span className="material-symbols-outlined text-base">arrow_forward</span>
                 </button>
