@@ -17,15 +17,14 @@ function convertExcelToJson() {
         console.log(`${rawData.length} lignes lues.`);
 
         const processedData = rawData.map((row, index) => {
-            // Récupère le nom et le prénom selon la structure réelle du fichier Excel
-            const nomFamille = row['Nom & Prénoms'] || row['Nom'] || '';
-            const prenomEleve = row['Unnamed: 2'] || row['Prénoms'] || row['Prenoms'] || '';
+            // Récupère la valeur complète depuis la colonne unique
+            const nomComplet = row['Nom & Prénoms'] || row['Nom'] || '';
             
             return {
                 id: index + 1,
                 matricule: String(row['Matricule'] || '').trim(),
-                nom: String(nomFamille).trim(),
-                prenom: String(prenomEleve).trim(),
+                nom: String(nomComplet).trim(), // Le nom complet est stocké ici
+                prenom: "", // Laissé vide puisque tout est regroupé dans 'nom'
                 classe: String(row['Classe'] || '').trim(),
                 niveau: String(row['Niveau'] || '').trim(),
                 moyenne: row['Moy Trim'] !== undefined ? String(row['Moy Trim']) : 'N/A',
