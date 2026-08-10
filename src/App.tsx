@@ -2,17 +2,28 @@ import React, { useState } from 'react';
 
 // ============================================================================
 // CONFIGURATION CENTRALISÉE DES MÉDIAS (PHOTOS & LOGO)
-// Fichiers stockés dans le dossier public/ (ex: public/facade.jpg, public/technique.jpg)
 // ============================================================================
 const MEDIA_CONFIG = {
   logo: "/logo.png",
   heroBackground: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1600",
   facadeCard: "/facade.jpg",
   generalImage: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&q=80&w=800",
-  techniqueImage: "/technique.jpg", // <--- Votre nouvelle photo locale
+  techniqueImage: "/technique.jpg",
   actu1: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=600",
   actu2: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=600",
   actu3: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=600",
+};
+
+// ============================================================================
+// INFORMATIONS OFFICIELLES DU COLLÈGE
+// ============================================================================
+const SCHOOL_INFO = {
+  name: "Collège Privé Technique Jean Baptiste de La Salle 2",
+  shortName: "J.B. de La Salle 2",
+  address: "Attécoubé Santé 3, 23 BP 519 Abidjan 23",
+  phone: "07 48 627 869",
+  phoneFormatted: "+225 07 48 62 78 69",
+  email: "college.jbs2@gmail.com",
 };
 
 export default function App() {
@@ -40,7 +51,7 @@ export default function App() {
 
   // Assistant IA
   const [messages, setMessages] = useState([
-    { id: '1', sender: 'assistant', text: 'Bonjour ! Je suis l\'Assistant Virtuel du Collège J.B. de La Salle 2. Comment puis-je vous aider aujourd\'hui ?' }
+    { id: '1', sender: 'assistant', text: `Bonjour ! Je suis l'Assistant Virtuel du Collège J.B. de La Salle 2. Comment puis-je vous aider aujourd'hui ? Vous pouvez aussi contacter le secrétariat au ${SCHOOL_INFO.phone}.` }
   ]);
   const [inputValue, setInputValue] = useState('');
 
@@ -53,7 +64,7 @@ export default function App() {
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         sender: 'assistant',
-        text: 'Merci pour votre message ! Le secrétariat d\'Attécoubé Santé 3 reste joignable pour tout complément d\'information.'
+        text: `Merci pour votre message ! Le secrétariat d'Attécoubé Santé 3 reste joignable au ${SCHOOL_INFO.phone} ou par email à ${SCHOOL_INFO.email}.`
       }]);
     }, 600);
   };
@@ -77,7 +88,7 @@ export default function App() {
           <img src={MEDIA_CONFIG.logo} alt="Logo JBS2" className="h-11 w-auto object-contain" />
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-extrabold text-lg text-[#0a2540] tracking-tight">J.B. de La Salle 2</span>
+              <span className="font-extrabold text-lg text-[#0a2540] tracking-tight">{SCHOOL_INFO.shortName}</span>
               <span className="bg-[#0b3c5d] text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">DRENA 3</span>
             </div>
             <p className="text-xs text-slate-500 font-medium">Attécoubé Santé 3 • Abidjan</p>
@@ -130,7 +141,7 @@ export default function App() {
             </h1>
 
             <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-normal max-w-2xl">
-              Le <em>Collège Privé Technique Jean Baptiste de La Salle 2</em> forme les leaders de demain à travers un enseignement général rigoureux et un pôle technique tertiaire de haut niveau au service du développement ivoirien.
+              Le <em>{SCHOOL_INFO.name}</em> forme les leaders de demain à travers un enseignement général rigoureux et un pôle technique tertiaire de haut niveau au service du développement ivoirien.
             </p>
 
             <div className="flex flex-wrap gap-4 pt-2">
@@ -176,7 +187,7 @@ export default function App() {
                   Façade Officielle
                 </span>
                 <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 text-white">
-                  <h3 className="font-bold text-base">Collège J.B. de La Salle 2</h3>
+                  <h3 className="font-bold text-base">{SCHOOL_INFO.shortName}</h3>
                   <p className="text-xs text-slate-300 flex items-center gap-1">
                     <span className="material-symbols-outlined text-sm">location_on</span> Attécoubé Santé 3 • Abidjan
                   </p>
@@ -243,7 +254,7 @@ export default function App() {
             </div>
           </div>
 
-          {/* Carte Technique Tertiaire (avec /technique.jpg) */}
+          {/* Carte Technique Tertiaire */}
           <div className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between">
             <div>
               <div className="relative h-64 overflow-hidden">
@@ -434,7 +445,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 6. NOUS TROUVER & CONTACT */}
+      {/* 6. NOUS TROUVER & CONTACT (VRAIES COORDONNÉES INCLUSES) */}
       <section id="contact" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
         <div>
           <span className="bg-[#0a2540] text-white text-[11px] font-extrabold px-3 py-1 rounded-md uppercase tracking-wider">LOCALISATION & CONTACT</span>
@@ -444,33 +455,41 @@ export default function App() {
 
         <div className="grid lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-4 space-y-4">
+            
+            {/* Adresse & BP */}
             <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-4">
               <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-[#0a2540] shrink-0">
                 <span className="material-symbols-outlined">location_on</span>
               </div>
               <div>
                 <h4 className="font-bold text-sm text-[#0a2540]">Adresse Officielle</h4>
-                <p className="text-xs text-slate-500 mt-0.5">Attécoubé Santé 3, près de la cité RAN, Abidjan, Côte d'Ivoire</p>
+                <p className="text-xs text-slate-600 mt-0.5 font-medium">{SCHOOL_INFO.address}</p>
               </div>
             </div>
 
+            {/* Téléphone */}
             <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-4">
               <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-[#0a2540] shrink-0">
                 <span className="material-symbols-outlined">call</span>
               </div>
               <div>
-                <h4 className="font-bold text-sm text-[#0a2540]">Téléphones (Secrétariat)</h4>
-                <p className="text-xs text-slate-500 mt-0.5">+225 07 00 00 00 00 / +225 27 00 00 00 00</p>
+                <h4 className="font-bold text-sm text-[#0a2540]">Téléphone (Secrétariat)</h4>
+                <a href={`tel:${SCHOOL_INFO.phoneFormatted}`} className="text-xs text-slate-600 mt-0.5 font-bold hover:text-[#047857] transition-colors block">
+                  {SCHOOL_INFO.phone}
+                </a>
               </div>
             </div>
 
+            {/* Email */}
             <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-4">
               <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-[#0a2540] shrink-0">
                 <span className="material-symbols-outlined">mail</span>
               </div>
               <div>
                 <h4 className="font-bold text-sm text-[#0a2540]">Courrier Électronique</h4>
-                <p className="text-xs text-slate-500 mt-0.5">contact@lasalle2-abidjan.ci</p>
+                <a href={`mailto:${SCHOOL_INFO.email}`} className="text-xs text-slate-600 mt-0.5 font-bold hover:text-[#047857] transition-colors block">
+                  {SCHOOL_INFO.email}
+                </a>
               </div>
             </div>
           </div>
@@ -482,14 +501,39 @@ export default function App() {
                 <span className="material-symbols-outlined text-2xl">school</span>
               </div>
               <div>
-                <h4 className="font-extrabold text-[#0a2540] text-base">Jean Baptiste de La Salle 2</h4>
-                <p className="text-xs text-slate-500">Attécoubé Santé 3 (près cité RAN)</p>
+                <h4 className="font-extrabold text-[#0a2540] text-base">{SCHOOL_INFO.shortName}</h4>
+                <p className="text-xs text-slate-500">Attécoubé Santé 3 (23 BP 519 Abidjan 23)</p>
               </div>
               <a href="https://maps.google.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-xs font-bold transition-all shadow-sm">
                 <span className="material-symbols-outlined text-base">map</span> Ouvrir dans Google Maps
               </a>
             </div>
           </div>
+        </div>
+
+        {/* Formulaire de Contact */}
+        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+          <h3 className="text-lg font-bold text-[#0a2540]">Envoyer un Message au Secrétariat</h3>
+          <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Nom & Prénoms *</label>
+                <input type="text" placeholder="Ex: Touré Amadou" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#0a2540]" />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Téléphone *</label>
+                <input type="text" placeholder="+225 07..." className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#0a2540]" />
+              </div>
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Votre Message *</label>
+              <textarea rows={4} placeholder="Posez votre question concernant les filières, les inscriptions ou les tarifs..." className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#0a2540]" />
+            </div>
+            <button type="submit" className="px-6 py-3 bg-[#0a2540] hover:bg-[#061726] text-white rounded-xl font-bold text-xs flex items-center gap-2 transition-all shadow-md">
+              <span className="material-symbols-outlined text-base">send</span>
+              Envoyer le message
+            </button>
+          </form>
         </div>
       </section>
 
@@ -571,7 +615,7 @@ export default function App() {
                 <div>
                   <span className="bg-emerald-100 text-[#047857] text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">ANNÉE ACADÉMIQUE 2026-2027</span>
                   <h3 className="font-extrabold text-lg text-[#0a2540]">Pré-Inscription & Inscription en Ligne</h3>
-                  <p className="text-xs text-slate-500">Collège Privé Technique Jean Baptiste de La Salle 2 (DRENA 3)</p>
+                  <p className="text-xs text-slate-500">{SCHOOL_INFO.name} (DRENA 3)</p>
                 </div>
               </div>
               <button onClick={() => setInscriptionModal(false)} className="text-slate-400 hover:text-slate-700">
@@ -732,7 +776,7 @@ export default function App() {
                     </div>
                     <div>
                       <label className="block font-bold text-slate-700 mb-1">Numéro WhatsApp *</label>
-                      <input type="text" placeholder="+225 07 00 00 00 00" value={formData.phoneTuteur} onChange={e => setFormData(prev => ({ ...prev, phoneTuteur: e.target.value }))} className="w-full p-2.5 bg-slate-50 border rounded-xl outline-none" />
+                      <input type="text" placeholder="+225 07..." value={formData.phoneTuteur} onChange={e => setFormData(prev => ({ ...prev, phoneTuteur: e.target.value }))} className="w-full p-2.5 bg-slate-50 border rounded-xl outline-none" />
                     </div>
                   </div>
                 </div>
@@ -755,7 +799,7 @@ export default function App() {
                   </div>
                   {formData.cantine && <div className="flex justify-between border-b pb-1"><span>Option Cantine :</span><span className="font-bold">75 000 FCFA</span></div>}
                   {formData.transport && <div className="flex justify-between border-b pb-1"><span>Option Transport Scolaire :</span><span className="font-bold">60 000 FCFA</span></div>}
-                  <p className="text-[11px] text-slate-500 pt-1">Un agent du secrétariat contactera le tuteur au <strong>{formData.phoneTuteur || "+225 07..."}</strong> pour finaliser le dépôt physique.</p>
+                  <p className="text-[11px] text-slate-500 pt-1">Le secrétariat contactera le tuteur au <strong>{formData.phoneTuteur || SCHOOL_INFO.phone}</strong> pour finaliser le dépôt physique.</p>
                 </div>
               </div>
             )}
@@ -837,7 +881,7 @@ export default function App() {
           <div className="space-y-3">
             <div className="flex items-center gap-2 font-extrabold text-base">
               <span className="material-symbols-outlined text-[#f59e0b]">school</span>
-              J.B. de La Salle 2
+              {SCHOOL_INFO.shortName}
             </div>
             <p className="text-slate-400 leading-relaxed text-[11px]">
               Fondé sur les valeurs de foi, de service et de communauté, notre collège privé technique est un pilier de l'éducation générale et tertiaire en Côte d'Ivoire.
@@ -882,7 +926,7 @@ export default function App() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 lg:px-10 mt-12 pt-6 border-t border-white/10 text-center text-slate-400 text-[11px]">
-          © 2026 Collège Privé Technique Jean Baptiste de La Salle 2 — DRENA 3 - Abidjan. Tous droits réservés.
+          © 2026 {SCHOOL_INFO.name} — DRENA 3 - Abidjan. Tous droits réservés.
         </div>
       </footer>
 
