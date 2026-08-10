@@ -24,6 +24,7 @@ const SCHOOL_INFO = {
   phone: "07 48 627 869",
   phoneFormatted: "+225 07 48 62 78 69",
   email: "college.jbs2@gmail.com",
+  mapsUrl: "https://www.google.com/maps/place/254+Rue+Paul+Emile+Ebrothi%C3%A9,+Abidjan/@5.3400456,-4.0518839,17z/data=!4m14!1m7!3m6!1s0xfc1ebba32f45801:0xafdcd064dbf9ef27!2sColl%C3%A8ge+Jean+Baptiste+de+la+Salle+2+de+Yopougon!8m2!3d5.3400456!4d-4.049309!16s%2Fg%2F11g1zj403l!3m5!1s0xfc1ea8bb8a6b7e5:0x565349083dc3b19c!8m2!3d5.3423186!4d-4.0529301!16s%2Fg%2F11hfpk2gch",
 };
 
 export default function App() {
@@ -445,7 +446,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 6. NOUS TROUVER & CONTACT (VRAIES COORDONNÉES INCLUSES) */}
+      {/* 6. NOUS TROUVER & CONTACT */}
       <section id="contact" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
         <div>
           <span className="bg-[#0a2540] text-white text-[11px] font-extrabold px-3 py-1 rounded-md uppercase tracking-wider">LOCALISATION & CONTACT</span>
@@ -504,7 +505,7 @@ export default function App() {
                 <h4 className="font-extrabold text-[#0a2540] text-base">{SCHOOL_INFO.shortName}</h4>
                 <p className="text-xs text-slate-500">Attécoubé Santé 3 (23 BP 519 Abidjan 23)</p>
               </div>
-              <a href="https://maps.google.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-xs font-bold transition-all shadow-sm">
+              <a href={SCHOOL_INFO.mapsUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-xs font-bold transition-all shadow-sm">
                 <span className="material-symbols-outlined text-base">map</span> Ouvrir dans Google Maps
               </a>
             </div>
