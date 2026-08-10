@@ -24,7 +24,7 @@ const SCHOOL_INFO = {
   phone: "07 48 627 869",
   phoneFormatted: "+225 07 48 62 78 69",
   email: "college.jbs2@gmail.com",
-  mapsUrl: "https://www.google.com/maps/place/254+Rue+Paul+Emile+Ebrothi%C3%A9,+Abidjan/@5.3400456,-4.0518839,17z/data=!4m14!1m7!3m6!1s0xfc1ebba32f45801:0xafdcd064dbf9ef27!2sColl%C3%A8ge+Jean+Baptiste+de+la+Salle+2+de+Yopougon!8m2!3d5.3400456!4d-4.049309!16s%2Fg%2F11g1zj403l!3m5!1s0xfc1ea8bb8a6b7e5:0x565349083dc3b19c!8m2!3d5.3423186!4d-4.0529301!16s%2Fg%2F11hfpk2gch",
+  mapsUrl: "https://www.google.com/maps?q=5.340777,-4.052753", // <--- Coordonnées GPS exactes (L 14)
 };
 
 export default function App() {
