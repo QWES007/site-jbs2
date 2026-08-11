@@ -18,7 +18,7 @@ const MEDIA_CONFIG = {
 // INFORMATIONS OFFICIELLES DU COLLÈGE
 // ============================================================================
 const SCHOOL_INFO = {
-  name: "Collège Privé Technique Jean Baptiste de La Salle 2",
+  fullName: "Collège privé technique Jean Baptiste de la Salle 2",
   shortName: "J.B. de La Salle 2",
   address: "Attécoubé Santé 3, 23 BP 519 Abidjan 23",
   phone: "07 48 627 869",
@@ -305,21 +305,21 @@ export default function App() {
     <div className="min-h-screen bg-[#f4f6f8] text-[#1e293b] font-sans antialiased">
       
       {/* 1. HEADER */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-3 sm:px-6 lg:px-10 py-2.5 shadow-sm">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 lg:px-10 py-3 shadow-sm">
+        <div className="max-w-[90rem] mx-auto flex items-center justify-between gap-4">
           
-          <div className="flex items-center gap-2 min-w-0">
-            <img src={MEDIA_CONFIG.logo} alt="Logo JBS2" className="h-9 sm:h-11 w-auto object-contain shrink-0" />
+          <div className="flex items-center gap-3 min-w-0">
+            <img src={MEDIA_CONFIG.logo} alt="Logo JBS2" className="h-12 w-auto object-contain shrink-0" />
             <div className="min-w-0">
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="font-extrabold text-sm sm:text-lg text-[#0a2540] tracking-tight whitespace-nowrap truncate">
-                  {SCHOOL_INFO.shortName}
+              <div className="flex items-center gap-2">
+                <span className="font-extrabold text-xl lg:text-2xl text-[#0a2540] tracking-tighter whitespace-nowrap truncate">
+                  {SCHOOL_INFO.fullName}
                 </span>
-                <span className="hidden sm:inline-block bg-[#0b3c5d] text-white text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase shrink-0">
+                <span className="inline-block bg-[#0b3c5d] text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase shrink-0">
                   DRENA 3
                 </span>
               </div>
-              <p className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">Attécoubé Santé 3 • Abidjan</p>
+              <p className="text-xs text-slate-500 font-medium truncate">{SCHOOL_INFO.address}</p>
             </div>
           </div>
 
@@ -327,24 +327,24 @@ export default function App() {
             <a href="#accueil" className="text-[#0a2540] border-b-2 border-[#0a2540] pb-1">Accueil</a>
             <a href="#formations" className="hover:text-[#0a2540] transition-colors pb-1">Formations</a>
             <a href="#portails" className="hover:text-[#0a2540] transition-colors pb-1">Portails Numériques</a>
-            <a href="#actualites" className="hover:text-[#0a2540] transition-colors pb-1">Actualités & Examens</a>
+            <a href="#actualites" className="hover:text-[#0a2540] transition-colors pb-1">Actualités</a>
             <a href="#contact" className="hover:text-[#0a2540] transition-colors pb-1">Nous Trouver</a>
           </nav>
 
-          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+          <div className="flex items-center gap-3 shrink-0">
             <button 
               onClick={() => setAiOpen(true)}
-              className="flex items-center gap-1 px-2.5 sm:px-3 py-2 bg-[#f59e0b] hover:bg-[#d97706] text-white rounded-xl text-[11px] sm:text-xs font-bold transition-all shadow-sm"
+              className="flex items-center gap-1.5 px-4 py-2.5 bg-[#f59e0b] hover:bg-[#d97706] text-white rounded-xl text-xs font-bold transition-all shadow-sm"
             >
-              <span className="material-symbols-outlined text-sm sm:text-base">smart_toy</span>
+              <span className="material-symbols-outlined text-base">smart_toy</span>
               <span className="hidden sm:inline">Assistant IA</span>
             </button>
 
             <button 
               onClick={() => openInscriptionWithFiliere('general')}
-              className="flex items-center gap-1 px-2.5 sm:px-4 py-2 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-[11px] sm:text-xs font-bold transition-all shadow-sm whitespace-nowrap"
+              className="flex items-center gap-1.5 px-5 py-2.5 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-xs font-bold transition-all shadow-sm whitespace-nowrap"
             >
-              <span className="material-symbols-outlined text-sm sm:text-base">how_to_reg</span>
+              <span className="material-symbols-outlined text-base">how_to_reg</span>
               <span>Réservation<span className="hidden sm:inline"> en Ligne</span></span>
             </button>
           </div>
@@ -353,85 +353,88 @@ export default function App() {
       </header>
 
       {/* 2. HERO SECTION */}
-      <section id="accueil" className="relative bg-[#0a2540] text-white overflow-hidden py-12 lg:py-20 px-4 lg:px-12">
+      <section id="accueil" className="relative bg-[#0a2540] text-white overflow-hidden py-16 lg:py-24 px-4 lg:px-12">
         <div 
           className="absolute inset-0 opacity-20 bg-cover bg-center mix-blend-overlay pointer-events-none"
           style={{ backgroundImage: `url(${MEDIA_CONFIG.heroBackground})` }}
         />
 
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-12 items-center relative z-10">
-          <div className="lg:col-span-7 space-y-6">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#f59e0b] text-[#0a2540] text-xs font-extrabold uppercase rounded-full tracking-wide shadow-sm">
-              <span className="material-symbols-outlined text-sm">workspace_premium</span>
+        <div className="max-w-[90rem] mx-auto grid lg:grid-cols-12 gap-12 items-center relative z-10">
+          <div className="lg:col-span-6 space-y-6">
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#f59e0b] text-[#0a2540] text-xs font-extrabold uppercase rounded-full tracking-wide shadow-sm">
+              <span className="material-symbols-outlined text-base">workspace_premium</span>
               ÉTABLISSEMENT D'EXCELLENCE • DRENA 3
             </span>
             
-            <h1 className="text-3xl sm:text-5xl lg:text-5xl font-extrabold leading-tight tracking-tight">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tighter">
               L'Excellence Éducative et Technique au Cœur d'Attécoubé
             </h1>
 
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-normal max-w-2xl">
-              Le <em>{SCHOOL_INFO.name}</em> forme les leaders de demain à travers un enseignement général rigoureux et un pôle technique tertiaire de haut niveau au service du développement ivoirien.
+            <p className="text-slate-300 text-base sm:text-lg leading-relaxed font-normal max-w-3xl">
+              Le <em>{SCHOOL_INFO.fullName}</em> forme les leaders de demain à travers un enseignement général rigoureux et un pôle technique tertiaire de haut niveau au service du développement ivoirien.
             </p>
 
-            <div className="flex flex-wrap gap-4 pt-2">
+            <div className="flex flex-wrap gap-4 pt-3">
               <button 
                 onClick={() => openInscriptionWithFiliere('general')}
-                className="flex items-center gap-2 px-6 py-3 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl font-bold text-xs sm:text-sm transition-all shadow-md"
+                className="flex items-center gap-2.5 px-7 py-3.5 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl font-bold text-sm sm:text-base transition-all shadow-md"
               >
-                <span className="material-symbols-outlined text-lg">event_seat</span>
+                <span className="material-symbols-outlined text-xl">event_seat</span>
                 Réserver une place en Ligne
               </button>
-              <a href="#formations" className="flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-xl font-bold text-xs sm:text-sm backdrop-blur-sm transition-all">
-                <span className="material-symbols-outlined text-lg">explore</span>
+              <a href="#formations" className="flex items-center gap-2.5 px-7 py-3.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-xl font-bold text-sm sm:text-base backdrop-blur-sm transition-all">
+                <span className="material-symbols-outlined text-xl">explore</span>
                 Visiter le Collège
               </a>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6">
-              <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10">
-                <span className="text-2xl sm:text-3xl font-black text-[#f59e0b]">94.8%</span>
-                <p className="text-xs text-slate-300 font-medium">Réussite BEPC</p>
+            {/* SECTION STATISTIQUES */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 pt-8">
+              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10 shadow-inner">
+                <span className="text-3xl sm:text-4xl font-black text-[#f59e0b]">58,88 %</span>
+                <p className="text-xs text-slate-300 font-medium mt-1">Réussite BEPC</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10">
-                <span className="text-2xl sm:text-3xl font-black text-[#f59e0b]">92.3%</span>
-                <p className="text-xs text-slate-300 font-medium">Réussite BAC G1/G2</p>
+              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10 shadow-inner">
+                <span className="text-3xl sm:text-4xl font-black text-[#f59e0b]">49,50 %</span>
+                <p className="text-xs text-slate-300 font-medium mt-1">Réussite BAC</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10">
-                <span className="text-2xl sm:text-3xl font-black text-[#f59e0b]">1 450+</span>
-                <p className="text-xs text-slate-300 font-medium">Élèves Enseignés</p>
+              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10 shadow-inner">
+                <span className="text-3xl sm:text-4xl font-black text-[#f59e0b]">1 450+</span>
+                <p className="text-xs text-slate-300 font-medium mt-1">Élèves Enseignés</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10">
-                <span className="text-2xl sm:text-3xl font-black text-[#f59e0b]">DRENA 3</span>
-                <p className="text-xs text-slate-300 font-medium">Rang d'Élite</p>
+              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10 shadow-inner">
+                <span className="text-3xl sm:text-4xl font-black text-[#f59e0b]">DRENA 3</span>
+                <p className="text-xs text-slate-300 font-medium mt-1">Rang d'Élite</p>
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-5">
-            <div className="bg-white/10 backdrop-blur-xl p-3 rounded-3xl border border-white/20 shadow-2xl space-y-3">
-              <div className="relative rounded-2xl overflow-hidden h-64 sm:h-72 border border-white/10">
-                <img src={MEDIA_CONFIG.facadeCard} alt="Façade Collège" className="w-full h-full object-cover" />
-                <span className="absolute top-3 left-3 bg-[#0a2540]/90 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5 border border-white/20">
+          {/* CARTE PHOTO AGRANDIE */}
+          <div className="lg:col-span-6">
+            <div className="bg-white/10 backdrop-blur-xl p-4 rounded-3xl border border-white/20 shadow-2xl space-y-4">
+              <div className="relative rounded-2xl overflow-hidden h-80 sm:h-96 border-2 border-white/10 shadow-inner">
+                <img src={MEDIA_CONFIG.facadeCard} alt="Façade du Collège" className="w-full h-full object-cover" />
+                <span className="absolute top-4 left-4 bg-[#0a2540]/90 backdrop-blur-md text-white text-xs font-bold px-4 py-1.5 rounded-full flex items-center gap-2 border border-white/20 shadow-md">
                   <span className="material-symbols-outlined text-sm text-[#f59e0b]">verified</span>
                   Façade Officielle
                 </span>
-                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 text-white">
-                  <h3 className="font-bold text-base">{SCHOOL_INFO.shortName}</h3>
-                  <p className="text-xs text-slate-300 flex items-center gap-1">
-                    <span className="material-symbols-outlined text-sm">location_on</span> Attécoubé Santé 3 • Abidjan
+                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-5 text-white">
+                  <h3 className="font-extrabold text-lg tracking-tight">{SCHOOL_INFO.shortName}</h3>
+                  <p className="text-sm text-slate-200 flex items-center gap-1.5 mt-1">
+                    <span className="material-symbols-outlined text-base">location_on</span>
+                    {SCHOOL_INFO.address}
                   </p>
                 </div>
               </div>
 
-              <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl flex items-center justify-between">
+              <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-xs font-bold text-white">Cadre d'études & Sécurité</p>
-                  <p className="text-[11px] text-slate-300">Enseignement Général & Tertiaire</p>
+                  <p className="text-sm font-bold text-white">Cadre d'études & Sécurité</p>
+                  <p className="text-xs text-slate-300">Enseignement Général & Tertiaire</p>
                 </div>
-                <a href="#formations" className="bg-[#f59e0b] hover:bg-[#d97706] text-[#0a2540] px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1 transition-all">
+                <a href="#formations" className="bg-[#f59e0b] hover:bg-[#d97706] text-[#0a2540] px-5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-md">
                   <span>Découvrir</span>
-                  <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                  <span className="material-symbols-outlined text-base">arrow_forward</span>
                 </a>
               </div>
             </div>
@@ -596,7 +599,6 @@ export default function App() {
             </a>
           </div>
 
-          {/* CARTE 4 : DRENA 3 (REMPLACÉE) */}
           <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 hover:shadow-md transition-shadow">
             <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-[#f59e0b]">
               <span className="material-symbols-outlined text-2xl">account_balance</span>
@@ -606,7 +608,7 @@ export default function App() {
               Portail officiel de la Direction Régionale de l'Éducation Nationale et de l'Alphabétisation Abidjan 3.
             </p>
             <a 
-              href="https://drenaabidjan3.ci/" 
+              href={SCHOOL_INFO.drenaUrl} 
               target="_blank" 
               rel="noreferrer" 
               className="text-xs font-bold text-[#f59e0b] flex items-center gap-1 hover:underline"
@@ -798,7 +800,7 @@ export default function App() {
                 <span className="bg-[#0a2540] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">INFORMATIONS LÉGALES</span>
                 <h3 className="font-extrabold text-xl text-[#0a2540]">Mentions Légales & Agréments</h3>
                 <div className="space-y-3 text-slate-600 leading-relaxed">
-                  <p><strong>Établissement :</strong> {SCHOOL_INFO.name}</p>
+                  <p><strong>Établissement :</strong> {SCHOOL_INFO.fullName}</p>
                   <p><strong>Adresse Officielle :</strong> {SCHOOL_INFO.address}</p>
                   <p><strong>Autorisation de Création :</strong> Agréé par le Ministère de l'Éducation Nationale et de l'Alphabétisation de Côte d'Ivoire (DRENA 3 Abidjan).</p>
                   <p><strong>Régime :</strong> Établissement Privé d'Enseignement Général et Technique Tertiaire.</p>
@@ -1008,7 +1010,7 @@ export default function App() {
                 <span className="bg-[#f59e0b] text-[#0a2540] text-xs font-extrabold px-3 py-1 rounded-md uppercase">PREMIER & SECOND CYCLES</span>
                 <h3 className="text-2xl font-extrabold text-[#0a2540]">Enseignement Général — Programme & Débouchés</h3>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Le pôle Enseignement Général prépare intensivement aux examens d'État avec un taux de réussite régulier de plus de 90%.
+                  Le pôle Enseignement Général prépare intensivement aux examens d'État avec un taux de réussite d'élite.
                 </p>
                 
                 <div className="grid sm:grid-cols-2 gap-4 text-xs pt-2">
@@ -1077,7 +1079,7 @@ export default function App() {
                 <div>
                   <span className="bg-emerald-100 text-[#047857] text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">RÉSERVATION DE PLACES 2026-2027</span>
                   <h3 className="font-extrabold text-lg text-[#0a2540]">Formulaire de Préinscription</h3>
-                  <p className="text-xs text-slate-500">{SCHOOL_INFO.name}</p>
+                  <p className="text-xs text-slate-500">{SCHOOL_INFO.fullName}</p>
                 </div>
               </div>
               <button onClick={() => setInscriptionModal(false)} className="text-slate-400 hover:text-slate-700">
@@ -1384,7 +1386,7 @@ export default function App() {
         </div>
       )}
 
-      {/* FOOTER */}
+      {/* FOOTER INTERACTIF TOTALEMENT OPÉRATIONNEL */}
       <footer className="bg-[#0a2540] text-white text-xs py-12 border-t border-white/10 mt-12">
         <div className="max-w-7xl mx-auto px-4 lg:px-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           
@@ -1497,7 +1499,7 @@ export default function App() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 lg:px-10 mt-12 pt-6 border-t border-white/10 text-center text-slate-400 text-[11px]">
-          © 2026 {SCHOOL_INFO.name} — DRENA 3 - Abidjan. Tous droits réservés.
+          © 2026 {SCHOOL_INFO.fullName}. Tous droits réservés.
         </div>
       </footer>
 
