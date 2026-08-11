@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
-// ============================================================================
+// // ============================================================================
 // CONFIGURATION CENTRALISÉE DES MÉDIAS (PHOTOS & LOGO)
 // ============================================================================
 const MEDIA_CONFIG = {
   logo: "/logo.png",
   heroBackground: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1600",
   facadeCard: "/facade.jpg",
-  generalImage: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&q=80&w=800",
+  generalImage: "/enseignement-general.jpg", // <-- Nom exact de ton fichier image
   techniqueImage: "/technique.jpg",
   actu1: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=600",
   actu2: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=600",
