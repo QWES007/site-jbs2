@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
-// // ============================================================================
+// ============================================================================
 // CONFIGURATION CENTRALISÉE DES MÉDIAS (PHOTOS & LOGO)
 // ============================================================================
 const MEDIA_CONFIG = {
   logo: "/logo.png",
   heroBackground: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1600",
   facadeCard: "/facade.jpg",
-  generalImage: "/enseignement-general.jpg", // <-- Nom exact de ton fichier image
+  generalImage: "/enseignement-general.jpg",
   techniqueImage: "/technique.jpg",
   actu1: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=600",
   actu2: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=600",
@@ -44,14 +44,12 @@ function BulletinNumeriqueSearch() {
     setStudent(null);
 
     try {
-      // Chargement instantané du fichier JSON généré
       const res = await fetch('/notes.json');
       if (!res.ok) throw new Error("Fichier introuvable");
       const data = await res.json();
       
       const searchTerm = query.toLowerCase().trim();
       
-      // Recherche par matricule ou par nom
       const found = data.find((s: any) => 
         s.matricule.toLowerCase().includes(searchTerm) || 
         s.nom.toLowerCase().includes(searchTerm)
@@ -107,13 +105,11 @@ function BulletinNumeriqueSearch() {
       {/* AFFICHAGE DU BULLETIN GÉNÉRÉ */}
       {student && (
         <div className="mt-6 bg-white rounded-2xl p-6 sm:p-8 text-slate-800 shadow-2xl relative overflow-hidden">
-          {/* Entête du bulletin */}
           <div className="text-center border-b-2 border-slate-200 pb-4 mb-6 space-y-1">
             <h3 className="font-extrabold text-xl text-[#0a2540]">{SCHOOL_INFO.shortName}</h3>
             <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Bulletin Récapitulatif - 3ème Trimestre</p>
           </div>
 
-          {/* Infos Élève */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6 bg-slate-50 p-4 rounded-xl border border-slate-100">
             <div className="col-span-2">
               <p className="text-[10px] font-bold text-slate-400 uppercase">Nom & Prénoms</p>
@@ -129,7 +125,6 @@ function BulletinNumeriqueSearch() {
             </div>
           </div>
 
-          {/* Tableau des notes */}
           <div className="border border-slate-200 rounded-xl overflow-hidden mb-6">
             <table className="w-full text-xs text-left">
               <thead className="bg-[#0a2540] text-white">
@@ -139,8 +134,6 @@ function BulletinNumeriqueSearch() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                
-                {/* Logique Spéciale pour le Français */}
                 {student.francais && student.francais.globale && (
                   <>
                     <tr className="bg-slate-50">
@@ -170,7 +163,6 @@ function BulletinNumeriqueSearch() {
                   </>
                 )}
 
-                {/* Autres Matières */}
                 {student.notes && Object.entries(student.notes).map(([matiere, note]) => (
                   <tr key={matiere} className="hover:bg-slate-50 transition-colors">
                     <td className="p-3 font-medium text-slate-700">{matiere}</td>
@@ -183,7 +175,6 @@ function BulletinNumeriqueSearch() {
             </table>
           </div>
 
-          {/* Résultat Final */}
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-emerald-50 p-4 rounded-xl border border-emerald-100">
             <div className="flex items-center gap-4 text-center sm:text-left">
               <div className="w-16 h-16 bg-[#047857] text-white rounded-full flex items-center justify-center font-black text-xl shadow-md border-4 border-white">
@@ -210,14 +201,12 @@ function BulletinNumeriqueSearch() {
 // COMPOSANT PRINCIPAL
 // ============================================================================
 export default function App() {
-  // --- ÉTATS DES MODALS ---
   const [aiOpen, setAiOpen] = useState(false);
   const [detailsModal, setDetailsModal] = useState<'general' | 'technique' | null>(null);
   const [inscriptionModal, setInscriptionModal] = useState(false);
   const [inscriptionStep, setInscriptionStep] = useState(1);
   const [activePortalTab, setActivePortalTab] = useState<'eleves' | 'parents' | 'profs'>('eleves');
 
-  // Formulaire d'inscription
   const [formData, setFormData] = useState({
     filiere: 'general',
     classe: '3ème — Enseignement Général',
@@ -232,7 +221,6 @@ export default function App() {
     phoneTuteur: '',
   });
 
-  // Assistant IA
   const [messages, setMessages] = useState([
     { id: '1', sender: 'assistant', text: `Bonjour ! Je suis l'Assistant Virtuel du Collège J.B. de La Salle 2. Comment puis-je vous aider aujourd'hui ? Vous pouvez aussi contacter le secrétariat au ${SCHOOL_INFO.phone}.` }
   ]);
@@ -451,13 +439,12 @@ export default function App() {
               </div>
               <div className="p-6 space-y-4">
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Formations professionnalisantes en G1, G2, Comptabilité et Secrétariat. Préparez votre insertion immédiate en entreprise ou vos études supérieures.
+                  Formations professionnalisantes en G1, G2, Série AB, Comptabilité et Secrétariat. Préparez votre insertion immédiate en entreprise ou vos études supérieures.
                 </p>
-                <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
                   <div className="p-2.5 bg-emerald-50 text-[#047857] font-bold rounded-xl text-center">Série G1 (Secrétariat)</div>
                   <div className="p-2.5 bg-emerald-50 text-[#047857] font-bold rounded-xl text-center">Série G2 (Comptabilité)</div>
-                  <div className="p-2.5 bg-emerald-50 text-[#047857] font-bold rounded-xl text-center">Comptabilité SYSCOHADA</div>
-                  <div className="p-2.5 bg-emerald-50 text-[#047857] font-bold rounded-xl text-center">Logiciels Sage & Excel</div>
+                  <div className="p-2.5 bg-emerald-50 text-[#047857] font-bold rounded-xl text-center">Série AB (Économie)</div>
                 </div>
               </div>
             </div>
@@ -509,7 +496,7 @@ export default function App() {
             </button>
             <button 
               onClick={() => setActivePortalTab('profs')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${activePortalTab === 'profs' ? 'bg-[#0a2540] text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'}`}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${activePortalTab === 'profs' ? 'bg-[#0a2540] text-[#0a2540] shadow-sm' : 'text-slate-600 hover:bg-slate-100'}`}
             >
               <span className="material-symbols-outlined text-base">person</span> Professeurs
             </button>
@@ -517,7 +504,6 @@ export default function App() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          
           <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 hover:shadow-md transition-shadow">
             <div className="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center text-[#0a2540]">
               <span className="material-symbols-outlined text-2xl">domain</span>
@@ -561,7 +547,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* L'APPEL AU NOUVEAU COMPOSANT EST ICI ! */}
         <BulletinNumeriqueSearch />
 
       </section>
@@ -626,8 +611,6 @@ export default function App() {
 
         <div className="grid lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-4 space-y-4">
-            
-            {/* Adresse & BP */}
             <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-4">
               <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-[#0a2540] shrink-0">
                 <span className="material-symbols-outlined">location_on</span>
@@ -638,7 +621,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Téléphone */}
             <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-4">
               <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-[#0a2540] shrink-0">
                 <span className="material-symbols-outlined">call</span>
@@ -651,7 +633,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Email */}
             <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-4">
               <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-[#0a2540] shrink-0">
                 <span className="material-symbols-outlined">mail</span>
@@ -682,7 +663,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* Formulaire de Contact */}
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
           <h3 className="text-lg font-bold text-[#0a2540]">Envoyer un Message au Secrétariat</h3>
           <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
@@ -711,7 +691,7 @@ export default function App() {
       {/* MODAL : DÉTAILS CURSUS */}
       {detailsModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-6 shadow-2xl relative">
+          <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-6 shadow-2xl relative">
             <button onClick={() => setDetailsModal(null)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-700">
               <span className="material-symbols-outlined text-2xl">close</span>
             </button>
@@ -745,12 +725,12 @@ export default function App() {
             ) : (
               <div className="space-y-4">
                 <span className="bg-[#047857] text-white text-xs font-extrabold px-3 py-1 rounded-md uppercase">PÔLE TERTIAIRE SPÉCIALISÉ</span>
-                <h3 className="text-2xl font-extrabold text-[#0a2540]">Technique Tertiaire — Métiers G1 & G2</h3>
+                <h3 className="text-2xl font-extrabold text-[#0a2540]">Technique Tertiaire — Métiers G1, G2 & Série AB</h3>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Formation pratique et théorique orientée vers les besoins immédiats des entreprises et cabinets comptables.
+                  Formation pratique et théorique orientée vers les besoins immédiats des entreprises, cabinets comptables et structures économiques.
                 </p>
 
-                <div className="grid sm:grid-cols-2 gap-4 text-xs pt-2">
+                <div className="grid sm:grid-cols-3 gap-4 text-xs pt-2">
                   <div className="p-4 bg-emerald-50/50 border border-emerald-100 rounded-2xl space-y-2">
                     <h4 className="font-bold text-[#047857] text-sm">Série G1 : Secrétariat</h4>
                     <p className="text-slate-600">Bureautique avancée, correspondance administrative, dactylographie, accueil et gestion d'agenda de direction.</p>
@@ -758,6 +738,10 @@ export default function App() {
                   <div className="p-4 bg-emerald-50/50 border border-emerald-100 rounded-2xl space-y-2">
                     <h4 className="font-bold text-[#047857] text-sm">Série G2 : Comptabilité</h4>
                     <p className="text-slate-600">Comptabilité générale SYSCOHADA, mathématiques financières, logiciels SAGE, fiscalité et gestion de paie.</p>
+                  </div>
+                  <div className="p-4 bg-emerald-50/50 border border-emerald-100 rounded-2xl space-y-2">
+                    <h4 className="font-bold text-[#047857] text-sm">Série AB : Économie</h4>
+                    <p className="text-slate-600">Sciences économiques et sociales, analyse de marché, gestion financière et fondamentaux du droit des affaires.</p>
                   </div>
                 </div>
 
@@ -773,7 +757,7 @@ export default function App() {
         </div>
       )}
 
-      {/* MODAL : FORMULAIRE DE PRÉ-INSCRIPTION EN 4 ÉTAPES */}
+      {/* MODAL : FORMULAIRE DE PRÉ-INSCRIPTION */}
       {inscriptionModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative border border-slate-100">
@@ -833,7 +817,7 @@ export default function App() {
                       {formData.filiere === 'technique' && <span className="material-symbols-outlined text-[#047857]">check_circle</span>}
                     </div>
                     <h5 className="font-bold text-sm text-[#047857]">Technique Tertiaire</h5>
-                    <p className="text-[11px] text-slate-500">Séries G1 (Secrétariat) & G2 (Comptabilité). Préparation au BAC Technique.</p>
+                    <p className="text-[11px] text-slate-500">Séries G1 (Secrétariat), G2 (Comptabilité) & AB (Économie). Préparation au BAC Technique.</p>
                   </div>
                 </div>
               </div>
@@ -862,11 +846,13 @@ export default function App() {
                       </>
                     ) : (
                       <>
-                        <option>2nde G1 / G2</option>
+                        <option>2nde G1 / G2 / AB</option>
                         <option>1ère G1 (Secrétariat)</option>
                         <option>1ère G2 (Comptabilité)</option>
+                        <option>1ère AB (Économie)</option>
                         <option>Série G1 (Secrétariat - Terminale)</option>
                         <option>Série G2 (Comptabilité - Terminale)</option>
+                        <option>Série AB (Économie - Terminale)</option>
                       </>
                     )}
                   </select>
