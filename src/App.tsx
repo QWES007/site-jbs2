@@ -257,7 +257,7 @@ export default function App() {
   // Formulaire d'ajout d'activité
   const [newActivity, setNewActivity] = useState({
     title: '',
-    category: 'fetes',
+    category: 'pedagogie',
     date_label: 'Août 2026',
     description: '',
   });
@@ -320,7 +320,7 @@ export default function App() {
   const handleAddActivity = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newActivity.title || !selectedFile) {
-      alert("Veuillez renseigner le titre et sélectionner une photo.");
+      alert("Veuillez renseigner le titre et sélectionner une photo/document.");
       return;
     }
 
@@ -353,8 +353,8 @@ export default function App() {
 
       if (insertError) throw insertError;
 
-      alert("Nouvelle activité publiée avec succès !");
-      setNewActivity({ title: '', category: 'fetes', date_label: 'Août 2026', description: '' });
+      alert("Nouvelle publication enregistrée avec succès !");
+      setNewActivity({ title: '', category: 'pedagogie', date_label: 'Août 2026', description: '' });
       setSelectedFile(null);
       fetchActivities();
     } catch (err: any) {
@@ -366,7 +366,7 @@ export default function App() {
 
   // Suppression d'une activité
   const handleDeleteActivity = async (id: number) => {
-    if (!window.confirm("Êtes-vous sûr de vouloir supprimer cette activité ?")) return;
+    if (!window.confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) return;
 
     try {
       const { error } = await supabase.from('activites').delete().eq('id', id);
@@ -658,15 +658,17 @@ export default function App() {
               Découverte des Activités de l'École
             </h2>
             <p className="text-xs text-slate-500 mt-1">
-              Explorez les moments forts, sorties et célébrations récents au Collège J.B. de La Salle 2.
+              Explorez les moments forts, calendriers pédagogiques, sorties et événements récents au Collège J.B. de La Salle 2.
             </p>
           </div>
 
+          {/* SÉPARATION EN FILTRES DISTINCTS */}
           <div className="flex flex-wrap gap-1.5 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm text-xs font-bold">
             <button onClick={() => setSelectedCategory('tous')} className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'tous' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Toutes</button>
+            <button onClick={() => setSelectedCategory('pedagogie')} className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'pedagogie' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Pédagogie & Calendrier</button>
+            <button onClick={() => setSelectedCategory('sorties')} className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'sorties' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Sorties & Visites</button>
             <button onClick={() => setSelectedCategory('fetes')} className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'fetes' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Fêtes & Culture</button>
             <button onClick={() => setSelectedCategory('sports')} className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'sports' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Sports</button>
-            <button onClick={() => setSelectedCategory('pedagogie')} className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'pedagogie' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Pédagogie & Sorties</button>
           </div>
         </div>
 
@@ -676,17 +678,17 @@ export default function App() {
             <div className="flex justify-between items-center border-b border-amber-200 pb-3">
               <h3 className="font-extrabold text-sm text-[#0a2540] flex items-center gap-2">
                 <span className="material-symbols-outlined text-[#f59e0b]">add_a_photo</span>
-                Ajouter une nouvelle activité photo
+                Ajouter un élément (Photo, Calendrier, Avis)
               </h3>
               <button onClick={() => setIsAdmin(false)} className="text-xs text-slate-500 font-bold hover:underline cursor-pointer">Déconnexion Admin</button>
             </div>
 
             <form onSubmit={handleAddActivity} className="grid sm:grid-cols-2 gap-4 text-xs">
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Titre de l'activité *</label>
+                <label className="block font-bold text-slate-700 mb-1">Titre de l'élément *</label>
                 <input 
                   type="text" 
-                  placeholder="Ex: Tournoi sportif inter-classes" 
+                  placeholder="Ex: Calendrier Officiel du 1er Trimestre" 
                   value={newActivity.title} 
                   onChange={e => setNewActivity(prev => ({ ...prev, title: e.target.value }))}
                   className="w-full p-2.5 bg-white border border-slate-200 rounded-xl outline-none" 
@@ -695,16 +697,16 @@ export default function App() {
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Catégorie *</label>
+                <label className="block font-bold text-slate-700 mb-1">Rubrique / Catégorie *</label>
                 <select 
                   value={newActivity.category} 
                   onChange={e => setNewActivity(prev => ({ ...prev, category: e.target.value }))}
-                  className="w-full p-2.5 bg-white border border-slate-200 rounded-xl outline-none font-bold"
+                  className="w-full p-2.5 bg-white border border-slate-200 rounded-xl outline-none font-bold text-[#0a2540]"
                 >
-                  <option value="fetes">Fêtes & Culture</option>
-                  <option value="sports">Sports</option>
-                  <option value="pedagogie">Pédagogie & Sorties</option>
-                  <option value="vie_scolaire">Vie Scolaire</option>
+                  <option value="pedagogie">📚 Pédagogie & Calendrier (Dates, Congés, Examens)</option>
+                  <option value="sorties">🚌 Sorties & Visites d'Entreprises</option>
+                  <option value="fetes">🎉 Fêtes & Culture</option>
+                  <option value="sports">🏆 Sports & Compétitions</option>
                 </select>
               </div>
 
@@ -712,7 +714,7 @@ export default function App() {
                 <label className="block font-bold text-slate-700 mb-1">Date (Mois / Année) *</label>
                 <input 
                   type="text" 
-                  placeholder="Ex: Août 2026" 
+                  placeholder="Ex: Année 2026-2027 ou Septembre 2026" 
                   value={newActivity.date_label} 
                   onChange={e => setNewActivity(prev => ({ ...prev, date_label: e.target.value }))}
                   className="w-full p-2.5 bg-white border border-slate-200 rounded-xl outline-none" 
@@ -721,7 +723,7 @@ export default function App() {
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Photo à importer *</label>
+                <label className="block font-bold text-slate-700 mb-1">Image / Affiche à importer *</label>
                 <input 
                   type="file" 
                   accept="image/*"
@@ -732,9 +734,9 @@ export default function App() {
               </div>
 
               <div className="sm:col-span-2">
-                <label className="block font-bold text-slate-700 mb-1">Description / Commentaire</label>
+                <label className="block font-bold text-slate-700 mb-1">Description / Précisions</label>
                 <textarea 
-                  placeholder="Écrivez un court commentaire sur cet événement..." 
+                  placeholder="Écrivez des précisions (ex: dates de début et de fin des congés de Toussaint...)" 
                   value={newActivity.description} 
                   onChange={e => setNewActivity(prev => ({ ...prev, description: e.target.value }))}
                   className="w-full p-2.5 bg-white border border-slate-200 rounded-xl outline-none h-20"
@@ -761,7 +763,7 @@ export default function App() {
           </div>
         ) : filteredActivities.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-3xl border border-slate-200 text-slate-500 text-xs">
-            Aucune activité enregistrée dans cette catégorie pour le moment.
+            Aucun élément disponible dans cette rubrique pour le moment.
           </div>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -774,7 +776,7 @@ export default function App() {
                   <button 
                     onClick={() => handleDeleteActivity(act.id)}
                     className="absolute top-3 right-3 z-20 bg-red-600 text-white p-1.5 rounded-full shadow-lg hover:bg-red-700 transition-colors cursor-pointer"
-                    title="Supprimer cette photo"
+                    title="Supprimer cet élément"
                   >
                     <span className="material-symbols-outlined text-sm">delete</span>
                   </button>
@@ -809,7 +811,7 @@ export default function App() {
                     className="w-full py-2 bg-slate-100 hover:bg-[#0a2540] hover:text-white text-[#0a2540] text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                   >
                     <span className="material-symbols-outlined text-base">zoom_in</span>
-                    <span>Agrandir la photo</span>
+                    <span>Agrandir l'image</span>
                   </button>
                 </div>
               </div>
@@ -1136,7 +1138,7 @@ export default function App() {
             <div className="text-center space-y-1">
               <span className="material-symbols-outlined text-3xl text-[#0a2540]">admin_panel_settings</span>
               <h3 className="font-extrabold text-base text-[#0a2540]">Connexion Administrateur</h3>
-              <p className="text-xs text-slate-500">Pour ajouter ou supprimer des photos d'activités.</p>
+              <p className="text-xs text-slate-500">Pour ajouter ou supprimer des photos/documents.</p>
             </div>
 
             <form onSubmit={handleAdminLogin} className="space-y-3">
