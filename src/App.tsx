@@ -28,6 +28,47 @@ const SCHOOL_INFO = {
 };
 
 // ============================================================================
+// FONCTION DE CALCUL DYNAMIQUE DES FRAIS
+// ============================================================================
+const calculateSchoolFees = (classe: string, statut: string) => {
+  const isAffecte = statut === 'affecte';
+  const isCollege = ['6ème', '5ème', '4ème', '3ème'].some(c => classe.includes(c));
+  const isLyceeGeneral = ['2nde A', '2nde D', '1ère A', '1ère D', 'Terminale A', 'Terminale D'].some(c => classe.includes(c));
+
+  if (isAffecte) {
+    return {
+      inscription: 10000,
+      scolarite: 15000, // Frais annexes & participation
+      total: 25000,
+      note: "Prise en charge par l'État de Côte d'Ivoire (Seuls les frais annexes d'inscription s'appliquent)."
+    };
+  } else {
+    if (isCollege) {
+      return {
+        inscription: 25000,
+        scolarite: 95000,
+        total: 120000,
+        note: "Tarif Inscription Libre - Premier Cycle Général."
+      };
+    } else if (isLyceeGeneral) {
+      return {
+        inscription: 30000,
+        scolarite: 110000,
+        total: 140000,
+        note: "Tarif Inscription Libre - Second Cycle Général (Séries A/D)."
+      };
+    } else {
+      return {
+        inscription: 35000,
+        scolarite: 125000,
+        total: 160000,
+        note: "Tarif Inscription Libre - Pôle Technique Tertiaire (G1, G2, AB)."
+      };
+    }
+  }
+};
+
+// ============================================================================
 // COMPOSANT: RECHERCHE DE BULLETIN NUMÉRIQUE (Lit le notes.json)
 // ============================================================================
 function BulletinNumeriqueSearch() {
@@ -102,7 +143,6 @@ function BulletinNumeriqueSearch() {
         </div>
       )}
 
-      {/* AFFICHAGE DU BULLETIN GÉNÉRÉ */}
       {student && (
         <div className="mt-6 bg-white rounded-2xl p-6 sm:p-8 text-slate-800 shadow-2xl relative overflow-hidden">
           <div className="text-center border-b-2 border-slate-200 pb-4 mb-6 space-y-1">
@@ -142,24 +182,6 @@ function BulletinNumeriqueSearch() {
                         {student.francais.globale}
                       </td>
                     </tr>
-                    {student.francais.comp && (
-                      <tr className="text-slate-500 text-[11px]">
-                        <td className="p-2 pl-8 flex items-center gap-2"><span className="w-1.5 h-1.5 bg-slate-300 rounded-full"></span> Composition Française</td>
-                        <td className="p-2 text-center">{student.francais.comp}</td>
-                      </tr>
-                    )}
-                    {student.francais.ortho && (
-                      <tr className="text-slate-500 text-[11px]">
-                        <td className="p-2 pl-8 flex items-center gap-2"><span className="w-1.5 h-1.5 bg-slate-300 rounded-full"></span> Orthographe-Grammaire</td>
-                        <td className="p-2 text-center">{student.francais.ortho}</td>
-                      </tr>
-                    )}
-                    {student.francais.oral && (
-                      <tr className="text-slate-500 text-[11px]">
-                        <td className="p-2 pl-8 flex items-center gap-2"><span className="w-1.5 h-1.5 bg-slate-300 rounded-full"></span> Expression Orale</td>
-                        <td className="p-2 text-center">{student.francais.oral}</td>
-                      </tr>
-                    )}
                   </>
                 )}
 
@@ -205,20 +227,19 @@ export default function App() {
   const [detailsModal, setDetailsModal] = useState<'general' | 'technique' | null>(null);
   const [inscriptionModal, setInscriptionModal] = useState(false);
   const [inscriptionStep, setInscriptionStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [activePortalTab, setActivePortalTab] = useState<'eleves' | 'parents' | 'profs'>('eleves');
 
+  // FORMULAIRE DE PRÉ-INSCRIPTION / RÉSERVATION DE PLACE
   const [formData, setFormData] = useState({
-    filiere: 'general',
-    classe: '3ème — Enseignement Général',
-    statut: 'affecte',
-    cantine: false,
-    transport: false,
-    nomEleve: '',
-    dateNaissance: '',
+    matricule: '',
+    nom: '',
+    prenom: '',
+    classe: '6ème — Enseignement Général',
+    statut: 'affecte', // 'affecte' ou 'non_affecte'
     etablissementOrigine: '',
-    genre: 'Masculin',
-    nomTuteur: '',
-    phoneTuteur: '',
+    mga: '', // Moyenne de Fin d'Année
+    filiere: 'general',
   });
 
   const [messages, setMessages] = useState([
@@ -244,16 +265,43 @@ export default function App() {
     setFormData(prev => ({ 
       ...prev, 
       filiere, 
-      classe: filiere === 'general' ? '3ème — Enseignement Général' : 'Série G2 (Comptabilité)'
+      classe: filiere === 'general' ? '6ème — Enseignement Général' : '2nde G1/G2/AB'
     }));
     setInscriptionStep(1);
     setInscriptionModal(true);
   };
 
+  // SOUMISSION PRÊTE POUR LE BACKEND (SUPABASE / API)
+  const handleReservationSubmit = async () => {
+    setIsSubmitting(true);
+
+    const reservationPayload = {
+      matricule_eleve: formData.matricule,
+      nom: formData.nom,
+      prenom: formData.prenom,
+      classe_sollicitee: formData.classe,
+      statut_affecte: formData.statut === 'affecte',
+      etablissement_origine: formData.etablissementOrigine,
+      mga: parseFloat(formData.mga) || 0,
+      filiere: formData.filiere,
+      frais_estimes: calculateSchoolFees(formData.classe, formData.statut),
+      created_at: new Date().toISOString()
+    };
+
+    console.log("📥 payload prêt pour envoi au backend:", reservationPayload);
+
+    // Simulation d'attente d'un appel API/Backend
+    await new Promise(resolve => setTimeout(resolve, 800));
+    setIsSubmitting(false);
+    setInscriptionStep(3); // Aller à la confirmation
+  };
+
+  const currentFees = calculateSchoolFees(formData.classe, formData.statut);
+
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-[#1e293b] font-sans antialiased">
       
-      {/* 1. HEADER */}
+      {/* HEADER */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 lg:px-10 py-3 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-3">
           <img src={MEDIA_CONFIG.logo} alt="Logo JBS2" className="h-11 w-auto object-contain" />
@@ -287,13 +335,13 @@ export default function App() {
             onClick={() => openInscriptionWithFiliere('general')}
             className="flex items-center gap-1.5 px-4 py-2 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-xs font-bold transition-all shadow-sm"
           >
-            <span className="material-symbols-outlined text-base">person_add</span>
-            <span>Inscriptions</span>
+            <span className="material-symbols-outlined text-base">how_to_reg</span>
+            <span>Réservation en Ligne</span>
           </button>
         </div>
       </header>
 
-      {/* 2. HERO SECTION */}
+      {/* HERO SECTION */}
       <section id="accueil" className="relative bg-[#0a2540] text-white overflow-hidden py-12 lg:py-20 px-4 lg:px-12">
         <div 
           className="absolute inset-0 opacity-20 bg-cover bg-center mix-blend-overlay pointer-events-none"
@@ -320,8 +368,8 @@ export default function App() {
                 onClick={() => openInscriptionWithFiliere('general')}
                 className="flex items-center gap-2 px-6 py-3 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl font-bold text-xs sm:text-sm transition-all shadow-md"
               >
-                <span className="material-symbols-outlined text-lg">person_add</span>
-                Inscriptions En Ligne
+                <span className="material-symbols-outlined text-lg">event_seat</span>
+                Réserver une place en Ligne
               </button>
               <a href="#formations" className="flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-xl font-bold text-xs sm:text-sm backdrop-blur-sm transition-all">
                 <span className="material-symbols-outlined text-lg">explore</span>
@@ -380,7 +428,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 3. SECTION FORMATIONS */}
+      {/* SECTION FORMATIONS */}
       <section id="formations" className="max-w-7xl mx-auto px-4 lg:px-10 py-16 space-y-10">
         <div className="grid lg:grid-cols-2 gap-8">
           
@@ -415,12 +463,14 @@ export default function App() {
                 <span className="material-symbols-outlined text-base">info</span>
                 Détails du cursus
               </button>
+              
+              {/* BOUTON D'ACTION : PRÉINSCRIPTION ENSEIGNEMENT GÉNÉRAL */}
               <button 
                 onClick={() => openInscriptionWithFiliere('general')}
-                className="w-full py-3 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-colors shadow-sm"
+                className="w-full py-3.5 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md"
               >
-                <span className="material-symbols-outlined text-base">person_add</span>
-                S'inscrire en Enseignement Général
+                <span className="material-symbols-outlined text-lg">event_seat</span>
+                Préinscription & Réservation de Place (Général)
               </button>
             </div>
           </div>
@@ -457,12 +507,14 @@ export default function App() {
                 <span className="material-symbols-outlined text-base">work</span>
                 Découvrir les métiers & programmes
               </button>
+              
+              {/* BOUTON D'ACTION : PRÉINSCRIPTION TECHNIQUE TERTIAIRE */}
               <button 
                 onClick={() => openInscriptionWithFiliere('technique')}
-                className="w-full py-3 bg-[#0a2540] hover:bg-[#061726] text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-colors shadow-sm"
+                className="w-full py-3.5 bg-[#0a2540] hover:bg-[#061726] text-white rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md"
               >
-                <span className="material-symbols-outlined text-base">person_add</span>
-                S'inscrire en Technique Tertiaire
+                <span className="material-symbols-outlined text-lg">event_seat</span>
+                Préinscription & Réservation de Place (Technique)
               </button>
             </div>
           </div>
@@ -470,7 +522,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 4. PORTAILS NUMÉRIQUES */}
+      {/* PORTAILS NUMÉRIQUES */}
       <section id="portails" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
@@ -496,7 +548,7 @@ export default function App() {
             </button>
             <button 
               onClick={() => setActivePortalTab('profs')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${activePortalTab === 'profs' ? 'bg-[#0a2540] text-[#0a2540] shadow-sm' : 'text-slate-600 hover:bg-slate-100'}`}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${activePortalTab === 'profs' ? 'bg-[#0a2540] text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'}`}
             >
               <span className="material-symbols-outlined text-base">person</span> Professeurs
             </button>
@@ -551,7 +603,7 @@ export default function App() {
 
       </section>
 
-      {/* 5. ACTUALITÉS */}
+      {/* ACTUALITÉS */}
       <section id="actualites" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
         <div>
           <span className="bg-[#f59e0b] text-[#0a2540] text-[11px] font-extrabold px-3 py-1 rounded-md uppercase tracking-wider">VIE DE L'ÉTABLISSEMENT</span>
@@ -563,13 +615,13 @@ export default function App() {
           <div className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="relative h-48">
               <img src={MEDIA_CONFIG.actu1} alt="Inscriptions" className="w-full h-full object-cover" />
-              <span className="absolute top-3 left-3 bg-[#0a2540] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase">INSCRIPTIONS</span>
+              <span className="absolute top-3 left-3 bg-[#0a2540] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase">RÉSERVATION DE PLACES</span>
             </div>
             <div className="p-5 space-y-3">
               <span className="text-[11px] text-slate-400 font-medium">28 Juillet 2026</span>
-              <h3 className="font-bold text-base text-[#0a2540] leading-snug">Inscriptions & Réinscriptions Année Académique 2026-2027</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">Les dossiers de réinscription et de nouvelles candidatures pour l'Enseignement Général et la Technique Tertiaire sont ouverts au secrétariat.</p>
-              <button onClick={() => openInscriptionWithFiliere('general')} className="text-xs font-bold text-[#0a2540] flex items-center gap-1 hover:underline">M'inscrire maintenant →</button>
+              <h3 className="font-bold text-base text-[#0a2540] leading-snug">Préinscriptions & Réservations de Places 2026-2027</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">Réservez la place de votre enfant en ligne pour garantir son admission au secrétariat.</p>
+              <button onClick={() => openInscriptionWithFiliere('general')} className="text-xs font-bold text-[#0a2540] flex items-center gap-1 hover:underline">Réserver maintenant →</button>
             </div>
           </div>
 
@@ -601,7 +653,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 6. NOUS TROUVER & CONTACT */}
+      {/* NOUS TROUVER & CONTACT */}
       <section id="contact" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
         <div>
           <span className="bg-[#0a2540] text-white text-[11px] font-extrabold px-3 py-1 rounded-md uppercase tracking-wider">LOCALISATION & CONTACT</span>
@@ -662,30 +714,6 @@ export default function App() {
             </div>
           </div>
         </div>
-
-        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
-          <h3 className="text-lg font-bold text-[#0a2540]">Envoyer un Message au Secrétariat</h3>
-          <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Nom & Prénoms *</label>
-                <input type="text" placeholder="Ex: Touré Amadou" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#0a2540]" />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Téléphone *</label>
-                <input type="text" placeholder="+225 07..." className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#0a2540]" />
-              </div>
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Votre Message *</label>
-              <textarea rows={4} placeholder="Posez votre question concernant les filières, les inscriptions ou les tarifs..." className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#0a2540]" />
-            </div>
-            <button type="submit" className="px-6 py-3 bg-[#0a2540] hover:bg-[#061726] text-white rounded-xl font-bold text-xs flex items-center gap-2 transition-all shadow-md">
-              <span className="material-symbols-outlined text-base">send</span>
-              Envoyer le message
-            </button>
-          </form>
-        </div>
       </section>
 
       {/* MODAL : DÉTAILS CURSUS */}
@@ -718,7 +746,7 @@ export default function App() {
                 <div className="pt-4 flex justify-end gap-3">
                   <button onClick={() => setDetailsModal(null)} className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold">Fermer</button>
                   <button onClick={() => { setDetailsModal(null); openInscriptionWithFiliere('general'); }} className="px-5 py-2 bg-[#047857] text-white rounded-xl text-xs font-bold flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-base">person_add</span> S'inscrire maintenant
+                    <span className="material-symbols-outlined text-base">event_seat</span> Réserver une place
                   </button>
                 </div>
               </div>
@@ -748,7 +776,7 @@ export default function App() {
                 <div className="pt-4 flex justify-end gap-3">
                   <button onClick={() => setDetailsModal(null)} className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold">Fermer</button>
                   <button onClick={() => { setDetailsModal(null); openInscriptionWithFiliere('technique'); }} className="px-5 py-2 bg-[#0a2540] text-white rounded-xl text-xs font-bold flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-base">person_add</span> S'inscrire maintenant
+                    <span className="material-symbols-outlined text-base">event_seat</span> Réserver une place
                   </button>
                 </div>
               </div>
@@ -757,20 +785,20 @@ export default function App() {
         </div>
       )}
 
-      {/* MODAL : FORMULAIRE DE PRÉ-INSCRIPTION */}
+      {/* MODAL : FORMULAIRE DE PRÉ-INSCRIPTION / RÉSERVATION DE PLACES */}
       {inscriptionModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative border border-slate-100">
+          <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative border border-slate-100 max-h-[90vh] overflow-y-auto">
             
             <div className="flex items-start justify-between border-b pb-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-[#0a2540] text-white rounded-xl flex items-center justify-center font-bold">
-                  <span className="material-symbols-outlined">badge</span>
+                  <span className="material-symbols-outlined">event_seat</span>
                 </div>
                 <div>
-                  <span className="bg-emerald-100 text-[#047857] text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">ANNÉE ACADÉMIQUE 2026-2027</span>
-                  <h3 className="font-extrabold text-lg text-[#0a2540]">Pré-Inscription & Inscription en Ligne</h3>
-                  <p className="text-xs text-slate-500">{SCHOOL_INFO.name} (DRENA 3)</p>
+                  <span className="bg-emerald-100 text-[#047857] text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">RÉSERVATION DE PLACES 2026-2027</span>
+                  <h3 className="font-extrabold text-lg text-[#0a2540]">Formulaire de Préinscription</h3>
+                  <p className="text-xs text-slate-500">{SCHOOL_INFO.name}</p>
                 </div>
               </div>
               <button onClick={() => setInscriptionModal(false)} className="text-slate-400 hover:text-slate-700">
@@ -778,213 +806,270 @@ export default function App() {
               </button>
             </div>
 
+            {/* BARRE DE PROGRESSION EN 2 ÉTAPES PRINCIPALES */}
             <div className="space-y-1.5">
               <div className="flex justify-between text-xs font-bold text-[#0a2540]">
-                <span>Étape {inscriptionStep} sur 4 : {
-                  inscriptionStep === 1 ? 'Choix de la Filière' :
-                  inscriptionStep === 2 ? 'Niveau d\'Étape & Options' :
-                  inscriptionStep === 3 ? 'Informations de l\'Élève & Parent' : 'Récapitulatif & Devis'
-                }</span>
-                <span>{inscriptionStep * 25}%</span>
+                <span>
+                  {inscriptionStep === 1 && "Étape 1 : Formulaire de Réservation"}
+                  {inscriptionStep === 2 && "Étape 2 : Frais d'Inscription & Scolarité"}
+                  {inscriptionStep === 3 && "Confirmation : Place Réservée"}
+                </span>
+                <span>{inscriptionStep === 1 ? '50%' : '100%'}</span>
               </div>
               <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                <div className="h-full bg-[#047857] transition-all duration-300" style={{ width: `${inscriptionStep * 25}%` }} />
+                <div className="h-full bg-[#047857] transition-all duration-300" style={{ width: inscriptionStep === 1 ? '50%' : '100%' }} />
               </div>
             </div>
 
+            {/* ÉTAPE 1 : FORMULAIRE DE RÉSERVATION */}
             {inscriptionStep === 1 && (
-              <div className="space-y-4">
-                <h4 className="font-bold text-sm text-slate-800">1. Choisissez le parcours de formation souhaité :</h4>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div 
-                    onClick={() => setFormData(prev => ({ ...prev, filiere: 'general', classe: '3ème — Enseignement Général' }))}
-                    className={`p-5 rounded-2xl border-2 cursor-pointer transition-all space-y-2 ${formData.filiere === 'general' ? 'border-[#0a2540] bg-slate-50' : 'border-slate-200 hover:border-slate-300'}`}
-                  >
-                    <div className="flex justify-between items-center">
-                      <span className="material-symbols-outlined text-2xl text-[#0a2540]">school</span>
-                      {formData.filiere === 'general' && <span className="material-symbols-outlined text-[#0a2540]">check_circle</span>}
-                    </div>
-                    <h5 className="font-bold text-sm text-[#0a2540]">Enseignement Général</h5>
-                    <p className="text-[11px] text-slate-500">De la 6ème à la Terminale A & D. Préparation intensive au BEPC et BAC Général.</p>
-                  </div>
+              <div className="space-y-4 text-xs">
+                <h4 className="font-bold text-sm text-slate-800 flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[#047857]">badge</span>
+                  Informations de l'Élève Candidate :
+                </h4>
 
-                  <div 
-                    onClick={() => setFormData(prev => ({ ...prev, filiere: 'technique', classe: 'Série G2 (Comptabilité)' }))}
-                    className={`p-5 rounded-2xl border-2 cursor-pointer transition-all space-y-2 ${formData.filiere === 'technique' ? 'border-[#047857] bg-emerald-50/30' : 'border-slate-200 hover:border-slate-300'}`}
-                  >
-                    <div className="flex justify-between items-center">
-                      <span className="material-symbols-outlined text-2xl text-[#047857]">work</span>
-                      {formData.filiere === 'technique' && <span className="material-symbols-outlined text-[#047857]">check_circle</span>}
-                    </div>
-                    <h5 className="font-bold text-sm text-[#047857]">Technique Tertiaire</h5>
-                    <p className="text-[11px] text-slate-500">Séries G1 (Secrétariat), G2 (Comptabilité) & AB (Économie). Préparation au BAC Technique.</p>
+                {/* 1. Matricule */}
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Matricule de l'élève (si attribué)</label>
+                  <input 
+                    type="text" 
+                    placeholder="Ex: 25170040G (Optionnel si nouveau)" 
+                    value={formData.matricule} 
+                    onChange={e => setFormData(prev => ({ ...prev, matricule: e.target.value }))} 
+                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#0a2540] font-medium" 
+                  />
+                </div>
+
+                {/* 2. Nom & Prénom */}
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Nom de l'Élève *</label>
+                    <input 
+                      type="text" 
+                      placeholder="Ex: KOUASSI" 
+                      value={formData.nom} 
+                      onChange={e => setFormData(prev => ({ ...prev, nom: e.target.value }))} 
+                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#0a2540] font-medium" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Prénom(s) de l'Élève *</label>
+                    <input 
+                      type="text" 
+                      placeholder="Ex: Jean-Marc Emmanuel" 
+                      value={formData.prenom} 
+                      onChange={e => setFormData(prev => ({ ...prev, prenom: e.target.value }))} 
+                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#0a2540] font-medium" 
+                    />
                   </div>
                 </div>
-              </div>
-            )}
 
-            {inscriptionStep === 2 && (
-              <div className="space-y-4 text-xs">
-                <h4 className="font-bold text-sm text-slate-800">2. Sélectionnez la classe demandée et les options :</h4>
-                
+                {/* 3. Classe sollicitée */}
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">Classe visée pour la rentrée 2026-2027 :</label>
+                  <label className="block font-bold text-slate-700 mb-1">Classe Sollicitée *</label>
                   <select 
                     value={formData.classe} 
                     onChange={e => setFormData(prev => ({ ...prev, classe: e.target.value }))}
-                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none font-bold text-slate-800"
+                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none font-bold text-slate-800 focus:border-[#0a2540]"
                   >
-                    {formData.filiere === 'general' ? (
-                      <>
-                        <option>6ème — Enseignement Général</option>
-                        <option>5ème — Enseignement Général</option>
-                        <option>4ème — Enseignement Général</option>
-                        <option>3ème — Enseignement Général</option>
-                        <option>2nde A / D</option>
-                        <option>1ère A / D</option>
-                        <option>Terminale A / D</option>
-                      </>
-                    ) : (
-                      <>
-                        <option>2nde G1 / G2 / AB</option>
-                        <option>1ère G1 (Secrétariat)</option>
-                        <option>1ère G2 (Comptabilité)</option>
-                        <option>1ère AB (Économie)</option>
-                        <option>Série G1 (Secrétariat - Terminale)</option>
-                        <option>Série G2 (Comptabilité - Terminale)</option>
-                        <option>Série AB (Économie - Terminale)</option>
-                      </>
-                    )}
+                    <optgroup label="Enseignement Général">
+                      <option value="6ème — Enseignement Général">6ème — Enseignement Général</option>
+                      <option value="5ème — Enseignement Général">5ème — Enseignement Général</option>
+                      <option value="4ème — Enseignement Général">4ème — Enseignement Général</option>
+                      <option value="3ème — Enseignement Général">3ème — Enseignement Général</option>
+                      <option value="2nde A / D">2nde A / D</option>
+                      <option value="1ère A / D">1ère A / D</option>
+                      <option value="Terminale A / D">Terminale A / D</option>
+                    </optgroup>
+                    <optgroup label="Technique Tertiaire">
+                      <option value="2nde G1/G2/AB">2nde G1 / G2 / AB</option>
+                      <option value="1ère G1 (Secrétariat)">1ère G1 (Secrétariat)</option>
+                      <option value="1ère G2 (Comptabilité)">1ère G2 (Comptabilité)</option>
+                      <option value="1ère AB (Économie)">1ère AB (Économie)</option>
+                      <option value="Série G1 (Secrétariat - Terminale)">Série G1 (Secrétariat - Terminale)</option>
+                      <option value="Série G2 (Comptabilité - Terminale)">Série G2 (Comptabilité - Terminale)</option>
+                      <option value="Série AB (Économie - Terminale)">Série AB (Économie - Terminale)</option>
+                    </optgroup>
                   </select>
                 </div>
 
+                {/* 4. Statut : Affecté de l'État ou Pas */}
                 <div className="p-4 bg-slate-50 rounded-2xl border space-y-2">
-                  <span className="font-bold text-slate-700">Statut de l'affectation :</span>
-                  <div className="flex gap-4">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input type="radio" name="statut" checked={formData.statut === 'affecte'} onChange={() => setFormData(prev => ({ ...prev, statut: 'affecte' }))} />
-                      <span>Affecté par l'État (DRENA 3)</span>
+                  <span className="font-bold text-slate-700">Statut de l'Élève :</span>
+                  <div className="grid sm:grid-cols-2 gap-3 pt-1">
+                    <label className={`p-3 border rounded-xl flex items-center gap-2 cursor-pointer transition-all ${formData.statut === 'affecte' ? 'border-[#047857] bg-emerald-50/60 font-bold text-[#047857]' : 'border-slate-200'}`}>
+                      <input 
+                        type="radio" 
+                        name="statut" 
+                        checked={formData.statut === 'affecte'} 
+                        onChange={() => setFormData(prev => ({ ...prev, statut: 'affecte' }))} 
+                      />
+                      <span>Affecté de l'État (DRENA 3)</span>
                     </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input type="radio" name="statut" checked={formData.statut === 'libre'} onChange={() => setFormData(prev => ({ ...prev, statut: 'libre' }))} />
-                      <span>Inscriptif Libre / Non-affecté</span>
+
+                    <label className={`p-3 border rounded-xl flex items-center gap-2 cursor-pointer transition-all ${formData.statut === 'non_affecte' ? 'border-[#0a2540] bg-slate-100 font-bold text-[#0a2540]' : 'border-slate-200'}`}>
+                      <input 
+                        type="radio" 
+                        name="statut" 
+                        checked={formData.statut === 'non_affecte'} 
+                        onChange={() => setFormData(prev => ({ ...prev, statut: 'non_affecte' }))} 
+                      />
+                      <span>Non-affecté / Inscription Libre</span>
                     </label>
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <span className="font-bold text-slate-700">Services optionnels :</span>
-                  <div className="grid sm:grid-cols-2 gap-3">
-                    <label className={`p-3 border rounded-xl flex items-center justify-between cursor-pointer ${formData.cantine ? 'border-[#047857] bg-emerald-50/50' : 'border-slate-200'}`}>
-                      <div className="flex items-center gap-2">
-                        <span className="material-symbols-outlined text-[#047857]">restaurant</span>
-                        <span>Service Cantine / Déjeuner (+75 000 FCFA/an)</span>
-                      </div>
-                      <input type="checkbox" checked={formData.cantine} onChange={e => setFormData(prev => ({ ...prev, cantine: e.target.checked }))} />
-                    </label>
-
-                    <label className={`p-3 border rounded-xl flex items-center justify-between cursor-pointer ${formData.transport ? 'border-[#047857] bg-emerald-50/50' : 'border-slate-200'}`}>
-                      <div className="flex items-center gap-2">
-                        <span className="material-symbols-outlined text-[#047857]">directions_bus</span>
-                        <span>Transport Scolaire Attécoubé (+60 000 FCFA/an)</span>
-                      </div>
-                      <input type="checkbox" checked={formData.transport} onChange={e => setFormData(prev => ({ ...prev, transport: e.target.checked }))} />
-                    </label>
+                {/* 5. Établissement d'Origine & Moyenne de Fin d'Année (MGA) */}
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Établissement d'Origine *</label>
+                    <input 
+                      type="text" 
+                      placeholder="Ex: EPP Attécoubé 1 ou Collège X" 
+                      value={formData.etablissementOrigine} 
+                      onChange={e => setFormData(prev => ({ ...prev, etablissementOrigine: e.target.value }))} 
+                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#0a2540]" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Moyenne de Fin d'Année (MGA) *</label>
+                    <input 
+                      type="number" 
+                      step="0.01" 
+                      min="0" 
+                      max="20" 
+                      placeholder="Ex: 14.25 / 20" 
+                      value={formData.mga} 
+                      onChange={e => setFormData(prev => ({ ...prev, mga: e.target.value }))} 
+                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#0a2540] font-bold text-[#047857]" 
+                    />
                   </div>
                 </div>
+
               </div>
             )}
 
-            {inscriptionStep === 3 && (
-              <div className="space-y-4 text-xs">
-                <h4 className="font-bold text-sm text-slate-800">3. Renseignez l'état civil de l'élève et du tuteur :</h4>
+            {/* ÉTAPE 2 : AFFICHAGE DYNAMIQUE DES FRAIS D'INSCRIPTION & SCOLARITÉ */}
+            {inscriptionStep === 2 && (
+              <div className="space-y-5 text-xs">
                 
-                <div className="grid sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block font-bold text-slate-700 mb-1">Nom & Prénoms de l'Élève *</label>
-                    <input type="text" placeholder="Ex: Kouassi Koffi Emmanuel" value={formData.nomEleve} onChange={e => setFormData(prev => ({ ...prev, nomEleve: e.target.value }))} className="w-full p-2.5 bg-slate-50 border rounded-xl outline-none" />
-                  </div>
-                  <div>
-                    <label className="block font-bold text-slate-700 mb-1">Date de Naissance *</label>
-                    <input type="date" value={formData.dateNaissance} onChange={e => setFormData(prev => ({ ...prev, dateNaissance: e.target.value }))} className="w-full p-2.5 bg-slate-50 border rounded-xl outline-none" />
-                  </div>
-                </div>
-
-                <div className="grid sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block font-bold text-slate-700 mb-1">Établissement d'Origine</label>
-                    <input type="text" placeholder="Établissement Primaire / Collège" value={formData.etablissementOrigine} onChange={e => setFormData(prev => ({ ...prev, etablissementOrigine: e.target.value }))} className="w-full p-2.5 bg-slate-50 border rounded-xl outline-none" />
-                  </div>
-                  <div>
-                    <label className="block font-bold text-slate-700 mb-1">Genre</label>
-                    <select value={formData.genre} onChange={e => setFormData(prev => ({ ...prev, genre: e.target.value }))} className="w-full p-2.5 bg-slate-50 border rounded-xl outline-none font-bold">
-                      <option>Masculin</option>
-                      <option>Féminin</option>
-                    </select>
+                <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                  <h4 className="font-bold text-sm text-[#0a2540] border-b pb-2">Récapitulatif de la Réservation</h4>
+                  <div className="grid grid-cols-2 gap-2 text-slate-600">
+                    <p>Candidate : <strong className="text-slate-800">{formData.nom || '—'} {formData.prenom}</strong></p>
+                    <p>Classe : <strong className="text-[#047857]">{formData.classe}</strong></p>
+                    <p>Statut : <strong>{formData.statut === 'affecte' ? "Affecté de l'État" : "Non-affecté / Inscription Libre"}</strong></p>
+                    <p>MGA : <strong className="text-[#047857]">{formData.mga ? `${formData.mga} / 20` : '—'}</strong></p>
+                    <p className="col-span-2">Établissement d'Origine : <strong>{formData.etablissementOrigine || '—'}</strong></p>
                   </div>
                 </div>
 
-                <div className="pt-2 border-t space-y-3">
-                  <span className="font-bold text-slate-800">Coordonnées du Parent / Tuteur Légal :</span>
-                  <div className="grid sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="block font-bold text-slate-700 mb-1">Nom & Prénoms du Tuteur *</label>
-                      <input type="text" placeholder="Ex: Kouassi Charles" value={formData.nomTuteur} onChange={e => setFormData(prev => ({ ...prev, nomTuteur: e.target.value }))} className="w-full p-2.5 bg-slate-50 border rounded-xl outline-none" />
+                {/* TABLEAU DES FRAIS DE SCOLARITÉ CALCULÉS */}
+                <div className="bg-emerald-50/70 border border-emerald-200 p-5 rounded-2xl space-y-4">
+                  <div className="flex items-center gap-2 text-[#047857] font-extrabold text-sm">
+                    <span className="material-symbols-outlined">payments</span>
+                    <span>Détail des Frais d'Inscription & Scolarité</span>
+                  </div>
+
+                  <div className="space-y-2 bg-white p-4 rounded-xl border border-emerald-100 shadow-sm">
+                    <div className="flex justify-between items-center border-b pb-2">
+                      <span className="font-semibold text-slate-600">Frais d'Inscription & Dossier :</span>
+                      <span className="font-bold text-slate-800">{currentFees.inscription.toLocaleString()} FCFA</span>
                     </div>
-                    <div>
-                      <label className="block font-bold text-slate-700 mb-1">Numéro WhatsApp *</label>
-                      <input type="text" placeholder="+225 07..." value={formData.phoneTuteur} onChange={e => setFormData(prev => ({ ...prev, phoneTuteur: e.target.value }))} className="w-full p-2.5 bg-slate-50 border rounded-xl outline-none" />
+
+                    <div className="flex justify-between items-center border-b pb-2 pt-1">
+                      <span className="font-semibold text-slate-600">Frais de Scolarité Annuelle :</span>
+                      <span className="font-bold text-slate-800">{currentFees.scolarite.toLocaleString()} FCFA</span>
+                    </div>
+
+                    <div className="flex justify-between items-center pt-2 text-sm font-black text-[#0a2540]">
+                      <span>MONTANT TOTAL À PAYER :</span>
+                      <span className="text-base text-[#047857] bg-emerald-100 px-3 py-1 rounded-lg">
+                        {currentFees.total.toLocaleString()} FCFA
+                      </span>
                     </div>
                   </div>
+
+                  <p className="text-[11px] text-slate-500 italic bg-white/50 p-2.5 rounded-lg border border-emerald-100">
+                    💡 {currentFees.note}
+                  </p>
+                </div>
+
+              </div>
+            )}
+
+            {/* ÉTAPE 3 : CONFIRMATION PRÊTE POUR LE BACKEND */}
+            {inscriptionStep === 3 && (
+              <div className="space-y-4 text-xs text-center py-4">
+                <div className="w-16 h-16 bg-emerald-100 text-[#047857] rounded-full flex items-center justify-center mx-auto border-4 border-emerald-50">
+                  <span className="material-symbols-outlined text-3xl">check_circle</span>
+                </div>
+
+                <div className="space-y-1">
+                  <h4 className="font-extrabold text-lg text-[#0a2540]">Réservation de Place Enregistrée !</h4>
+                  <p className="text-slate-500 max-w-md mx-auto">
+                    La préinscription de <strong>{formData.nom} {formData.prenom}</strong> en classe de <strong>{formData.classe}</strong> a été enregistrée avec succès dans le système.
+                  </p>
+                </div>
+
+                <div className="bg-slate-50 p-4 rounded-2xl border text-left space-y-2 max-w-md mx-auto">
+                  <p className="font-bold text-[#0a2540] border-b pb-1">Bordereau de Réservation :</p>
+                  <p className="flex justify-between"><span>Matricule :</span> <strong>{formData.matricule || 'N/A'}</strong></p>
+                  <p className="flex justify-between"><span>Total Frais à Réglera :</span> <strong className="text-[#047857]">{currentFees.total.toLocaleString()} FCFA</strong></p>
+                  <p className="flex justify-between"><span>Lieu de Dépôt :</span> <strong>Secrétariat J.B. de La Salle 2 (Attécoubé Santé 3)</strong></p>
                 </div>
               </div>
             )}
 
-            {inscriptionStep === 4 && (
-              <div className="space-y-4 text-xs">
-                <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-center space-y-2">
-                  <span className="material-symbols-outlined text-3xl text-[#047857]">check_circle</span>
-                  <h4 className="font-extrabold text-[#047857] text-base">Fiche de Pré-Inscription Générée avec Succès !</h4>
-                  <p className="text-slate-600">Votre dossier pour <strong>{formData.nomEleve || "L'élève"}</strong> en <strong>{formData.classe}</strong> a été enregistré.</p>
-                </div>
-
-                <div className="bg-slate-50 p-4 rounded-2xl border space-y-2">
-                  <h5 className="font-bold text-[#0a2540]">Récapitulatif des frais estimés :</h5>
-                  <div className="flex justify-between border-b pb-1">
-                    <span>Droits d'inscription ({formData.statut === 'affecte' ? 'État DRENA 3' : 'Libre'}) :</span>
-                    <span className="font-bold">{formData.statut === 'affecte' ? 'Frais d\'État' : '95 000 FCFA'}</span>
-                  </div>
-                  {formData.cantine && <div className="flex justify-between border-b pb-1"><span>Option Cantine :</span><span className="font-bold">75 000 FCFA</span></div>}
-                  {formData.transport && <div className="flex justify-between border-b pb-1"><span>Option Transport Scolaire :</span><span className="font-bold">60 000 FCFA</span></div>}
-                  <p className="text-[11px] text-slate-500 pt-1">Le secrétariat contactera le tuteur au <strong>{formData.phoneTuteur || SCHOOL_INFO.phone}</strong> pour finaliser le dépôt physique.</p>
-                </div>
-              </div>
-            )}
-
+            {/* BOUTONS D'ACTION DU FORMULAIRE DE RÉSERVATION */}
             <div className="flex justify-between pt-4 border-t">
-              {inscriptionStep > 1 && inscriptionStep < 4 ? (
-                <button onClick={() => setInscriptionStep(prev => prev - 1)} className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold">
+              {inscriptionStep === 2 && (
+                <button 
+                  onClick={() => setInscriptionStep(1)} 
+                  className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold"
+                >
                   Retour
                 </button>
-              ) : <div />}
+              )}
 
-              {inscriptionStep < 3 && (
-                <button onClick={() => setInscriptionStep(prev => prev + 1)} className="px-6 py-2.5 bg-[#0a2540] text-white rounded-xl text-xs font-bold flex items-center gap-1.5 ml-auto">
-                  <span>Étape Suivante</span>
+              {inscriptionStep === 1 && (
+                <button 
+                  onClick={() => setInscriptionStep(2)} 
+                  disabled={!formData.nom || !formData.prenom || !formData.etablissementOrigine}
+                  className="px-6 py-3 bg-[#0a2540] hover:bg-[#061726] text-white rounded-xl text-xs font-bold flex items-center gap-1.5 ml-auto disabled:opacity-50 shadow-md"
+                >
+                  <span>Étape Suivante (Calcul des Frais)</span>
                   <span className="material-symbols-outlined text-base">arrow_forward</span>
                 </button>
               )}
 
-              {inscriptionStep === 3 && (
-                <button onClick={() => setInscriptionStep(4)} className="px-6 py-2.5 bg-[#047857] text-white rounded-xl text-xs font-bold flex items-center gap-1.5 ml-auto">
-                  <span>Voir le Devis & Valider</span>
-                  <span className="material-symbols-outlined text-base">check</span>
+              {inscriptionStep === 2 && (
+                <button 
+                  onClick={handleReservationSubmit} 
+                  disabled={isSubmitting}
+                  className="px-6 py-3 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-xs font-bold flex items-center gap-2 ml-auto shadow-md transition-all disabled:opacity-50"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <span className="material-symbols-outlined animate-spin text-base">sync</span>
+                      <span>Enregistrement dans le système...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="material-symbols-outlined text-base">how_to_reg</span>
+                      <span>Valider la Réservation en Ligne</span>
+                    </>
+                  )}
                 </button>
               )}
 
-              {inscriptionStep === 4 && (
-                <button onClick={() => setInscriptionModal(false)} className="px-6 py-2.5 bg-[#0a2540] text-white rounded-xl text-xs font-bold ml-auto">
-                  Fermer & Terminer
+              {inscriptionStep === 3 && (
+                <button 
+                  onClick={() => setInscriptionModal(false)} 
+                  className="px-6 py-3 bg-[#0a2540] text-white rounded-xl text-xs font-bold ml-auto"
+                >
+                  Fermer & Imprimer la Fiche
                 </button>
               )}
             </div>
