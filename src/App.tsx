@@ -283,6 +283,9 @@ export default function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activePortalTab, setActivePortalTab] = useState<'eleves' | 'parents' | 'profs'>('eleves');
   
+  // État du menu mobile (burger)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const [selectedCategory, setSelectedCategory] = useState<string>('tous');
   const [selectedPhoto, setSelectedPhoto] = useState<any | null>(null);
 
@@ -323,31 +326,28 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-[#1e293b] font-sans antialiased">
       
-      {/* 1. HEADER */}
+      {/* 1. HEADER (EN-TÊTE ULTRA-RESPONSIVE MOBILE ET PC) */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 lg:px-10 py-2.5 shadow-sm">
         <div className="max-w-[90rem] mx-auto flex items-center justify-between gap-4">
           
-          <div className="flex items-center gap-3 min-w-0">
-            <img src={MEDIA_CONFIG.logo} alt="Logo JBS2" className="h-9 w-auto object-contain shrink-0" />
+          {/* Logo & Titre de l'établissement */}
+          <div className="flex items-center gap-2.5 min-w-0">
+            <img src={MEDIA_CONFIG.logo} alt="Logo JBS2" className="h-8 sm:h-9 w-auto object-contain shrink-0" />
             <div className="min-w-0 flex flex-col justify-center">
-              <div className="flex items-center gap-2">
-                <div className="flex flex-col">
-                  <span className="font-extrabold text-xs text-[#0a2540] tracking-tight leading-snug">
-                    {SCHOOL_INFO.fullNamePart1}
-                  </span>
-                  <span className="font-extrabold text-xs text-[#0a2540] tracking-tight leading-snug text-center">
-                    {SCHOOL_INFO.fullNamePart2}
-                  </span>
-                </div>
-                <span className="inline-block bg-[#0b3c5d] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase shrink-0">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="font-extrabold text-xs text-[#0a2540] tracking-tight whitespace-nowrap">
+                  {SCHOOL_INFO.fullNamePart1} {SCHOOL_INFO.fullNamePart2}
+                </span>
+                <span className="bg-[#0b3c5d] text-white text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase shrink-0">
                   DRENA 3
                 </span>
               </div>
-              <p className="text-[10px] text-slate-500 font-medium truncate mt-0.5">{SCHOOL_INFO.address}</p>
+              <p className="text-[10px] text-slate-500 font-medium truncate">{SCHOOL_INFO.address}</p>
             </div>
           </div>
 
-          <nav className="flex items-center gap-6 text-xs font-bold text-slate-700">
+          {/* Navigation PC (visible dès 1024px) */}
+          <nav className="hidden lg:flex items-center gap-6 text-xs font-bold text-slate-700 shrink-0">
             <a href="#accueil" className="text-[#0a2540] border-b-2 border-[#0a2540] pb-1">Accueil</a>
             <a href="#formations" className="hover:text-[#0a2540] transition-colors pb-1">Formations</a>
             <a href="#portails" className="hover:text-[#0a2540] transition-colors pb-1">Portails Numériques</a>
@@ -355,7 +355,59 @@ export default function App() {
             <a href="#contact" className="hover:text-[#0a2540] transition-colors pb-1">Nous Trouver</a>
           </nav>
 
+          {/* Bouton Burger Mobile (masqué dès 1024px) */}
+          <button 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden p-2 text-[#0a2540] hover:bg-slate-100 rounded-xl focus:outline-none shrink-0"
+            aria-label="Toggle menu"
+          >
+            <span className="material-symbols-outlined text-2xl">
+              {mobileMenuOpen ? 'close' : 'menu'}
+            </span>
+          </button>
+
         </div>
+
+        {/* Tiroir de Navigation Mobile */}
+        {mobileMenuOpen && (
+          <nav className="lg:hidden mt-2 pt-2 pb-3 border-t border-slate-100 flex flex-col space-y-1 text-xs font-bold text-slate-700 bg-white px-2 rounded-xl shadow-lg">
+            <a 
+              href="#accueil" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-2 hover:bg-slate-50 rounded-lg text-[#0a2540]"
+            >
+              Accueil
+            </a>
+            <a 
+              href="#formations" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-2 hover:bg-slate-50 rounded-lg"
+            >
+              Formations
+            </a>
+            <a 
+              href="#portails" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-2 hover:bg-slate-50 rounded-lg"
+            >
+              Portails Numériques
+            </a>
+            <a 
+              href="#activites" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-2 hover:bg-slate-50 rounded-lg"
+            >
+              Découverte & Activités
+            </a>
+            <a 
+              href="#contact" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-2 hover:bg-slate-50 rounded-lg"
+            >
+              Nous Trouver
+            </a>
+          </nav>
+        )}
       </header>
 
       {/* 2. HERO SECTION */}
