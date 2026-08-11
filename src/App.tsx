@@ -648,14 +648,7 @@ export default function App() {
               <span className="bg-[#f59e0b] text-[#0a2540] text-[10px] font-extrabold px-2.5 py-0.5 rounded-md uppercase tracking-wider">
                 VIE SCOLAIRE & ACTIVITÉS
               </span>
-              {!isAdmin ? (
-                <button 
-                  onClick={() => setShowAdminLogin(true)} 
-                  className="text-[10px] text-slate-400 hover:text-[#0a2540] underline cursor-pointer"
-                >
-                  (Espace Admin)
-                </button>
-              ) : (
+              {isAdmin && (
                 <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md">
                   Mode Administration Actif
                 </span>
