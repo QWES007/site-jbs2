@@ -1,74 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
 
 // ============================================================================
-// CONFIGURATION CENTRALISÉE DES MÉDIAS (PHOTOS & LOGO)
+// CONFIGURATION SUPABASE & CENTRALISÉE DES MÉDIAS
 // ============================================================================
+const SUPABASE_URL = "https://kwbdawzllmgfsfqpafyu.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3YmRhd3psbG1nZnNmcXBhZnl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY0NDYyNTksImV4cCI6MjEwMjAyMjI1OX0.HR8WHmAP2QOFN70AEBPN1NGNAw5BqDuuMDYpkqe3rCg";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 const MEDIA_CONFIG = {
   logo: "/logo.png",
   heroBackground: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1600",
   facadeCard: "/facade.jpg",
   generalImage: "/enseignement-general.jpg",
   techniqueImage: "/technique.jpg",
-  actu1: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=600",
-  actu2: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=600",
-  actu3: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=600",
 };
 
-// GALERIE DES ACTIVITÉS DE L'ÉCOLE
-const SCHOOL_ACTIVITIES = [
-  {
-    id: 1,
-    title: "Journée du Mérite & Récompenses",
-    category: "fetes",
-    date: "Mai 2026",
-    image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=600",
-    desc: "Célébration des meilleurs élèves de l'année académique."
-  },
-  {
-    id: 2,
-    title: "Tournoi Inter-classes de Football & Basket",
-    category: "sports",
-    date: "Avril 2026",
-    image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&q=80&w=600",
-    desc: "Compétition sportive annuelle entre le 1er et 2nd cycle."
-  },
-  {
-    id: 3,
-    title: "Sortie Éducative & Visite d'Entreprise",
-    category: "pedagogie",
-    date: "Mars 2026",
-    image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=600",
-    desc: "Immersion des élèves des séries G1 et G2 en milieu professionnel."
-  },
-  {
-    id: 4,
-    title: "Atelier Scientifique & Informatique",
-    category: "pedagogie",
-    date: "Février 2026",
-    image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=600",
-    desc: "Pratique sur ordinateurs et démonstrations en laboratoire."
-  },
-  {
-    id: 5,
-    title: "Fête Culturelle & Danses Traditionnelles",
-    category: "fetes",
-    date: "Décembre 2025",
-    image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&q=80&w=600",
-    desc: "Mise en valeur du patrimoine culturel et des talents des élèves."
-  },
-  {
-    id: 6,
-    title: "Séance de Sensibilisation & Secourisme",
-    category: "vie_scolaire",
-    date: "Novembre 2025",
-    image: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=600",
-    desc: "Formation aux premiers secours et conseils de citoyenneté."
-  }
-];
-
-// ============================================================================
-// INFORMATIONS OFFICIELLES DU COLLÈGE
-// ============================================================================
 const SCHOOL_INFO = {
   fullNamePart1: "Collège privé technique Jean Baptiste",
   fullNamePart2: "de la Salle 2",
@@ -186,7 +134,7 @@ function BulletinNumeriqueSearch() {
           onChange={(e) => setQuery(e.target.value)}
           className="flex-1 p-3 bg-white/10 border border-white/20 rounded-xl text-xs text-white outline-none focus:border-[#f59e0b] placeholder-slate-400"
         />
-        <button type="submit" disabled={searching} className="px-6 py-3 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors disabled:opacity-50">
+        <button type="submit" disabled={searching} className="px-6 py-3 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors disabled:opacity-50 cursor-pointer">
           {searching ? <span className="material-symbols-outlined animate-spin text-base">sync</span> : <span className="material-symbols-outlined text-base">search</span>}
           Rechercher
         </button>
@@ -262,7 +210,7 @@ function BulletinNumeriqueSearch() {
                 </p>
               </div>
             </div>
-            <button onClick={() => window.print()} className="w-full sm:w-auto px-5 py-2.5 bg-[#0a2540] hover:bg-[#061726] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 transition-all shadow-md">
+            <button onClick={() => window.print()} className="w-full sm:w-auto px-5 py-2.5 bg-[#0a2540] hover:bg-[#061726] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 transition-all shadow-md cursor-pointer">
               <span className="material-symbols-outlined text-base">print</span> Imprimer le bulletin
             </button>
           </div>
@@ -276,18 +224,14 @@ function BulletinNumeriqueSearch() {
 // COMPOSANT PRINCIPAL
 // ============================================================================
 export default function App() {
-  const [actuModal, setActuModal] = useState<'dates' | 'viescolaire' | 'festif' | null>(null);
-  const [footerModal, setFooterModal] = useState<'mentions' | 'fournitures' | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>('tous');
+  const [selectedPhoto, setSelectedPhoto] = useState<any | null>(null);
+
+  // Modale Préinscription
   const [inscriptionModal, setInscriptionModal] = useState(false);
   const [inscriptionStep, setInscriptionStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [activePortalTab, setActivePortalTab] = useState<'eleves' | 'parents' | 'profs'>('eleves');
-  
-  // État du menu mobile (burger)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const [selectedCategory, setSelectedCategory] = useState<string>('tous');
-  const [selectedPhoto, setSelectedPhoto] = useState<any | null>(null);
 
   const [formData, setFormData] = useState({
     matricule: '',
@@ -299,6 +243,25 @@ export default function App() {
     mga: '',
     filiere: 'general',
   });
+
+  // État des Activités Supabase
+  const [activities, setActivities] = useState<any[]>([]);
+  const [loadingActivities, setLoadingActivities] = useState(true);
+
+  // Mode Administration
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [adminPassword, setAdminPassword] = useState('');
+  const [showAdminLogin, setShowAdminLogin] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  // Formulaire d'ajout d'activité
+  const [newActivity, setNewActivity] = useState({
+    title: '',
+    category: 'fetes',
+    date_label: 'Août 2026',
+    description: '',
+  });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const openInscriptionWithFiliere = (filiere: 'general' | 'technique') => {
     setFormData(prev => ({ 
@@ -319,18 +282,112 @@ export default function App() {
 
   const currentFees = calculateSchoolFees(formData.classe, formData.statut);
 
+  // Chargement des activités depuis Supabase
+  const fetchActivities = async () => {
+    setLoadingActivities(true);
+    try {
+      const { data, error } = await supabase
+        .from('activites')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      if (data) setActivities(data);
+    } catch (err) {
+      console.error("Erreur chargement activités:", err);
+    } finally {
+      setLoadingActivities(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchActivities();
+  }, []);
+
+  // Connexion Admin
+  const handleAdminLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (adminPassword === "JBS2Admin2026") {
+      setIsAdmin(true);
+      setShowAdminLogin(false);
+      setAdminPassword('');
+    } else {
+      alert("Mot de passe incorrect !");
+    }
+  };
+
+  // Upload et publication d'une activité
+  const handleAddActivity = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newActivity.title || !selectedFile) {
+      alert("Veuillez renseigner le titre et sélectionner une photo.");
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const fileExt = selectedFile.name.split('.').pop();
+      const fileName = `${Date.now()}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('activites-photos')
+        .upload(fileName, selectedFile);
+
+      if (uploadError) throw uploadError;
+
+      const { data: publicUrlData } = supabase.storage
+        .from('activites-photos')
+        .getPublicUrl(fileName);
+
+      const imageUrl = publicUrlData.publicUrl;
+
+      const { error: insertError } = await supabase.from('activites').insert([
+        {
+          title: newActivity.title,
+          category: newActivity.category,
+          date_label: newActivity.date_label,
+          description: newActivity.description,
+          image_url: imageUrl,
+        }
+      ]);
+
+      if (insertError) throw insertError;
+
+      alert("Nouvelle activité publiée avec succès !");
+      setNewActivity({ title: '', category: 'fetes', date_label: 'Août 2026', description: '' });
+      setSelectedFile(null);
+      fetchActivities();
+    } catch (err: any) {
+      alert("Erreur lors de l'ajout: " + err.message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  // Suppression d'une activité
+  const handleDeleteActivity = async (id: number) => {
+    if (!window.confirm("Êtes-vous sûr de vouloir supprimer cette activité ?")) return;
+
+    try {
+      const { error } = await supabase.from('activites').delete().eq('id', id);
+      if (error) throw error;
+      fetchActivities();
+    } catch (err: any) {
+      alert("Erreur lors de la suppression: " + err.message);
+    }
+  };
+
   const filteredActivities = selectedCategory === 'tous' 
-    ? SCHOOL_ACTIVITIES 
-    : SCHOOL_ACTIVITIES.filter(a => a.category === selectedCategory);
+    ? activities 
+    : activities.filter(a => a.category === selectedCategory);
 
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-[#1e293b] font-sans antialiased">
       
-      {/* 1. HEADER (EN-TÊTE ULTRA-RESPONSIVE MOBILE ET PC) */}
+      {/* 1. HEADER RESPONSIVE */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 lg:px-10 py-2.5 shadow-sm">
         <div className="max-w-[90rem] mx-auto flex items-center justify-between gap-4">
           
-          {/* Logo & Titre de l'établissement */}
           <div className="flex items-center gap-2.5 min-w-0">
             <img src={MEDIA_CONFIG.logo} alt="Logo JBS2" className="h-8 sm:h-9 w-auto object-contain shrink-0" />
             <div className="min-w-0 flex flex-col justify-center">
@@ -346,7 +403,6 @@ export default function App() {
             </div>
           </div>
 
-          {/* Navigation PC (visible dès 1024px) */}
           <nav className="hidden lg:flex items-center gap-6 text-xs font-bold text-slate-700 shrink-0">
             <a href="#accueil" className="text-[#0a2540] border-b-2 border-[#0a2540] pb-1">Accueil</a>
             <a href="#formations" className="hover:text-[#0a2540] transition-colors pb-1">Formations</a>
@@ -355,7 +411,6 @@ export default function App() {
             <a href="#contact" className="hover:text-[#0a2540] transition-colors pb-1">Nous Trouver</a>
           </nav>
 
-          {/* Bouton Burger Mobile (masqué dès 1024px) */}
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="lg:hidden p-2 text-[#0a2540] hover:bg-slate-100 rounded-xl focus:outline-none shrink-0"
@@ -368,44 +423,13 @@ export default function App() {
 
         </div>
 
-        {/* Tiroir de Navigation Mobile */}
         {mobileMenuOpen && (
           <nav className="lg:hidden mt-2 pt-2 pb-3 border-t border-slate-100 flex flex-col space-y-1 text-xs font-bold text-slate-700 bg-white px-2 rounded-xl shadow-lg">
-            <a 
-              href="#accueil" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2 hover:bg-slate-50 rounded-lg text-[#0a2540]"
-            >
-              Accueil
-            </a>
-            <a 
-              href="#formations" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2 hover:bg-slate-50 rounded-lg"
-            >
-              Formations
-            </a>
-            <a 
-              href="#portails" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2 hover:bg-slate-50 rounded-lg"
-            >
-              Portails Numériques
-            </a>
-            <a 
-              href="#activites" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2 hover:bg-slate-50 rounded-lg"
-            >
-              Découverte & Activités
-            </a>
-            <a 
-              href="#contact" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2 hover:bg-slate-50 rounded-lg"
-            >
-              Nous Trouver
-            </a>
+            <a href="#accueil" onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-slate-50 rounded-lg text-[#0a2540]">Accueil</a>
+            <a href="#formations" onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-slate-50 rounded-lg">Formations</a>
+            <a href="#portails" onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-slate-50 rounded-lg">Portails Numériques</a>
+            <a href="#activites" onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-slate-50 rounded-lg">Découverte & Activités</a>
+            <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-slate-50 rounded-lg">Nous Trouver</a>
           </nav>
         )}
       </header>
@@ -491,7 +515,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 3. SECTION FORMATIONS & PRÉINSCRIPTIONS */}
+      {/* 3. SECTION FORMATIONS & PRÉINSCRIPTION */}
       <section id="formations" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
         <div className="grid lg:grid-cols-2 gap-6">
           
@@ -567,37 +591,6 @@ export default function App() {
 
       {/* 4. PORTAILS NUMÉRIQUES */}
       <section id="portails" className="max-w-7xl mx-auto px-4 lg:px-10 py-8 space-y-6">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <span className="bg-[#0a2540] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-md uppercase tracking-wider">
-              ESPACE NUMÉRIQUE SÉCURISÉ
-            </span>
-            <h2 className="text-2xl font-extrabold text-[#0a2540] mt-1">Portails Numériques</h2>
-            <p className="text-xs text-slate-500">Accédez directement aux plateformes gouvernementales et scolaires officielles.</p>
-          </div>
-
-          <div className="bg-white p-1 rounded-xl border border-slate-200 flex gap-1 shadow-sm">
-            <button 
-              onClick={() => setActivePortalTab('eleves')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${activePortalTab === 'eleves' ? 'bg-[#0a2540] text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'}`}
-            >
-              <span className="material-symbols-outlined text-sm">school</span> Élèves
-            </button>
-            <button 
-              onClick={() => setActivePortalTab('parents')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${activePortalTab === 'parents' ? 'bg-[#0a2540] text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'}`}
-            >
-              <span className="material-symbols-outlined text-sm">family_restroom</span> Parents
-            </button>
-            <button 
-              onClick={() => setActivePortalTab('profs')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${activePortalTab === 'profs' ? 'bg-[#0a2540] text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'}`}
-            >
-              <span className="material-symbols-outlined text-sm">person</span> Professeurs
-            </button>
-          </div>
-        </div>
-
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:shadow-md transition-shadow">
             <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-[#0a2540]">
@@ -645,91 +638,191 @@ export default function App() {
         </div>
 
         <BulletinNumeriqueSearch />
-
       </section>
 
-      {/* 5. DÉCOUVERTE & GALERIE DE TOUTES LES ACTIVITÉS DE L'ÉCOLE */}
+      {/* 5. DÉCOUVERTE & ACTIVITÉS DYNAMIQUES */}
       <section id="activites" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <span className="bg-[#f59e0b] text-[#0a2540] text-[10px] font-extrabold px-2.5 py-0.5 rounded-md uppercase tracking-wider">
-              VIE SCOLAIRE & ACTIVITÉS
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="bg-[#f59e0b] text-[#0a2540] text-[10px] font-extrabold px-2.5 py-0.5 rounded-md uppercase tracking-wider">
+                VIE SCOLAIRE & ACTIVITÉS
+              </span>
+              {!isAdmin ? (
+                <button 
+                  onClick={() => setShowAdminLogin(true)} 
+                  className="text-[10px] text-slate-400 hover:text-[#0a2540] underline cursor-pointer"
+                >
+                  (Espace Admin)
+                </button>
+              ) : (
+                <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md">
+                  Mode Administration Actif
+                </span>
+              )}
+            </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a2540] mt-1">
               Découverte des Activités de l'École
             </h2>
             <p className="text-xs text-slate-500 mt-1">
-              Explorez les moments forts, sorties, événements sportifs et célébrations au Collège J.B. de La Salle 2.
+              Explorez les moments forts, sorties et célébrations récents au Collège J.B. de La Salle 2.
             </p>
           </div>
 
           <div className="flex flex-wrap gap-1.5 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm text-xs font-bold">
-            <button 
-              onClick={() => setSelectedCategory('tous')}
-              className={`px-3 py-1.5 rounded-xl transition-all ${selectedCategory === 'tous' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}
-            >
-              Toutes
-            </button>
-            <button 
-              onClick={() => setSelectedCategory('fetes')}
-              className={`px-3 py-1.5 rounded-xl transition-all ${selectedCategory === 'fetes' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}
-            >
-              Fêtes & Culture
-            </button>
-            <button 
-              onClick={() => setSelectedCategory('sports')}
-              className={`px-3 py-1.5 rounded-xl transition-all ${selectedCategory === 'sports' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}
-            >
-              Sports
-            </button>
-            <button 
-              onClick={() => setSelectedCategory('pedagogie')}
-              className={`px-3 py-1.5 rounded-xl transition-all ${selectedCategory === 'pedagogie' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}
-            >
-              Pédagogie & Sorties
-            </button>
+            <button onClick={() => setSelectedCategory('tous')} className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'tous' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Toutes</button>
+            <button onClick={() => setSelectedCategory('fetes')} className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'fetes' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Fêtes & Culture</button>
+            <button onClick={() => setSelectedCategory('sports')} className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'sports' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Sports</button>
+            <button onClick={() => setSelectedCategory('pedagogie')} className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'pedagogie' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Pédagogie & Sorties</button>
           </div>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredActivities.map(act => (
-            <div 
-              key={act.id} 
-              className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all group flex flex-col justify-between"
-            >
+        {/* PANNEAU D'ADMINISTRATION POUR AJOUTER UNE PHOTO */}
+        {isAdmin && (
+          <div className="bg-amber-50/80 border-2 border-[#f59e0b] p-6 rounded-3xl space-y-4 shadow-md">
+            <div className="flex justify-between items-center border-b border-amber-200 pb-3">
+              <h3 className="font-extrabold text-sm text-[#0a2540] flex items-center gap-2">
+                <span className="material-symbols-outlined text-[#f59e0b]">add_a_photo</span>
+                Ajouter une nouvelle activité photo
+              </h3>
+              <button onClick={() => setIsAdmin(false)} className="text-xs text-slate-500 font-bold hover:underline cursor-pointer">Déconnexion Admin</button>
+            </div>
+
+            <form onSubmit={handleAddActivity} className="grid sm:grid-cols-2 gap-4 text-xs">
               <div>
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src={act.image} 
-                    alt={act.title} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-                  />
-                  <span className="absolute top-3 left-3 bg-[#0a2540]/90 backdrop-blur-md text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase">
-                    {act.date}
-                  </span>
-                </div>
-                <div className="p-5 space-y-2">
-                  <h3 className="font-bold text-base text-[#0a2540] leading-snug group-hover:text-[#047857] transition-colors">
-                    {act.title}
-                  </h3>
-                  <p className="text-xs text-slate-500 leading-relaxed">
-                    {act.desc}
-                  </p>
-                </div>
+                <label className="block font-bold text-slate-700 mb-1">Titre de l'activité *</label>
+                <input 
+                  type="text" 
+                  placeholder="Ex: Tournoi sportif inter-classes" 
+                  value={newActivity.title} 
+                  onChange={e => setNewActivity(prev => ({ ...prev, title: e.target.value }))}
+                  className="w-full p-2.5 bg-white border border-slate-200 rounded-xl outline-none" 
+                  required 
+                />
               </div>
 
-              <div className="p-5 pt-0">
-                <button 
-                  onClick={() => setSelectedPhoto(act)}
-                  className="w-full py-2 bg-slate-100 hover:bg-[#0a2540] hover:text-white text-[#0a2540] text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors"
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">Catégorie *</label>
+                <select 
+                  value={newActivity.category} 
+                  onChange={e => setNewActivity(prev => ({ ...prev, category: e.target.value }))}
+                  className="w-full p-2.5 bg-white border border-slate-200 rounded-xl outline-none font-bold"
                 >
-                  <span className="material-symbols-outlined text-base">zoom_in</span>
-                  <span>Agrandir la photo</span>
-                </button>
+                  <option value="fetes">Fêtes & Culture</option>
+                  <option value="sports">Sports</option>
+                  <option value="pedagogie">Pédagogie & Sorties</option>
+                  <option value="vie_scolaire">Vie Scolaire</option>
+                </select>
               </div>
-            </div>
-          ))}
-        </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">Date (Mois / Année) *</label>
+                <input 
+                  type="text" 
+                  placeholder="Ex: Août 2026" 
+                  value={newActivity.date_label} 
+                  onChange={e => setNewActivity(prev => ({ ...prev, date_label: e.target.value }))}
+                  className="w-full p-2.5 bg-white border border-slate-200 rounded-xl outline-none" 
+                  required 
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">Photo à importer *</label>
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  onChange={e => setSelectedFile(e.target.files ? e.target.files[0] : null)}
+                  className="w-full p-2 bg-white border border-slate-200 rounded-xl outline-none text-xs" 
+                  required 
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block font-bold text-slate-700 mb-1">Description / Commentaire</label>
+                <textarea 
+                  placeholder="Écrivez un court commentaire sur cet événement..." 
+                  value={newActivity.description} 
+                  onChange={e => setNewActivity(prev => ({ ...prev, description: e.target.value }))}
+                  className="w-full p-2.5 bg-white border border-slate-200 rounded-xl outline-none h-20"
+                />
+              </div>
+
+              <button 
+                type="submit" 
+                disabled={uploading} 
+                className="sm:col-span-2 py-3 bg-[#047857] hover:bg-[#065f46] text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
+              >
+                {uploading ? <span className="material-symbols-outlined animate-spin">sync</span> : <span className="material-symbols-outlined">publish</span>}
+                {uploading ? 'Téléversement en cours...' : 'Publier immédiatement sur le site'}
+              </button>
+            </form>
+          </div>
+        )}
+
+        {/* AFFICHAGE DE LA GALERIE PHOTO */}
+        {loadingActivities ? (
+          <div className="text-center py-12 text-slate-400 text-xs">
+            <span className="material-symbols-outlined animate-spin text-3xl mb-2">sync</span>
+            <p>Chargement des activités de l'école...</p>
+          </div>
+        ) : filteredActivities.length === 0 ? (
+          <div className="text-center py-12 bg-white rounded-3xl border border-slate-200 text-slate-500 text-xs">
+            Aucune activité enregistrée dans cette catégorie pour le moment.
+          </div>
+        ) : (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredActivities.map(act => (
+              <div 
+                key={act.id} 
+                className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all group flex flex-col justify-between relative"
+              >
+                {isAdmin && (
+                  <button 
+                    onClick={() => handleDeleteActivity(act.id)}
+                    className="absolute top-3 right-3 z-20 bg-red-600 text-white p-1.5 rounded-full shadow-lg hover:bg-red-700 transition-colors cursor-pointer"
+                    title="Supprimer cette photo"
+                  >
+                    <span className="material-symbols-outlined text-sm">delete</span>
+                  </button>
+                )}
+
+                <div>
+                  <div className="relative h-48 overflow-hidden bg-slate-100">
+                    <img 
+                      src={act.image_url} 
+                      alt={act.title} 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                    />
+                    <span className="absolute top-3 left-3 bg-[#0a2540]/90 backdrop-blur-md text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase">
+                      {act.date_label}
+                    </span>
+                  </div>
+                  <div className="p-5 space-y-2">
+                    <h3 className="font-bold text-base text-[#0a2540] leading-snug group-hover:text-[#047857] transition-colors">
+                      {act.title}
+                    </h3>
+                    {act.description && (
+                      <p className="text-xs text-slate-500 leading-relaxed">
+                        {act.description}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="p-5 pt-0">
+                  <button 
+                    onClick={() => setSelectedPhoto(act)}
+                    className="w-full py-2 bg-slate-100 hover:bg-[#0a2540] hover:text-white text-[#0a2540] text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-base">zoom_in</span>
+                    <span>Agrandir la photo</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* MODAL PHOTO AGRANDIE */}
@@ -738,27 +831,27 @@ export default function App() {
           <div className="bg-white rounded-3xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl space-y-4 relative overflow-hidden">
             <button 
               onClick={() => setSelectedPhoto(null)} 
-              className="absolute top-3 right-3 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black"
+              className="absolute top-3 right-3 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black cursor-pointer"
             >
               <span className="material-symbols-outlined text-xl">close</span>
             </button>
 
             <div className="rounded-2xl overflow-hidden h-72 sm:h-96">
-              <img src={selectedPhoto.image} alt={selectedPhoto.title} className="w-full h-full object-cover" />
+              <img src={selectedPhoto.image_url} alt={selectedPhoto.title} className="w-full h-full object-cover" />
             </div>
 
             <div className="space-y-1">
               <span className="bg-[#047857] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-md uppercase">
-                {selectedPhoto.date}
+                {selectedPhoto.date_label}
               </span>
               <h3 className="font-extrabold text-lg text-[#0a2540]">{selectedPhoto.title}</h3>
-              <p className="text-xs text-slate-600">{selectedPhoto.desc}</p>
+              <p className="text-xs text-slate-600">{selectedPhoto.description}</p>
             </div>
           </div>
         </div>
       )}
 
-      {/* MODAL : FORMULAIRE DE PRÉ-INSCRIPTION */}
+      {/* MODAL PRÉINSCRIPTION */}
       {inscriptionModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative border border-slate-100 max-h-[90vh] overflow-y-auto">
@@ -774,7 +867,7 @@ export default function App() {
                   <p className="text-xs text-slate-500">{SCHOOL_INFO.fullNamePart1} {SCHOOL_INFO.fullNamePart2}</p>
                 </div>
               </div>
-              <button onClick={() => setInscriptionModal(false)} className="text-slate-400 hover:text-slate-700">
+              <button onClick={() => setInscriptionModal(false)} className="text-slate-400 hover:text-slate-700 cursor-pointer">
                 <span className="material-symbols-outlined text-2xl">close</span>
               </button>
             </div>
@@ -988,7 +1081,7 @@ export default function App() {
               {inscriptionStep === 2 && (
                 <button 
                   onClick={() => setInscriptionStep(1)} 
-                  className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold"
+                  className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold cursor-pointer"
                 >
                   Retour
                 </button>
@@ -1028,13 +1121,44 @@ export default function App() {
               {inscriptionStep === 3 && (
                 <button 
                   onClick={() => setInscriptionModal(false)} 
-                  className="px-6 py-3 bg-[#0a2540] text-white rounded-xl text-xs font-bold ml-auto"
+                  className="px-6 py-3 bg-[#0a2540] text-white rounded-xl text-xs font-bold ml-auto cursor-pointer"
                 >
                   Fermer & Imprimer la Fiche
                 </button>
               )}
             </div>
 
+          </div>
+        </div>
+      )}
+
+      {/* MODAL LOGIN ADMIN */}
+      {showAdminLogin && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4 relative">
+            <button onClick={() => setShowAdminLogin(false)} className="absolute top-3 right-3 text-slate-400 cursor-pointer">
+              <span className="material-symbols-outlined">close</span>
+            </button>
+
+            <div className="text-center space-y-1">
+              <span className="material-symbols-outlined text-3xl text-[#0a2540]">admin_panel_settings</span>
+              <h3 className="font-extrabold text-base text-[#0a2540]">Connexion Administrateur</h3>
+              <p className="text-xs text-slate-500">Pour ajouter ou supprimer des photos d'activités.</p>
+            </div>
+
+            <form onSubmit={handleAdminLogin} className="space-y-3">
+              <input 
+                type="password" 
+                placeholder="Mot de passe d'administration..." 
+                value={adminPassword}
+                onChange={e => setAdminPassword(e.target.value)}
+                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#0a2540]"
+                required
+              />
+              <button type="submit" className="w-full py-3 bg-[#0a2540] text-white font-bold text-xs rounded-xl cursor-pointer">
+                Se connecter
+              </button>
+            </form>
           </div>
         </div>
       )}
@@ -1105,7 +1229,6 @@ export default function App() {
       {/* FOOTER */}
       <footer className="bg-[#0a2540] text-white text-xs py-10 border-t border-white/10 mt-12">
         <div className="max-w-7xl mx-auto px-4 lg:px-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          
           <div className="space-y-2">
             <div className="flex items-center gap-2 font-extrabold text-sm">
               <span className="material-symbols-outlined text-[#f59e0b]">school</span>
@@ -1119,7 +1242,6 @@ export default function App() {
           <div>
             <h4 className="font-bold text-xs text-[#f59e0b] mb-2 uppercase tracking-wider">LIENS UTILES</h4>
             <ul className="space-y-1.5 text-slate-300 text-[11px]">
-              <li><button onClick={() => setFooterModal('mentions')} className="hover:underline text-left">Mentions Légales & Agréments</button></li>
               <li><a href="#accueil" className="hover:underline">Plan du Site & Accueil</a></li>
               <li><a href="#contact" className="hover:underline">Contact & Secrétariat</a></li>
             </ul>
@@ -1128,8 +1250,6 @@ export default function App() {
           <div>
             <h4 className="font-bold text-xs text-[#f59e0b] mb-2 uppercase tracking-wider">ACADÉMIQUE</h4>
             <ul className="space-y-1.5 text-slate-300 text-[11px]">
-              <li><button onClick={() => setActuModal('dates')} className="hover:underline text-left">Calendrier Scolaire 2026-2027</button></li>
-              <li><button onClick={() => setFooterModal('fournitures')} className="hover:underline text-left">Listes de Fournitures Scolaires</button></li>
               <li><a href="#portails" className="hover:underline">Bulletins Numériques</a></li>
             </ul>
           </div>
@@ -1148,11 +1268,13 @@ export default function App() {
               </a>
             </div>
           </div>
-
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 lg:px-10 mt-8 pt-4 border-t border-white/10 text-center text-slate-400 text-[10px]">
-          © 2026 {SCHOOL_INFO.fullNamePart1} {SCHOOL_INFO.fullNamePart2}. Tous droits réservés.
+        <div className="max-w-7xl mx-auto px-4 lg:px-10 mt-8 pt-4 border-t border-white/10 text-center text-slate-400 text-[10px] flex justify-between items-center">
+          <span>© 2026 {SCHOOL_INFO.fullNamePart1} {SCHOOL_INFO.fullNamePart2}. Tous droits réservés.</span>
+          <button onClick={() => setShowAdminLogin(true)} className="hover:text-white transition-colors cursor-pointer">
+            Administration
+          </button>
         </div>
       </footer>
 
