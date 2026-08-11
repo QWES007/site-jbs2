@@ -14,7 +14,7 @@ const MEDIA_CONFIG = {
   actu3: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=600",
 };
 
-// GALERIE DES ACTIVITÉS DE L'ÉCOLE (Prête à recevoir plusieurs photos de toutes sortes)
+// GALERIE DES ACTIVITÉS DE L'ÉCOLE
 const SCHOOL_ACTIVITIES = [
   {
     id: 1,
@@ -276,8 +276,6 @@ function BulletinNumeriqueSearch() {
 // COMPOSANT PRINCIPAL
 // ============================================================================
 export default function App() {
-  const [aiOpen, setAiOpen] = useState(false);
-  const [detailsModal, setDetailsModal] = useState<'general' | 'technique' | null>(null);
   const [actuModal, setActuModal] = useState<'dates' | 'viescolaire' | 'festif' | null>(null);
   const [footerModal, setFooterModal] = useState<'mentions' | 'fournitures' | null>(null);
   const [inscriptionModal, setInscriptionModal] = useState(false);
@@ -285,7 +283,6 @@ export default function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activePortalTab, setActivePortalTab] = useState<'eleves' | 'parents' | 'profs'>('eleves');
   
-  // Filtre pour la galerie photos des activités
   const [selectedCategory, setSelectedCategory] = useState<string>('tous');
   const [selectedPhoto, setSelectedPhoto] = useState<any | null>(null);
 
@@ -299,25 +296,6 @@ export default function App() {
     mga: '',
     filiere: 'general',
   });
-
-  const [messages, setMessages] = useState([
-    { id: '1', sender: 'assistant', text: `Bonjour ! Je suis l'Assistant Virtuel du Collège J.B. de La Salle 2. Comment puis-je vous aider aujourd'hui ? Vous pouvez contacter le secrétariat au ${SCHOOL_INFO.phone}.` }
-  ]);
-  const [inputValue, setInputValue] = useState('');
-
-  const handleSend = () => {
-    if (!inputValue.trim()) return;
-    const userMsg = { id: Date.now().toString(), sender: 'user', text: inputValue };
-    setMessages(prev => [...prev, userMsg]);
-    setInputValue('');
-    setTimeout(() => {
-      setMessages(prev => [...prev, {
-        id: (Date.now() + 1).toString(),
-        sender: 'assistant',
-        text: `Merci pour votre message ! Le secrétariat d'Attécoubé Santé 3 reste joignable au ${SCHOOL_INFO.phone}.`
-      }]);
-    }, 600);
-  };
 
   const openInscriptionWithFiliere = (filiere: 'general' | 'technique') => {
     setFormData(prev => ({ 
@@ -346,7 +324,7 @@ export default function App() {
     <div className="min-h-screen bg-[#f4f6f8] text-[#1e293b] font-sans antialiased">
       
       {/* 1. HEADER */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 lg:px-10 py-2 shadow-sm">
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 lg:px-10 py-2.5 shadow-sm">
         <div className="max-w-[90rem] mx-auto flex items-center justify-between gap-4">
           
           <div className="flex items-center gap-3 min-w-0">
@@ -369,7 +347,7 @@ export default function App() {
             </div>
           </div>
 
-          <nav className="hidden xl:flex items-center gap-6 text-xs font-bold text-slate-700">
+          <nav className="flex items-center gap-6 text-xs font-bold text-slate-700">
             <a href="#accueil" className="text-[#0a2540] border-b-2 border-[#0a2540] pb-1">Accueil</a>
             <a href="#formations" className="hover:text-[#0a2540] transition-colors pb-1">Formations</a>
             <a href="#portails" className="hover:text-[#0a2540] transition-colors pb-1">Portails Numériques</a>
@@ -377,28 +355,10 @@ export default function App() {
             <a href="#contact" className="hover:text-[#0a2540] transition-colors pb-1">Nous Trouver</a>
           </nav>
 
-          <div className="flex items-center gap-2 shrink-0">
-            <button 
-              onClick={() => setAiOpen(true)}
-              className="flex items-center gap-1 px-3 py-1.5 bg-[#f59e0b] hover:bg-[#d97706] text-white rounded-xl text-xs font-bold transition-all shadow-sm"
-            >
-              <span className="material-symbols-outlined text-sm">smart_toy</span>
-              <span className="hidden sm:inline">Assistant IA</span>
-            </button>
-
-            <button 
-              onClick={() => openInscriptionWithFiliere('general')}
-              className="flex items-center gap-1.5 px-4 py-1.5 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-xs font-bold transition-all shadow-sm whitespace-nowrap"
-            >
-              <span className="material-symbols-outlined text-sm">how_to_reg</span>
-              <span>Réservation<span className="hidden sm:inline"> en Ligne</span></span>
-            </button>
-          </div>
-
         </div>
       </header>
 
-      {/* 2. HERO SECTION (POLICE RÉDUITE & POLICE DES STATS RÉDUITE COMME SUR L'IMAGE 2) */}
+      {/* 2. HERO SECTION */}
       <section id="accueil" className="relative bg-[#0a2540] text-white overflow-hidden py-10 lg:py-14 px-4 lg:px-12">
         <div 
           className="absolute inset-0 opacity-20 bg-cover bg-center mix-blend-overlay pointer-events-none"
@@ -412,7 +372,6 @@ export default function App() {
               ÉTABLISSEMENT D'EXCELLENCE • DRENA 3
             </span>
             
-            {/* Titre réduit pour correspondre exactement au style visuel de l'image 2 */}
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-tight tracking-tight">
               L'Excellence Éducative et Technique au Cœur d'Attécoubé
             </h1>
@@ -422,20 +381,12 @@ export default function App() {
             </p>
 
             <div className="flex flex-wrap gap-3 pt-2">
-              <button 
-                onClick={() => openInscriptionWithFiliere('general')}
-                className="flex items-center gap-2 px-5 py-2.5 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl font-bold text-xs transition-all shadow-md"
-              >
-                <span className="material-symbols-outlined text-base">event_seat</span>
-                Réserver une place en Ligne
-              </button>
               <a href="#formations" className="flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-xl font-bold text-xs backdrop-blur-sm transition-all">
                 <span className="material-symbols-outlined text-base">explore</span>
                 Visiter le Collège
               </a>
             </div>
 
-            {/* SECTION STATISTIQUES (Taille de police réduite exactement comme sur l'image 2) */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4">
               <div className="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/10 shadow-inner text-center sm:text-left">
                 <span className="text-xl sm:text-2xl font-extrabold text-[#f59e0b]">58,88 %</span>
@@ -456,7 +407,6 @@ export default function App() {
             </div>
           </div>
 
-          {/* CARTE PHOTO */}
           <div className="lg:col-span-5">
             <div className="bg-white/10 backdrop-blur-xl p-3 rounded-2xl border border-white/20 shadow-2xl space-y-3">
               <div className="relative rounded-xl overflow-hidden h-64 sm:h-72 border border-white/10 shadow-inner">
@@ -489,7 +439,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 3. SECTION FORMATIONS */}
+      {/* 3. SECTION FORMATIONS & PRÉINSCRIPTIONS */}
       <section id="formations" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
         <div className="grid lg:grid-cols-2 gap-6">
           
@@ -515,20 +465,12 @@ export default function App() {
               </div>
             </div>
 
-            <div className="p-5 pt-0 space-y-2">
-              <button 
-                onClick={() => setDetailsModal('general')}
-                className="w-full py-2.5 border border-[#0a2540] text-[#0a2540] hover:bg-slate-50 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
-              >
-                <span className="material-symbols-outlined text-sm">info</span>
-                Détails du cursus
-              </button>
-              
+            <div className="p-5 pt-0">
               <button 
                 onClick={() => openInscriptionWithFiliere('general')}
-                className="w-full py-3 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md"
+                className="w-full py-3 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md cursor-pointer"
               >
-                <span className="material-symbols-outlined text-base">event_seat</span>
+                <span className="material-symbols-outlined text-base">how_to_reg</span>
                 Préinscription (Général)
               </button>
             </div>
@@ -557,20 +499,12 @@ export default function App() {
               </div>
             </div>
 
-            <div className="p-5 pt-0 space-y-2">
-              <button 
-                onClick={() => setDetailsModal('technique')}
-                className="w-full py-2.5 border border-[#047857] text-[#047857] hover:bg-emerald-50 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
-              >
-                <span className="material-symbols-outlined text-sm">work</span>
-                Découvrir les métiers
-              </button>
-              
+            <div className="p-5 pt-0">
               <button 
                 onClick={() => openInscriptionWithFiliere('technique')}
-                className="w-full py-3 bg-[#0a2540] hover:bg-[#061726] text-white rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md"
+                className="w-full py-3 bg-[#0a2540] hover:bg-[#061726] text-white rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md cursor-pointer"
               >
-                <span className="material-symbols-outlined text-base">event_seat</span>
+                <span className="material-symbols-outlined text-base">how_to_reg</span>
                 Préinscription (Technique)
               </button>
             </div>
@@ -677,7 +611,6 @@ export default function App() {
             </p>
           </div>
 
-          {/* BARRE DE FILTRES DYNAMIQUES */}
           <div className="flex flex-wrap gap-1.5 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm text-xs font-bold">
             <button 
               onClick={() => setSelectedCategory('tous')}
@@ -706,7 +639,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* GRILLE MULTI-PHOTOS DE TOUTES SORTES */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredActivities.map(act => (
             <div 
@@ -770,6 +702,287 @@ export default function App() {
               <h3 className="font-extrabold text-lg text-[#0a2540]">{selectedPhoto.title}</h3>
               <p className="text-xs text-slate-600">{selectedPhoto.desc}</p>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL : FORMULAIRE DE PRÉ-INSCRIPTION */}
+      {inscriptionModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative border border-slate-100 max-h-[90vh] overflow-y-auto">
+            
+            <div className="flex items-start justify-between border-b pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-[#0a2540] text-white rounded-xl flex items-center justify-center font-bold">
+                  <span className="material-symbols-outlined">how_to_reg</span>
+                </div>
+                <div>
+                  <span className="bg-emerald-100 text-[#047857] text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">PRÉINSCRIPTION 2026-2027</span>
+                  <h3 className="font-extrabold text-lg text-[#0a2540]">Formulaire de Préinscription</h3>
+                  <p className="text-xs text-slate-500">{SCHOOL_INFO.fullNamePart1} {SCHOOL_INFO.fullNamePart2}</p>
+                </div>
+              </div>
+              <button onClick={() => setInscriptionModal(false)} className="text-slate-400 hover:text-slate-700">
+                <span className="material-symbols-outlined text-2xl">close</span>
+              </button>
+            </div>
+
+            <div className="space-y-1.5">
+              <div className="flex justify-between text-xs font-bold text-[#0a2540]">
+                <span>
+                  {inscriptionStep === 1 && "Étape 1 : Informations de l'élève"}
+                  {inscriptionStep === 2 && "Étape 2 : Frais d'Inscription & Scolarité"}
+                  {inscriptionStep === 3 && "Confirmation de Préinscription"}
+                </span>
+                <span>{inscriptionStep === 1 ? '50%' : '100%'}</span>
+              </div>
+              <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                <div className="h-full bg-[#047857] transition-all duration-300" style={{ width: inscriptionStep === 1 ? '50%' : '100%' }} />
+              </div>
+            </div>
+
+            {inscriptionStep === 1 && (
+              <div className="space-y-4 text-xs">
+                <h4 className="font-bold text-sm text-slate-800 flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[#047857]">badge</span>
+                  Informations de l'Élève Candidate :
+                </h4>
+
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Matricule de l'élève (si attribué)</label>
+                  <input 
+                    type="text" 
+                    placeholder="Ex: 25170040G (Optionnel)" 
+                    value={formData.matricule} 
+                    onChange={e => setFormData(prev => ({ ...prev, matricule: e.target.value }))} 
+                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#0a2540] font-medium" 
+                  />
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Nom de l'Élève *</label>
+                    <input 
+                      type="text" 
+                      placeholder="Ex: KOUASSI" 
+                      value={formData.nom} 
+                      onChange={e => setFormData(prev => ({ ...prev, nom: e.target.value }))} 
+                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#0a2540] font-medium" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Prénom(s) de l'Élève *</label>
+                    <input 
+                      type="text" 
+                      placeholder="Ex: Jean-Marc Emmanuel" 
+                      value={formData.prenom} 
+                      onChange={e => setFormData(prev => ({ ...prev, prenom: e.target.value }))} 
+                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#0a2540] font-medium" 
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Classe Sollicitée *</label>
+                  <select 
+                    value={formData.classe} 
+                    onChange={e => setFormData(prev => ({ ...prev, classe: e.target.value }))}
+                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none font-bold text-slate-800 focus:border-[#0a2540]"
+                  >
+                    <optgroup label="Enseignement Général">
+                      <option value="6ème — Enseignement Général">6ème — Enseignement Général</option>
+                      <option value="5ème — Enseignement Général">5ème — Enseignement Général</option>
+                      <option value="4ème — Enseignement Général">4ème — Enseignement Général</option>
+                      <option value="3ème — Enseignement Général">3ème — Enseignement Général</option>
+                      <option value="2nde A / D">2nde A / D</option>
+                      <option value="1ère A / D">1ère A / D</option>
+                      <option value="Terminale A / D">Terminale A / D</option>
+                    </optgroup>
+                    <optgroup label="Technique Tertiaire">
+                      <option value="2nde G1/G2/AB">2nde G1 / G2 / AB</option>
+                      <option value="1ère G1 (Secrétariat)">1ère G1 (Secrétariat)</option>
+                      <option value="1ère G2 (Comptabilité)">1ère G2 (Comptabilité)</option>
+                      <option value="1ère AB (Économie)">1ère AB (Économie)</option>
+                      <option value="Série G1 (Secrétariat - Terminale)">Série G1 (Secrétariat - Terminale)</option>
+                      <option value="Série G2 (Comptabilité - Terminale)">Série G2 (Comptabilité - Terminale)</option>
+                      <option value="Série AB (Économie - Terminale)">Série AB (Économie - Terminale)</option>
+                    </optgroup>
+                  </select>
+                </div>
+
+                <div className="p-4 bg-slate-50 rounded-2xl border space-y-2">
+                  <span className="font-bold text-slate-700">Statut de l'Élève :</span>
+                  <div className="grid sm:grid-cols-2 gap-3 pt-1">
+                    <label className={`p-3 border rounded-xl flex items-center gap-2 cursor-pointer transition-all ${formData.statut === 'affecte' ? 'border-[#047857] bg-emerald-50/60 font-bold text-[#047857]' : 'border-slate-200'}`}>
+                      <input 
+                        type="radio" 
+                        name="statut" 
+                        checked={formData.statut === 'affecte'} 
+                        onChange={() => setFormData(prev => ({ ...prev, statut: 'affecte' }))} 
+                      />
+                      <span>Affecté de l'État (DRENA 3)</span>
+                    </label>
+
+                    <label className={`p-3 border rounded-xl flex items-center gap-2 cursor-pointer transition-all ${formData.statut === 'non_affecte' ? 'border-[#0a2540] bg-slate-100 font-bold text-[#0a2540]' : 'border-slate-200'}`}>
+                      <input 
+                        type="radio" 
+                        name="statut" 
+                        checked={formData.statut === 'non_affecte'} 
+                        onChange={() => setFormData(prev => ({ ...prev, statut: 'non_affecte' }))} 
+                      />
+                      <span>Non-affecté / Inscription Libre</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Établissement d'Origine *</label>
+                    <input 
+                      type="text" 
+                      placeholder="Ex: EPP Attécoubé 1 ou Collège X" 
+                      value={formData.etablissementOrigine} 
+                      onChange={e => setFormData(prev => ({ ...prev, etablissementOrigine: e.target.value }))} 
+                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#0a2540]" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Moyenne de Fin d'Année (MGA) *</label>
+                    <input 
+                      type="number" 
+                      step="0.01" 
+                      min="0" 
+                      max="20" 
+                      placeholder="Ex: 14.25 / 20" 
+                      value={formData.mga} 
+                      onChange={e => setFormData(prev => ({ ...prev, mga: e.target.value }))} 
+                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#0a2540] font-bold text-[#047857]" 
+                    />
+                  </div>
+                </div>
+
+              </div>
+            )}
+
+            {inscriptionStep === 2 && (
+              <div className="space-y-5 text-xs">
+                <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                  <h4 className="font-bold text-sm text-[#0a2540] border-b pb-2">Récapitulatif de la Préinscription</h4>
+                  <div className="grid grid-cols-2 gap-2 text-slate-600">
+                    <p>Candidate : <strong className="text-slate-800">{formData.nom || '—'} {formData.prenom}</strong></p>
+                    <p>Classe : <strong className="text-[#047857]">{formData.classe}</strong></p>
+                    <p>Statut : <strong>{formData.statut === 'affecte' ? "Affecté de l'État" : "Non-affecté / Inscription Libre"}</strong></p>
+                    <p>MGA : <strong className="text-[#047857]">{formData.mga ? `${formData.mga} / 20` : '—'}</strong></p>
+                    <p className="col-span-2">Établissement d'Origine : <strong>{formData.etablissementOrigine || '—'}</strong></p>
+                  </div>
+                </div>
+
+                <div className="bg-emerald-50/70 border border-emerald-200 p-5 rounded-2xl space-y-4">
+                  <div className="flex items-center gap-2 text-[#047857] font-extrabold text-sm">
+                    <span className="material-symbols-outlined">payments</span>
+                    <span>Détail des Frais d'Inscription & Scolarité</span>
+                  </div>
+
+                  <div className="space-y-2 bg-white p-4 rounded-xl border border-emerald-100 shadow-sm">
+                    <div className="flex justify-between items-center border-b pb-2">
+                      <span className="font-semibold text-slate-600">Frais d'Inscription & Dossier :</span>
+                      <span className="font-bold text-slate-800">{currentFees.inscription.toLocaleString()} FCFA</span>
+                    </div>
+
+                    <div className="flex justify-between items-center border-b pb-2 pt-1">
+                      <span className="font-semibold text-slate-600">Frais de Scolarité Annuelle :</span>
+                      <span className="font-bold text-slate-800">{currentFees.scolarite.toLocaleString()} FCFA</span>
+                    </div>
+
+                    <div className="flex justify-between items-center pt-2 text-sm font-black text-[#0a2540]">
+                      <span>MONTANT TOTAL À PAYER :</span>
+                      <span className="text-base text-[#047857] bg-emerald-100 px-3 py-1 rounded-lg">
+                        {currentFees.total.toLocaleString()} FCFA
+                      </span>
+                    </div>
+                  </div>
+
+                  <p className="text-[11px] text-slate-500 italic bg-white/50 p-2.5 rounded-lg border border-emerald-100">
+                    💡 {currentFees.note}
+                  </p>
+                </div>
+
+              </div>
+            )}
+
+            {inscriptionStep === 3 && (
+              <div className="space-y-4 text-xs text-center py-4">
+                <div className="w-16 h-16 bg-emerald-100 text-[#047857] rounded-full flex items-center justify-center mx-auto border-4 border-emerald-50">
+                  <span className="material-symbols-outlined text-3xl">check_circle</span>
+                </div>
+
+                <div className="space-y-1">
+                  <h4 className="font-extrabold text-lg text-[#0a2540]">Préinscription Enregistrée !</h4>
+                  <p className="text-slate-500 max-w-md mx-auto">
+                    La préinscription de <strong>{formData.nom} {formData.prenom}</strong> en classe de <strong>{formData.classe}</strong> a été enregistrée avec succès.
+                  </p>
+                </div>
+
+                <div className="bg-slate-50 p-4 rounded-2xl border text-left space-y-2 max-w-md mx-auto">
+                  <p className="font-bold text-[#0a2540] border-b pb-1">Bordereau de Préinscription :</p>
+                  <p className="flex justify-between"><span>Matricule :</span> <strong>{formData.matricule || 'N/A'}</strong></p>
+                  <p className="flex justify-between"><span>Total Frais à Régler :</span> <strong className="text-[#047857]">{currentFees.total.toLocaleString()} FCFA</strong></p>
+                  <p className="flex justify-between"><span>Lieu de Dépôt :</span> <strong>Secrétariat J.B. de La Salle 2 (Attécoubé Santé 3)</strong></p>
+                </div>
+              </div>
+            )}
+
+            <div className="flex justify-between pt-4 border-t">
+              {inscriptionStep === 2 && (
+                <button 
+                  onClick={() => setInscriptionStep(1)} 
+                  className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold"
+                >
+                  Retour
+                </button>
+              )}
+
+              {inscriptionStep === 1 && (
+                <button 
+                  onClick={() => setInscriptionStep(2)} 
+                  disabled={!formData.nom || !formData.prenom || !formData.etablissementOrigine}
+                  className="px-6 py-3 bg-[#0a2540] hover:bg-[#061726] text-white rounded-xl text-xs font-bold flex items-center gap-1.5 ml-auto disabled:opacity-50 shadow-md cursor-pointer"
+                >
+                  <span>Étape Suivante (Calcul des Frais)</span>
+                  <span className="material-symbols-outlined text-base">arrow_forward</span>
+                </button>
+              )}
+
+              {inscriptionStep === 2 && (
+                <button 
+                  onClick={handleReservationSubmit} 
+                  disabled={isSubmitting}
+                  className="px-6 py-3 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-xs font-bold flex items-center gap-2 ml-auto shadow-md transition-all disabled:opacity-50 cursor-pointer"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <span className="material-symbols-outlined animate-spin text-base">sync</span>
+                      <span>Enregistrement...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="material-symbols-outlined text-base">how_to_reg</span>
+                      <span>Valider la Préinscription</span>
+                    </>
+                  )}
+                </button>
+              )}
+
+              {inscriptionStep === 3 && (
+                <button 
+                  onClick={() => setInscriptionModal(false)} 
+                  className="px-6 py-3 bg-[#0a2540] text-white rounded-xl text-xs font-bold ml-auto"
+                >
+                  Fermer & Imprimer la Fiche
+                </button>
+              )}
+            </div>
+
           </div>
         </div>
       )}
