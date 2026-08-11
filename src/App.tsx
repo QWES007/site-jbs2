@@ -27,7 +27,6 @@ const SCHOOL_INFO = {
   email: "college.jbs2@gmail.com",
   mapsUrl: "https://www.google.com/maps?q=5.340777,-4.052753",
   facebookUrl: "https://facebook.com",
-  // drenaUrl: "https://drenaabidjan3.ci/", // Lien DRENA 3 (retiré du portail numérique)
 };
 
 // ============================================================================
@@ -178,14 +177,12 @@ function BulletinNumeriqueSearch() {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {student.francais && student.francais.globale && (
-                  <>
-                    <tr className="bg-slate-50">
-                      <td className="p-3 font-bold text-[#0a2540]">Français (Moyenne Globale)</td>
-                      <td className={`p-3 font-bold text-center ${Number(student.francais.globale) >= 10 ? 'text-[#047857]' : 'text-red-600'}`}>
-                        {student.francais.globale}
-                      </td>
-                    </tr>
-                  </>
+                  <tr className="bg-slate-50">
+                    <td className="p-3 font-bold text-[#0a2540]">Français (Moyenne Globale)</td>
+                    <td className={`p-3 font-bold text-center ${Number(student.francais.globale) >= 10 ? 'text-[#047857]' : 'text-red-600'}`}>
+                      {student.francais.globale}
+                    </td>
+                  </tr>
                 )}
 
                 {student.notes && Object.entries(student.notes).map(([matiere, note]) => (
@@ -304,18 +301,17 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-[#1e293b] font-sans antialiased">
       
-      {/* 1. HEADER (Nom sur 2 lignes) */}
+      {/* 1. HEADER (Nom sur 2 lignes complet et visible) */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 lg:px-10 py-2.5 shadow-sm">
         <div className="max-w-[90rem] mx-auto flex items-center justify-between gap-4">
           
           <div className="flex items-center gap-3 min-w-0">
-            <img src={MEDIA_CONFIG.logo} alt="Logo JBS2" className="h-11 w-auto object-contain shrink-0" />
+            <img src={MEDIA_CONFIG.logo} alt="Logo JBS2" className="h-10 w-auto object-contain shrink-0" />
             <div className="min-w-0 flex flex-col justify-center">
               <div className="flex items-center gap-2">
-                {/* CORRECTION: flex-wrap + truncation pour afficher sur 2 lignes */}
-                <h1 className="font-extrabold text-lg lg:text-xl text-[#0a2540] tracking-tighter leading-tight flex-wrap max-w-lg">
+                <span className="font-extrabold text-xs sm:text-sm text-[#0a2540] tracking-tight leading-snug whitespace-normal max-w-[240px] sm:max-w-xs block">
                   {SCHOOL_INFO.fullName}
-                </h1>
+                </span>
                 <span className="inline-block bg-[#0b3c5d] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase shrink-0">
                   DRENA 3
                 </span>
@@ -353,67 +349,67 @@ export default function App() {
         </div>
       </header>
 
-      {/* 2. HERO SECTION */}
-      <section id="accueil" className="relative bg-[#0a2540] text-white overflow-hidden py-16 lg:py-24 px-4 lg:px-12">
+      {/* 2. HERO SECTION (Police ajustée) */}
+      <section id="accueil" className="relative bg-[#0a2540] text-white overflow-hidden py-14 lg:py-20 px-4 lg:px-12">
         <div 
           className="absolute inset-0 opacity-20 bg-cover bg-center mix-blend-overlay pointer-events-none"
           style={{ backgroundImage: `url(${MEDIA_CONFIG.heroBackground})` }}
         />
 
-        <div className="max-w-[90rem] mx-auto grid lg:grid-cols-12 gap-12 items-center relative z-10">
-          <div className="lg:col-span-6 space-y-6">
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#f59e0b] text-[#0a2540] text-xs font-extrabold uppercase rounded-full tracking-wide shadow-sm">
-              <span className="material-symbols-outlined text-base">workspace_premium</span>
+        <div className="max-w-[90rem] mx-auto grid lg:grid-cols-12 gap-10 items-center relative z-10">
+          <div className="lg:col-span-6 space-y-5">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#f59e0b] text-[#0a2540] text-[11px] font-extrabold uppercase rounded-full tracking-wide shadow-sm">
+              <span className="material-symbols-outlined text-sm">workspace_premium</span>
               ÉTABLISSEMENT D'EXCELLENCE • DRENA 3
             </span>
             
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tighter">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight tracking-tight">
               L'Excellence Éducative et Technique au Cœur d'Attécoubé
             </h1>
 
-            <p className="text-slate-300 text-base sm:text-lg leading-relaxed font-normal max-w-3xl">
+            <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-normal max-w-2xl">
               Le <em>{SCHOOL_INFO.fullName}</em> forme les leaders de demain à travers un enseignement général rigoureux et un pôle technique tertiaire de haut niveau au service du développement ivoirien.
             </p>
 
-            <div className="flex flex-wrap gap-4 pt-3">
+            <div className="flex flex-wrap gap-3 pt-2">
               <button 
                 onClick={() => openInscriptionWithFiliere('general')}
-                className="flex items-center gap-2.5 px-7 py-3.5 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl font-bold text-sm sm:text-base transition-all shadow-md"
+                className="flex items-center gap-2 px-6 py-3 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl font-bold text-xs sm:text-sm transition-all shadow-md"
               >
-                <span className="material-symbols-outlined text-xl">event_seat</span>
+                <span className="material-symbols-outlined text-lg">event_seat</span>
                 Réserver une place en Ligne
               </button>
-              <a href="#formations" className="flex items-center gap-2.5 px-7 py-3.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-xl font-bold text-sm sm:text-base backdrop-blur-sm transition-all">
-                <span className="material-symbols-outlined text-xl">explore</span>
+              <a href="#formations" className="flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-xl font-bold text-xs sm:text-sm backdrop-blur-sm transition-all">
+                <span className="material-symbols-outlined text-lg">explore</span>
                 Visiter le Collège
               </a>
             </div>
 
             {/* SECTION STATISTIQUES */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 pt-8">
-              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10 shadow-inner">
-                <span className="text-3xl sm:text-4xl font-black text-[#f59e0b]">58,88 %</span>
-                <p className="text-xs text-slate-300 font-medium mt-1">Réussite BEPC</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6">
+              <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 shadow-inner">
+                <span className="text-2xl sm:text-3xl font-black text-[#f59e0b]">58,88 %</span>
+                <p className="text-[11px] text-slate-300 font-medium mt-1">Réussite BEPC</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10 shadow-inner">
-                <span className="text-3xl sm:text-4xl font-black text-[#f59e0b]">49,50 %</span>
-                <p className="text-xs text-slate-300 font-medium mt-1">Réussite BAC</p>
+              <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 shadow-inner">
+                <span className="text-2xl sm:text-3xl font-black text-[#f59e0b]">49,50 %</span>
+                <p className="text-[11px] text-slate-300 font-medium mt-1">Réussite BAC</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10 shadow-inner">
-                <span className="text-3xl sm:text-4xl font-black text-[#f59e0b]">1 450+</span>
-                <p className="text-xs text-slate-300 font-medium mt-1">Élèves Enseignés</p>
+              <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 shadow-inner">
+                <span className="text-2xl sm:text-3xl font-black text-[#f59e0b]">1 450+</span>
+                <p className="text-[11px] text-slate-300 font-medium mt-1">Élèves Enseignés</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10 shadow-inner">
-                <span className="text-3xl sm:text-4xl font-black text-[#f59e0b]">DRENA 3</span>
-                <p className="text-xs text-slate-300 font-medium mt-1">Rang d'Élite</p>
+              <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 shadow-inner">
+                <span className="text-2xl sm:text-3xl font-black text-[#f59e0b]">DRENA 3</span>
+                <p className="text-[11px] text-slate-300 font-medium mt-1">Rang d'Élite</p>
               </div>
             </div>
           </div>
 
-          {/* CARTE PHOTO AGRANDIE */}
+          {/* CARTE PHOTO */}
           <div className="lg:col-span-6">
             <div className="bg-white/10 backdrop-blur-xl p-4 rounded-3xl border border-white/20 shadow-2xl space-y-4">
-              <div className="relative rounded-2xl overflow-hidden h-80 sm:h-96 border-2 border-white/10 shadow-inner">
+              <div className="relative rounded-2xl overflow-hidden h-72 sm:h-88 border-2 border-white/10 shadow-inner">
                 <img src={MEDIA_CONFIG.facadeCard} alt="Façade du Collège" className="w-full h-full object-cover" />
                 <span className="absolute top-4 left-4 bg-[#0a2540]/90 backdrop-blur-md text-white text-xs font-bold px-4 py-1.5 rounded-full flex items-center gap-2 border border-white/20 shadow-md">
                   <span className="material-symbols-outlined text-sm text-[#f59e0b]">verified</span>
@@ -1136,412 +1132,343 @@ export default function App() {
                       <option value="6ème — Enseignement Général">6ème — Enseignement Général</option>
                       <option value="5ème — Enseignement Général">5ème — Enseignement Général</option>
                       <option value="4ème — Enseignement Général">4ème — Enseignement Général</option>
-                      <option value="3ème — Enseignement Général">3èmeC'est fait. J'ai ajusté le header pour permettre au nom complet de l'école de s'afficher sur deux lignes.
+                      <option value="3ème — Enseignement Général">3ème — Enseignement Général</option>
+                      <option value="2nde A / D">2nde A / D</option>
+                      <option value="1ère A / D">1ère A / D</option>
+                      <option value="Terminale A / D">Terminale A / D</option>
+                    </optgroup>
+                    <optgroup label="Technique Tertiaire">
+                      <option value="2nde G1/G2/AB">2nde G1 / G2 / AB</option>
+                      <option value="1ère G1 (Secrétariat)">1ère G1 (Secrétariat)</option>
+                      <option value="1ère G2 (Comptabilité)">1ère G2 (Comptabilité)</option>
+                      <option value="1ère AB (Économie)">1ère AB (Économie)</option>
+                      <option value="Série G1 (Secrétariat - Terminale)">Série G1 (Secrétariat - Terminale)</option>
+                      <option value="Série G2 (Comptabilité - Terminale)">Série G2 (Comptabilité - Terminale)</option>
+                      <option value="Série AB (Économie - Terminale)">Série AB (Économie - Terminale)</option>
+                    </optgroup>
+                  </select>
+                </div>
 
-Voici le code **100% complet** de `src/App.tsx` (ou `src/App.jsx`). Tu peux copier l'intégralité du bloc ci-dessous et l'utiliser pour remplacer le contenu de ton fichier actuel.
+                <div className="p-4 bg-slate-50 rounded-2xl border space-y-2">
+                  <span className="font-bold text-slate-700">Statut de l'Élève :</span>
+                  <div className="grid sm:grid-cols-2 gap-3 pt-1">
+                    <label className={`p-3 border rounded-xl flex items-center gap-2 cursor-pointer transition-all ${formData.statut === 'affecte' ? 'border-[#047857] bg-emerald-50/60 font-bold text-[#047857]' : 'border-slate-200'}`}>
+                      <input 
+                        type="radio" 
+                        name="statut" 
+                        checked={formData.statut === 'affecte'} 
+                        onChange={() => setFormData(prev => ({ ...prev, statut: 'affecte' }))} 
+                      />
+                      <span>Affecté de l'État (DRENA 3)</span>
+                    </label>
 
-```tsx
-import React, { useState } from 'react';
+                    <label className={`p-3 border rounded-xl flex items-center gap-2 cursor-pointer transition-all ${formData.statut === 'non_affecte' ? 'border-[#0a2540] bg-slate-100 font-bold text-[#0a2540]' : 'border-slate-200'}`}>
+                      <input 
+                        type="radio" 
+                        name="statut" 
+                        checked={formData.statut === 'non_affecte'} 
+                        onChange={() => setFormData(prev => ({ ...prev, statut: 'non_affecte' }))} 
+                      />
+                      <span>Non-affecté / Inscription Libre</span>
+                    </label>
+                  </div>
+                </div>
 
-// ============================================================================
-// CONFIGURATION CENTRALISÉE DES MÉDIAS (PHOTOS & LOGO)
-// ============================================================================
-const MEDIA_CONFIG = {
-  logo: "/logo.png",
-  heroBackground: "[https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1600](https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1600)",
-  facadeCard: "/facade.jpg",
-  generalImage: "/enseignement-general.jpg",
-  techniqueImage: "/technique.jpg",
-  actu1: "[https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=600](https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=600)",
-  actu2: "[https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=600](https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=600)",
-  actu3: "[https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=600](https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=600)",
-};
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Établissement d'Origine *</label>
+                    <input 
+                      type="text" 
+                      placeholder="Ex: EPP Attécoubé 1 ou Collège X" 
+                      value={formData.etablissementOrigine} 
+                      onChange={e => setFormData(prev => ({ ...prev, etablissementOrigine: e.target.value }))} 
+                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#0a2540]" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Moyenne de Fin d'Année (MGA) *</label>
+                    <input 
+                      type="number" 
+                      step="0.01" 
+                      min="0" 
+                      max="20" 
+                      placeholder="Ex: 14.25 / 20" 
+                      value={formData.mga} 
+                      onChange={e => setFormData(prev => ({ ...prev, mga: e.target.value }))} 
+                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#0a2540] font-bold text-[#047857]" 
+                    />
+                  </div>
+                </div>
 
-// ============================================================================
-// INFORMATIONS OFFICIELLES DU COLLÈGE
-// ============================================================================
-const SCHOOL_INFO = {
-  fullName: "Collège privé technique Jean Baptiste de la Salle 2",
-  shortName: "J.B. de La Salle 2",
-  address: "Attécoubé Santé 3, 23 BP 519 Abidjan 23",
-  phone: "07 48 627 869",
-  phoneFormatted: "+2250748627869",
-  whatsappUrl: "[https://wa.me/2250748627869?text=Bonjour,%20je%20souhaite%20des%20informations%20sur%20le%20Coll%C3%A8ge%20JBS2](https://wa.me/2250748627869?text=Bonjour,%20je%20souhaite%20des%20informations%20sur%20le%20Coll%C3%A8ge%20JBS2)",
-  email: "college.jbs2@gmail.com",
-  mapsUrl: "[https://www.google.com/maps?q=5.340777,-4.052753](https://www.google.com/maps?q=5.340777,-4.052753)",
-  facebookUrl: "[https://facebook.com](https://facebook.com)",
-  // drenaUrl: "[https://drenaabidjan3.ci/](https://drenaabidjan3.ci/)", // Lien DRENA 3 (retiré du portail numérique)
-};
+              </div>
+            )}
 
-// ============================================================================
-// FONCTION DE CALCUL DYNAMIQUE DES FRAIS
-// ============================================================================
-const calculateSchoolFees = (classe: string, statut: string) => {
-  const isAffecte = statut === 'affecte';
-  const isCollege = ['6ème', '5ème', '4ème', '3ème'].some(c => classe.includes(c));
-  const isLyceeGeneral = ['2nde A', '2nde D', '1ère A', '1ère D', 'Terminale A', 'Terminale D'].some(c => classe.includes(c));
+            {inscriptionStep === 2 && (
+              <div className="space-y-5 text-xs">
+                <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                  <h4 className="font-bold text-sm text-[#0a2540] border-b pb-2">Récapitulatif de la Réservation</h4>
+                  <div className="grid grid-cols-2 gap-2 text-slate-600">
+                    <p>Candidate : <strong className="text-slate-800">{formData.nom || '—'} {formData.prenom}</strong></p>
+                    <p>Classe : <strong className="text-[#047857]">{formData.classe}</strong></p>
+                    <p>Statut : <strong>{formData.statut === 'affecte' ? "Affecté de l'État" : "Non-affecté / Inscription Libre"}</strong></p>
+                    <p>MGA : <strong className="text-[#047857]">{formData.mga ? `${formData.mga} / 20` : '—'}</strong></p>
+                    <p className="col-span-2">Établissement d'Origine : <strong>{formData.etablissementOrigine || '—'}</strong></p>
+                  </div>
+                </div>
 
-  if (isAffecte) {
-    return {
-      inscription: 10000,
-      scolarite: 15000,
-      total: 25000,
-      note: "Prise en charge par l'État de Côte d'Ivoire (Seuls les frais annexes d'inscription s'appliquent)."
-    };
-  } else {
-    if (isCollege) {
-      return {
-        inscription: 25000,
-        scolarite: 95000,
-        total: 120000,
-        note: "Tarif Inscription Libre - Premier Cycle Général."
-      };
-    } else if (isLyceeGeneral) {
-      return {
-        inscription: 30000,
-        scolarite: 110000,
-        total: 140000,
-        note: "Tarif Inscription Libre - Second Cycle Général (Séries A/D)."
-      };
-    } else {
-      return {
-        inscription: 35000,
-        scolarite: 125000,
-        total: 160000,
-        note: "Tarif Inscription Libre - Pôle Technique Tertiaire (G1, G2, AB)."
-      };
-    }
-  }
-};
+                <div className="bg-emerald-50/70 border border-emerald-200 p-5 rounded-2xl space-y-4">
+                  <div className="flex items-center gap-2 text-[#047857] font-extrabold text-sm">
+                    <span className="material-symbols-outlined">payments</span>
+                    <span>Détail des Frais d'Inscription & Scolarité</span>
+                  </div>
 
-// ============================================================================
-// COMPOSANT: RECHERCHE DE BULLETIN NUMÉRIQUE (Lit le notes.json)
-// ============================================================================
-function BulletinNumeriqueSearch() {
-  const [query, setQuery] = useState('');
-  const [searching, setSearching] = useState(false);
-  const [student, setStudent] = useState<any | null>(null);
-  const [error, setError] = useState('');
+                  <div className="space-y-2 bg-white p-4 rounded-xl border border-emerald-100 shadow-sm">
+                    <div className="flex justify-between items-center border-b pb-2">
+                      <span className="font-semibold text-slate-600">Frais d'Inscription & Dossier :</span>
+                      <span className="font-bold text-slate-800">{currentFees.inscription.toLocaleString()} FCFA</span>
+                    </div>
 
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!query.trim()) return;
-    setSearching(true);
-    setError('');
-    setStudent(null);
+                    <div className="flex justify-between items-center border-b pb-2 pt-1">
+                      <span className="font-semibold text-slate-600">Frais de Scolarité Annuelle :</span>
+                      <span className="font-bold text-slate-800">{currentFees.scolarite.toLocaleString()} FCFA</span>
+                    </div>
 
-    try {
-      const res = await fetch('/notes.json');
-      if (!res.ok) throw new Error("Fichier introuvable");
-      const data = await res.json();
-      
-      const searchTerm = query.toLowerCase().trim();
-      
-      const found = data.find((s: any) => 
-        s.matricule.toLowerCase().includes(searchTerm) || 
-        s.nom.toLowerCase().includes(searchTerm)
-      );
+                    <div className="flex justify-between items-center pt-2 text-sm font-black text-[#0a2540]">
+                      <span>MONTANT TOTAL À PAYER :</span>
+                      <span className="text-base text-[#047857] bg-emerald-100 px-3 py-1 rounded-lg">
+                        {currentFees.total.toLocaleString()} FCFA
+                      </span>
+                    </div>
+                  </div>
 
-      if (found) {
-        setStudent(found);
-      } else {
-        setError(`Aucun élève trouvé pour "${query}". Vérifiez le matricule ou l'orthographe du nom.`);
-      }
-    } catch (err) {
-      setError("Impossible de charger les notes. Assurez-vous que les notes ont été exportées (fichier notes.json manquant).");
-    } finally {
-      setSearching(false);
-    }
-  };
+                  <p className="text-[11px] text-slate-500 italic bg-white/50 p-2.5 rounded-lg border border-emerald-100">
+                    💡 {currentFees.note}
+                  </p>
+                </div>
 
-  return (
-    <div className="bg-[#0a2540] p-6 sm:p-8 rounded-3xl space-y-6 shadow-xl border border-white/10 mt-8">
-      <div className="flex flex-col md:flex-row items-center gap-4 border-b border-white/10 pb-6 text-center md:text-left">
-        <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-[#f59e0b] shrink-0">
-          <span className="material-symbols-outlined text-2xl">school</span>
-        </div>
-        <div>
-          <span className="bg-[#047857] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-md uppercase">
-            3ème TRIMESTRE 2025-2026
-          </span>
-          <h4 className="font-bold text-lg mt-1 text-white">Consulter le Bulletin Numérique</h4>
-          <p className="text-xs text-slate-300">Entrez le matricule ou le nom de l'élève pour générer le récapitulatif des moyennes.</p>
-        </div>
-      </div>
+              </div>
+            )}
 
-      <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3">
-        <input
-          type="text"
-          placeholder="Ex: 25170040G ou BABOYEHE CHRIST..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="flex-1 p-3 bg-white/10 border border-white/20 rounded-xl text-xs text-white outline-none focus:border-[#f59e0b] placeholder-slate-400"
-        />
-        <button type="submit" disabled={searching} className="px-6 py-3 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors disabled:opacity-50">
-          {searching ? <span className="material-symbols-outlined animate-spin text-base">sync</span> : <span className="material-symbols-outlined text-base">search</span>}
-          Rechercher
-        </button>
-      </form>
+            {inscriptionStep === 3 && (
+              <div className="space-y-4 text-xs text-center py-4">
+                <div className="w-16 h-16 bg-emerald-100 text-[#047857] rounded-full flex items-center justify-center mx-auto border-4 border-emerald-50">
+                  <span className="material-symbols-outlined text-3xl">check_circle</span>
+                </div>
 
-      {error && (
-        <div className="p-3 bg-red-500/20 text-red-200 text-xs rounded-xl flex items-center gap-2 border border-red-500/30">
-          <span className="material-symbols-outlined text-base">error</span> {error}
+                <div className="space-y-1">
+                  <h4 className="font-extrabold text-lg text-[#0a2540]">Réservation de Place Enregistrée !</h4>
+                  <p className="text-slate-500 max-w-md mx-auto">
+                    La préinscription de <strong>{formData.nom} {formData.prenom}</strong> en classe de <strong>{formData.classe}</strong> a été enregistrée avec succès dans le système.
+                  </p>
+                </div>
+
+                <div className="bg-slate-50 p-4 rounded-2xl border text-left space-y-2 max-w-md mx-auto">
+                  <p className="font-bold text-[#0a2540] border-b pb-1">Bordereau de Réservation :</p>
+                  <p className="flex justify-between"><span>Matricule :</span> <strong>{formData.matricule || 'N/A'}</strong></p>
+                  <p className="flex justify-between"><span>Total Frais à Réglera :</span> <strong className="text-[#047857]">{currentFees.total.toLocaleString()} FCFA</strong></p>
+                  <p className="flex justify-between"><span>Lieu de Dépôt :</span> <strong>Secrétariat J.B. de La Salle 2 (Attécoubé Santé 3)</strong></p>
+                </div>
+              </div>
+            )}
+
+            <div className="flex justify-between pt-4 border-t">
+              {inscriptionStep === 2 && (
+                <button 
+                  onClick={() => setInscriptionStep(1)} 
+                  className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold"
+                >
+                  Retour
+                </button>
+              )}
+
+              {inscriptionStep === 1 && (
+                <button 
+                  onClick={() => setInscriptionStep(2)} 
+                  disabled={!formData.nom || !formData.prenom || !formData.etablissementOrigine}
+                  className="px-6 py-3 bg-[#0a2540] hover:bg-[#061726] text-white rounded-xl text-xs font-bold flex items-center gap-1.5 ml-auto disabled:opacity-50 shadow-md"
+                >
+                  <span>Étape Suivante (Calcul des Frais)</span>
+                  <span className="material-symbols-outlined text-base">arrow_forward</span>
+                </button>
+              )}
+
+              {inscriptionStep === 2 && (
+                <button 
+                  onClick={handleReservationSubmit} 
+                  disabled={isSubmitting}
+                  className="px-6 py-3 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-xs font-bold flex items-center gap-2 ml-auto shadow-md transition-all disabled:opacity-50"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <span className="material-symbols-outlined animate-spin text-base">sync</span>
+                      <span>Enregistrement dans le système...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="material-symbols-outlined text-base">how_to_reg</span>
+                      <span>Valider la Réservation en Ligne</span>
+                    </>
+                  )}
+                </button>
+              )}
+
+              {inscriptionStep === 3 && (
+                <button 
+                  onClick={() => setInscriptionModal(false)} 
+                  className="px-6 py-3 bg-[#0a2540] text-white rounded-xl text-xs font-bold ml-auto"
+                >
+                  Fermer & Imprimer la Fiche
+                </button>
+              )}
+            </div>
+
+          </div>
         </div>
       )}
 
-      {student && (
-        <div className="mt-6 bg-white rounded-2xl p-6 sm:p-8 text-slate-800 shadow-2xl relative overflow-hidden">
-          <div className="text-center border-b-2 border-slate-200 pb-4 mb-6 space-y-1">
-            <h3 className="font-extrabold text-xl text-[#0a2540]">{SCHOOL_INFO.shortName}</h3>
-            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Bulletin Récapitulatif - 3ème Trimestre</p>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6 bg-slate-50 p-4 rounded-xl border border-slate-100">
-            <div className="col-span-2">
-              <p className="text-[10px] font-bold text-slate-400 uppercase">Nom & Prénoms</p>
-              <p className="font-bold text-sm text-[#0a2540]">{student.nom}</p>
+      {/* MODAL ASSISTANT IA */}
+      {aiOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl max-w-md w-full h-[520px] flex flex-col shadow-2xl overflow-hidden border border-slate-100">
+            <div className="p-4 bg-[#0a2540] text-white flex justify-between items-center">
+              <span className="font-bold text-sm flex items-center gap-2">
+                <span className="material-symbols-outlined text-base text-[#f59e0b]">smart_toy</span>
+                Assistant IA Lasallien
+              </span>
+              <button onClick={() => setAiOpen(false)} className="hover:opacity-75"><span className="material-symbols-outlined">close</span></button>
             </div>
-            <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase">Matricule</p>
-              <p className="font-bold text-sm text-[#0a2540]">{student.matricule}</p>
-            </div>
-            <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase">Classe</p>
-              <p className="font-bold text-sm text-[#047857]">{student.classe}</p>
-            </div>
-          </div>
 
-          <div className="border border-slate-200 rounded-xl overflow-hidden mb-6">
-            <table className="w-full text-xs text-left">
-              <thead className="bg-[#0a2540] text-white">
-                <tr>
-                  <th className="p-3 font-bold">Matière</th>
-                  <th className="p-3 font-bold text-center w-24">Note / 20</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {student.francais && student.francais.globale && (
-                  <>
-                    <tr className="bg-slate-50">
-                      <td className="p-3 font-bold text-[#0a2540]">Français (Moyenne Globale)</td>
-                      <td className={`p-3 font-bold text-center ${Number(student.francais.globale) >= 10 ? 'text-[#047857]' : 'text-red-600'}`}>
-                        {student.francais.globale}
-                      </td>
-                    </tr>
-                  </>
-                )}
-
-                {student.notes && Object.entries(student.notes).map(([matiere, note]) => (
-                  <tr key={matiere} className="hover:bg-slate-50 transition-colors">
-                    <td className="p-3 font-medium text-slate-700">{matiere}</td>
-                    <td className={`p-3 font-bold text-center ${Number(note) >= 10 ? 'text-[#047857]' : (Number(note) < 10 ? 'text-red-600' : 'text-slate-400')}`}>
-                      {note as React.ReactNode}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-emerald-50 p-4 rounded-xl border border-emerald-100">
-            <div className="flex items-center gap-4 text-center sm:text-left">
-              <div className="w-16 h-16 bg-[#047857] text-white rounded-full flex items-center justify-center font-black text-xl shadow-md border-4 border-white">
-                {student.moyenne}
-              </div>
-              <div>
-                <p className="text-xs font-bold text-[#047857] uppercase tracking-wider">Moyenne Trimestrielle</p>
-                <p className="text-sm font-extrabold text-[#0a2540]">
-                  Rang : {student.rang !== 'N/A' && student.rang !== 'nan' ? student.rang : 'Non classé'}
-                </p>
-              </div>
+            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50 text-xs">
+              {messages.map(m => (
+                <div key={m.id} className={`flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[85%] p-3 rounded-2xl ${m.sender === 'user' ? 'bg-[#0a2540] text-white' : 'bg-white border border-slate-200 text-slate-800 shadow-sm'}`}>
+                    {m.text}
+                  </div>
+                </div>
+              ))}
             </div>
-            <button onClick={() => window.print()} className="w-full sm:w-auto px-6 py-3 bg-[#0a2540] hover:bg-[#061726] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 transition-all shadow-md">
-              <span className="material-symbols-outlined text-base">print</span> Imprimer le bulletin
-            </button>
+
+            <div className="p-3 bg-white border-t border-slate-200 flex gap-2">
+              <input 
+                type="text" 
+                placeholder="Posez votre question..." 
+                value={inputValue} 
+                onChange={e => setInputValue(e.target.value)} 
+                onKeyDown={e => e.key === 'Enter' && handleSend()}
+                className="flex-1 p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#0a2540]" 
+              />
+              <button onClick={handleSend} className="p-2.5 bg-[#0a2540] text-white rounded-xl hover:bg-[#061726] transition-colors">
+                <span className="material-symbols-outlined text-base">send</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
+
+      {/* FOOTER */}
+      <footer className="bg-[#0a2540] text-white text-xs py-12 border-t border-white/10 mt-12">
+        <div className="max-w-7xl mx-auto px-4 lg:px-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 font-extrabold text-base">
+              <span className="material-symbols-outlined text-[#f59e0b]">school</span>
+              {SCHOOL_INFO.shortName}
+            </div>
+            <p className="text-slate-400 leading-relaxed text-[11px]">
+              Fondé sur les valeurs de foi, de service et de communauté, notre collège privé technique est un pilier de l'éducation générale et tertiaire en Côte d'Ivoire.
+            </p>
+          </div>
+
+          <div>
+            <h4 className="font-bold text-sm text-[#f59e0b] mb-3 uppercase tracking-wider">LIENS UTILES</h4>
+            <ul className="space-y-2 text-slate-300 text-[11px]">
+              <li>
+                <button onClick={() => setFooterModal('mentions')} className="hover:underline text-left">
+                  Mentions Légales & Agréments
+                </button>
+              </li>
+              <li>
+                <a href="#accueil" className="hover:underline">
+                  Plan du Site & Accueil
+                </a>
+              </li>
+              <li>
+                <a href="#contact" className="hover:underline">
+                  Contact & Secrétariat
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-bold text-sm text-[#f59e0b] mb-3 uppercase tracking-wider">ACADÉMIQUE</h4>
+            <ul className="space-y-2 text-slate-300 text-[11px]">
+              <li>
+                <button onClick={() => setActuModal('dates')} className="hover:underline text-left">
+                  Calendrier Scolaire 2026-2027
+                </button>
+              </li>
+              <li>
+                <button onClick={() => setFooterModal('fournitures')} className="hover:underline text-left">
+                  Listes de Fournitures Scolaires
+                </button>
+              </li>
+              <li>
+                <button onClick={() => setActuModal('viescolaire')} className="hover:underline text-left">
+                  Examens Blancs & Épreuves
+                </button>
+              </li>
+              <li>
+                <a href="#portails" className="hover:underline">
+                  Suivi du Carnet d'Assiduité
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-bold text-sm text-[#f59e0b] mb-3 uppercase tracking-wider">SUIVEZ-NOUS</h4>
+            <p className="text-slate-400 text-[11px] mb-3">
+              Restez informés des actualités et échangez avec le secrétariat sur nos canaux officiels.
+            </p>
+            <div className="flex gap-2">
+              <a 
+                href={SCHOOL_INFO.whatsappUrl} 
+                target="_blank" 
+                rel="noreferrer" 
+                title="Contacter le Secrétariat sur WhatsApp"
+                className="w-9 h-9 bg-emerald-600/30 hover:bg-emerald-600 text-white rounded-lg flex items-center justify-center transition-all"
+              >
+                <span className="material-symbols-outlined text-lg">chat</span>
+              </a>
+              <a 
+                href={SCHOOL_INFO.facebookUrl} 
+                target="_blank" 
+                rel="noreferrer" 
+                title="Page Facebook Officielle"
+                className="w-9 h-9 bg-blue-600/30 hover:bg-blue-600 text-white rounded-lg flex items-center justify-center transition-all"
+              >
+                <span className="material-symbols-outlined text-lg">public</span>
+              </a>
+              <a 
+                href={SCHOOL_INFO.mapsUrl} 
+                target="_blank" 
+                rel="noreferrer" 
+                title="Localisation Google Maps"
+                className="w-9 h-9 bg-white/10 hover:bg-white/20 text-white rounded-lg flex items-center justify-center transition-all"
+              >
+                <span className="material-symbols-outlined text-lg">location_on</span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 lg:px-10 mt-12 pt-6 border-t border-white/10 text-center text-slate-400 text-[11px]">
+          © 2026 {SCHOOL_INFO.fullName}. Tous droits réservés.
+        </div>
+      </footer>
+
     </div>
   );
 }
-
-// ============================================================================
-// COMPOSANT PRINCIPAL
-// ============================================================================
-export default function App() {
-  const [aiOpen, setAiOpen] = useState(false);
-  const [detailsModal, setDetailsModal] = useState<'general' | 'technique' | null>(null);
-  const [actuModal, setActuModal] = useState<'dates' | 'viescolaire' | 'festif' | null>(null);
-  const [footerModal, setFooterModal] = useState<'mentions' | 'fournitures' | null>(null);
-  const [inscriptionModal, setInscriptionModal] = useState(false);
-  const [inscriptionStep, setInscriptionStep] = useState(1);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [activePortalTab, setActivePortalTab] = useState<'eleves' | 'parents' | 'profs'>('eleves');
-
-  // FORMULAIRE DE PRÉ-INSCRIPTION / RÉSERVATION DE PLACE
-  const [formData, setFormData] = useState({
-    matricule: '',
-    nom: '',
-    prenom: '',
-    classe: '6ème — Enseignement Général',
-    statut: 'affecte',
-    etablissementOrigine: '',
-    mga: '',
-    filiere: 'general',
-  });
-
-  const [messages, setMessages] = useState([
-    { id: '1', sender: 'assistant', text: `Bonjour ! Je suis l'Assistant Virtuel du Collège J.B. de La Salle 2. Comment puis-je vous aider aujourd'hui ? Vous pouvez aussi contacter le secrétariat au ${SCHOOL_INFO.phone}.` }
-  ]);
-  const [inputValue, setInputValue] = useState('');
-
-  const handleSend = () => {
-    if (!inputValue.trim()) return;
-    const userMsg = { id: Date.now().toString(), sender: 'user', text: inputValue };
-    setMessages(prev => [...prev, userMsg]);
-    setInputValue('');
-    setTimeout(() => {
-      setMessages(prev => [...prev, {
-        id: (Date.now() + 1).toString(),
-        sender: 'assistant',
-        text: `Merci pour votre message ! Le secrétariat d'Attécoubé Santé 3 reste joignable au ${SCHOOL_INFO.phone} ou par email à ${SCHOOL_INFO.email}.`
-      }]);
-    }, 600);
-  };
-
-  const openInscriptionWithFiliere = (filiere: 'general' | 'technique') => {
-    setFormData(prev => ({ 
-      ...prev, 
-      filiere, 
-      classe: filiere === 'general' ? '6ème — Enseignement Général' : '2nde G1/G2/AB'
-    }));
-    setInscriptionStep(1);
-    setInscriptionModal(true);
-  };
-
-  const handleReservationSubmit = async () => {
-    setIsSubmitting(true);
-
-    const reservationPayload = {
-      matricule_eleve: formData.matricule,
-      nom: formData.nom,
-      prenom: formData.prenom,
-      classe_sollicitee: formData.classe,
-      statut_affecte: formData.statut === 'affecte',
-      etablissement_origine: formData.etablissementOrigine,
-      mga: parseFloat(formData.mga) || 0,
-      filiere: formData.filiere,
-      frais_estimes: calculateSchoolFees(formData.classe, formData.statut),
-      created_at: new Date().toISOString()
-    };
-
-    console.log("📥 payload prêt pour envoi au backend:", reservationPayload);
-
-    await new Promise(resolve => setTimeout(resolve, 800));
-    setIsSubmitting(false);
-    setInscriptionStep(3);
-  };
-
-  const currentFees = calculateSchoolFees(formData.classe, formData.statut);
-
-  return (
-    <div className="min-h-screen bg-[#f4f6f8] text-[#1e293b] font-sans antialiased">
-      
-      {/* 1. HEADER (Correction: Nom complet sur 2 lignes) */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 lg:px-10 py-3 shadow-sm">
-        <div className="max-w-[90rem] mx-auto flex items-center justify-between gap-4">
-          
-          <div className="flex items-center gap-3 min-w-0">
-            <img src={MEDIA_CONFIG.logo} alt="Logo JBS2" className="h-12 w-auto object-contain shrink-0" />
-            <div className="min-w-0 flex flex-col justify-center">
-              <div className="flex items-center gap-2">
-                {/* CORRECTION: flex-wrap + truncation pour afficher sur 2 lignes */}
-                <span className="font-extrabold text-xl lg:text-2xl text-[#0a2540] tracking-tighter leading-tight flex flex-wrap max-w-lg">
-                  {SCHOOL_INFO.fullName}
-                </span>
-                <span className="inline-block bg-[#0b3c5d] text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase shrink-0">
-                  DRENA 3
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 font-medium truncate mt-0.5">{SCHOOL_INFO.address}</p>
-            </div>
-          </div>
-
-          <nav className="hidden xl:flex items-center gap-7 text-xs font-bold text-slate-700">
-            <a href="#accueil" className="text-[#0a2540] border-b-2 border-[#0a2540] pb-1">Accueil</a>
-            <a href="#formations" className="hover:text-[#0a2540] transition-colors pb-1">Formations</a>
-            <a href="#portails" className="hover:text-[#0a2540] transition-colors pb-1">Portails Numériques</a>
-            <a href="#actualites" className="hover:text-[#0a2540] transition-colors pb-1">Actualités</a>
-            <a href="#contact" className="hover:text-[#0a2540] transition-colors pb-1">Nous Trouver</a>
-          </nav>
-
-          <div className="flex items-center gap-3 shrink-0">
-            <button 
-              onClick={() => setAiOpen(true)}
-              className="flex items-center gap-1.5 px-4 py-2.5 bg-[#f59e0b] hover:bg-[#d97706] text-white rounded-xl text-xs font-bold transition-all shadow-sm"
-            >
-              <span className="material-symbols-outlined text-base">smart_toy</span>
-              <span className="hidden sm:inline">Assistant IA</span>
-            </button>
-
-            <button 
-              onClick={() => openInscriptionWithFiliere('general')}
-              className="flex items-center gap-1.5 px-5 py-2.5 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-xs font-bold transition-all shadow-sm whitespace-nowrap"
-            >
-              <span className="material-symbols-outlined text-base">how_to_reg</span>
-              <span>Réservation<span className="hidden sm:inline"> en Ligne</span></span>
-            </button>
-          </div>
-
-        </div>
-      </header>
-
-      {/* 2. HERO SECTION */}
-      <section id="accueil" className="relative bg-[#0a2540] text-white overflow-hidden py-16 lg:py-24 px-4 lg:px-12">
-        <div 
-          className="absolute inset-0 opacity-20 bg-cover bg-center mix-blend-overlay pointer-events-none"
-          style={{ backgroundImage: `url(${MEDIA_CONFIG.heroBackground})` }}
-        />
-
-        <div className="max-w-[90rem] mx-auto grid lg:grid-cols-12 gap-12 items-center relative z-10">
-          <div className="lg:col-span-6 space-y-6">
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#f59e0b] text-[#0a2540] text-xs font-extrabold uppercase rounded-full tracking-wide shadow-sm">
-              <span className="material-symbols-outlined text-base">workspace_premium</span>
-              ÉTABLISSEMENT D'EXCELLENCE • DRENA 3
-            </span>
-            
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tighter">
-              L'Excellence Éducative et Technique au Cœur d'Attécoubé
-            </h1>
-
-            <p className="text-slate-300 text-base sm:text-lg leading-relaxed font-normal max-w-3xl">
-              Le <em>{SCHOOL_INFO.fullName}</em> forme les leaders de demain à travers un enseignement général rigoureux et un pôle technique tertiaire de haut niveau au service du développement ivoirien.
-            </p>
-
-            <div className="flex flex-wrap gap-4 pt-3">
-              <button 
-                onClick={() => openInscriptionWithFiliere('general')}
-                className="flex items-center gap-2.5 px-7 py-3.5 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl font-bold text-sm sm:text-base transition-all shadow-md"
-              >
-                <span className="material-symbols-outlined text-xl">event_seat</span>
-                Réserver une place en Ligne
-              </button>
-              <a href="#formations" className="flex items-center gap-2.5 px-7 py-3.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-xl font-bold text-sm sm:text-base backdrop-blur-sm transition-all">
-                <span className="material-symbols-outlined text-xl">explore</span>
-                Visiter le Collège
-              </a>
-            </div>
-
-            {/* SECTION STATISTIQUES */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 pt-8">
-              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10 shadow-inner">
-                <span className="text-3xl sm:text-4xl font-black text-[#f59e0b]">58,88 %</span>
-                <p className="text-xs text-slate-300 font-medium mt-1">Réussite BEPC</p>
-              </div>
-              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10 shadow-inner">
-                <span className="text-3xl sm:text-4xl font-black text-[#f59e0b]">49,50 %</span>
-                <p className="text-xs text-slate-300 font-medium mt-1">Réussite BAC</p>
-              </div>
-              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10 shadow-inner">
-                <span className="text-3xl sm:text-4xl font-black text-[#f59e0b]">1 450+</span>
-                <pnode update.cjs
