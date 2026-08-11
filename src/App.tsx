@@ -11,7 +11,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const MEDIA_CONFIG = {
   logo: "/logo.png",
-  heroBackground: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1600",
+  heroBackground: "/facade.jpg", // Filigrane identique à la façade
   facadeCard: "/facade.jpg",
   generalImage: "/enseignement-general.jpg",
   techniqueImage: "/technique.jpg",
@@ -273,14 +273,36 @@ export default function App() {
     setInscriptionModal(true);
   };
 
+  const currentFees = calculateSchoolFees(formData.classe, formData.statut);
+
+  // Soumission réelle de la Préinscription à Supabase
   const handleReservationSubmit = async () => {
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 800));
-    setIsSubmitting(false);
-    setInscriptionStep(3);
-  };
+    try {
+      const { error } = await supabase.from('preinscriptions').insert([
+        {
+          matricule: formData.matricule || null,
+          nom: formData.nom,
+          prenom: formData.prenom,
+          classe: formData.classe,
+          statut: formData.statut,
+          etablissement_origine: formData.etablissementOrigine,
+          mga: formData.mga || null,
+          filiere: formData.filiere,
+          frais_inscription: currentFees.inscription,
+          frais_scolarite: currentFees.scolarite,
+          frais_total: currentFees.total,
+        }
+      ]);
 
-  const currentFees = calculateSchoolFees(formData.classe, formData.statut);
+      if (error) throw error;
+      setInscriptionStep(3);
+    } catch (err: any) {
+      alert("Erreur lors de l'enregistrement de la préinscription: " + err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   // Chargement des activités depuis Supabase
   const fetchActivities = async () => {
@@ -437,7 +459,7 @@ export default function App() {
       {/* 2. HERO SECTION */}
       <section id="accueil" className="relative bg-[#0a2540] text-white overflow-hidden py-10 lg:py-14 px-4 lg:px-12">
         <div 
-          className="absolute inset-0 opacity-20 bg-cover bg-center mix-blend-overlay pointer-events-none"
+          className="absolute inset-0 opacity-15 bg-cover bg-center mix-blend-overlay pointer-events-none"
           style={{ backgroundImage: `url(${MEDIA_CONFIG.heroBackground})` }}
         />
 
@@ -662,7 +684,6 @@ export default function App() {
             </p>
           </div>
 
-          {/* SÉPARATION EN FILTRES DISTINCTS */}
           <div className="flex flex-wrap gap-1.5 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm text-xs font-bold">
             <button onClick={() => setSelectedCategory('tous')} className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'tous' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Toutes</button>
             <button onClick={() => setSelectedCategory('pedagogie')} className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'pedagogie' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Pédagogie & Calendrier</button>
@@ -1059,7 +1080,7 @@ export default function App() {
                 <div className="space-y-1">
                   <h4 className="font-extrabold text-lg text-[#0a2540]">Préinscription Enregistrée !</h4>
                   <p className="text-slate-500 max-w-md mx-auto">
-                    La préinscription de <strong>{formData.nom} {formData.prenom}</strong> en classe de <strong>{formData.classe}</strong> a été enregistrée avec succès.
+                    La préinscription de <strong>{formData.nom} {formData.prenom}</strong> en classe de <strong>{formData.classe}</strong> a été enregistrée avec succès dans la base de données de l'établissement.
                   </p>
                 </div>
 
@@ -1102,7 +1123,7 @@ export default function App() {
                   {isSubmitting ? (
                     <>
                       <span className="material-symbols-outlined animate-spin text-base">sync</span>
-                      <span>Enregistrement...</span>
+                      <span>Enregistrement dans Supabase...</span>
                     </>
                   ) : (
                     <>
