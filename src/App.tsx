@@ -37,7 +37,7 @@ const SCHOOL_INFO = {
 const calculateSchoolFees = (classe: string, statut: string) => {
   const isAffecte = statut === 'affecte';
   const isCollege = ['6ème', '5ème', '4ème', '3ème'].some(c => classe.includes(c));
-  const isLyceeGeneral = ['2nde A', '2nde D', '1ère A', '1ère D', 'Terminale A', 'Terminale D'].some(c => classe.includes(c));
+  const isLyceeGeneral = ['2nd A', '2nd C', '1ère A2', '1ère D', 'Tle A2', 'Tle D'].some(c => classe.includes(c));
 
   if (isAffecte) {
     return {
@@ -59,14 +59,14 @@ const calculateSchoolFees = (classe: string, statut: string) => {
         inscription: 30000,
         scolarite: 110000,
         total: 140000,
-        note: "Tarif Inscription Libre - Second Cycle Général (Séries A/D)."
+        note: "Tarif Inscription Libre - Second Cycle Général (A2 / C / D)."
       };
     } else {
       return {
         inscription: 35000,
         scolarite: 125000,
         total: 160000,
-        note: "Tarif Inscription Libre - Pôle Technique Tertiaire (G1, G2, AB)."
+        note: "Tarif Inscription Libre - Pôle Technique Tertiaire (AB / B / G1 / G2)."
       };
     }
   }
@@ -238,7 +238,7 @@ export default function App() {
     matricule: '',
     nom: '',
     prenom: '',
-    classe: '6ème — Enseignement Général',
+    classe: '6ème',
     statut: 'affecte',
     etablissementOrigine: '',
     mga: '',
@@ -268,7 +268,7 @@ export default function App() {
     setFormData(prev => ({ 
       ...prev, 
       filiere, 
-      classe: filiere === 'general' ? '6ème — Enseignement Général' : '2nde G1/G2/AB'
+      classe: filiere === 'general' ? '6ème' : '2nd AB'
     }));
     setInscriptionStep(1);
     setInscriptionModal(true);
@@ -655,11 +655,11 @@ export default function App() {
               </div>
               <div className="p-5 space-y-3">
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  De la 6ème à la Terminale (Séries A & D). Un encadrement pédagogique d'élite pour la réussite aux examens nationaux du BEPC et du BAC.
+                  De la 6ème à la Terminale. Un encadrement pédagogique d'élite pour la réussite aux examens nationaux du BEPC et du BAC.
                 </p>
                 <div className="space-y-1.5 text-xs font-bold text-slate-700">
-                  <p className="flex items-center gap-2"><span className="text-[#047857]">✓</span> Cycle Orientation (6ème - 3ème)</p>
-                  <p className="flex items-center gap-2"><span className="text-[#047857]">✓</span> Cycle Secondaire (2nde - Terminale A/D)</p>
+                  <p className="flex items-center gap-2"><span className="text-[#047857]">✓</span> Premier Cycle (6ème, 5ème, 4ème, 3ème)</p>
+                  <p className="flex items-center gap-2"><span className="text-[#047857]">✓</span> Second Cycle (2nd A, 2nd C, 1ère A2/D, Tle A2/D)</p>
                 </div>
               </div>
             </div>
@@ -688,12 +688,12 @@ export default function App() {
               </div>
               <div className="p-5 space-y-3">
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Formations professionnalisantes en G1, G2, Série AB, Comptabilité et Secrétariat. Préparez votre insertion immédiate en entreprise.
+                  Formations professionnalisantes en G1, G2, Série B / AB. Préparez votre insertion immédiate en entreprise.
                 </p>
                 <div className="grid grid-cols-3 gap-2 text-[11px]">
-                  <div className="p-2 bg-emerald-50 text-[#047857] font-bold rounded-lg text-center">Série G1</div>
-                  <div className="p-2 bg-emerald-50 text-[#047857] font-bold rounded-lg text-center">Série G2</div>
-                  <div className="p-2 bg-emerald-50 text-[#047857] font-bold rounded-lg text-center">Série AB</div>
+                  <div className="p-2 bg-emerald-50 text-[#047857] font-bold rounded-lg text-center">Séries G1 / G2</div>
+                  <div className="p-2 bg-emerald-50 text-[#047857] font-bold rounded-lg text-center">Séries AB / B</div>
+                  <div className="p-2 bg-emerald-50 text-[#047857] font-bold rounded-lg text-center">Formations Pro</div>
                 </div>
               </div>
             </div>
@@ -1052,22 +1052,27 @@ export default function App() {
                     className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none font-bold text-slate-800 focus:border-[#0a2540]"
                   >
                     <optgroup label="Enseignement Général">
-                      <option value="6ème — Enseignement Général">6ème — Enseignement Général</option>
-                      <option value="5ème — Enseignement Général">5ème — Enseignement Général</option>
-                      <option value="4ème — Enseignement Général">4ème — Enseignement Général</option>
-                      <option value="3ème — Enseignement Général">3ème — Enseignement Général</option>
-                      <option value="2nde A / D">2nde A / D</option>
-                      <option value="1ère A / D">1ère A / D</option>
-                      <option value="Terminale A / D">Terminale A / D</option>
+                      <option value="6ème">6ème</option>
+                      <option value="5ème">5ème</option>
+                      <option value="4ème">4ème</option>
+                      <option value="3ème">3ème</option>
+                      <option value="2nd A">2nd A</option>
+                      <option value="2nd C">2nd C</option>
+                      <option value="1ère A2">1ère A2</option>
+                      <option value="1ère D">1ère D</option>
+                      <option value="Tle A2">Tle A2</option>
+                      <option value="Tle D">Tle D</option>
                     </optgroup>
                     <optgroup label="Technique Tertiaire">
-                      <option value="2nde G1/G2/AB">2nde G1 / G2 / AB</option>
-                      <option value="1ère G1 (Secrétariat)">1ère G1 (Secrétariat)</option>
-                      <option value="1ère G2 (Comptabilité)">1ère G2 (Comptabilité)</option>
-                      <option value="1ère AB (Économie)">1ère AB (Économie)</option>
-                      <option value="Série G1 (Secrétariat - Terminale)">Série G1 (Secrétariat - Terminale)</option>
-                      <option value="Série G2 (Comptabilité - Terminale)">Série G2 (Comptabilité - Terminale)</option>
-                      <option value="Série AB (Économie - Terminale)">Série AB (Économie - Terminale)</option>
+                      <option value="2nd AB">2nd AB</option>
+                      <option value="2nd G1">2nd G1</option>
+                      <option value="2nd G2">2nd G2</option>
+                      <option value="1ère B">1ère B</option>
+                      <option value="1ère G1">1ère G1</option>
+                      <option value="1ère G2">1ère G2</option>
+                      <option value="Tle B">Tle B</option>
+                      <option value="Tle G1">Tle G1</option>
+                      <option value="Tle G2">Tle G2</option>
                     </optgroup>
                   </select>
                 </div>
