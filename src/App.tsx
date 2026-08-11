@@ -227,6 +227,69 @@ export default function App() {
       {/* 6. DÉCOUVERTE & ACTIVITÉS */}
       <Activities isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
 
+      {/* 7. NOUS TROUVER & CONTACT */}
+      <section id="contact" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8 print:hidden">
+        <div>
+          <span className="bg-[#0a2540] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-md uppercase tracking-wider">LOCALISATION & CONTACT</span>
+          <h2 className="text-2xl font-extrabold text-[#0a2540] mt-1">Nous Trouver</h2>
+          <p className="text-xs text-slate-500 mt-1">Situé à Attécoubé Santé 3, notre établissement offre un cadre sécurisé et propice aux études.</p>
+        </div>
+
+        <div className="grid lg:grid-cols-12 gap-8 items-start">
+          <div className="lg:col-span-4 space-y-3">
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-3">
+              <div className="w-9 h-9 bg-slate-100 rounded-xl flex items-center justify-center text-[#0a2540] shrink-0">
+                <span className="material-symbols-outlined text-lg">location_on</span>
+              </div>
+              <div>
+                <h4 className="font-bold text-xs text-[#0a2540]">Adresse Officielle</h4>
+                <p className="text-xs text-slate-600 mt-0.5 font-medium">{SCHOOL_INFO.address}</p>
+              </div>
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-3">
+              <div className="w-9 h-9 bg-slate-100 rounded-xl flex items-center justify-center text-[#0a2540] shrink-0">
+                <span className="material-symbols-outlined text-lg">call</span>
+              </div>
+              <div>
+                <h4 className="font-bold text-xs text-[#0a2540]">Téléphone (Secrétariat)</h4>
+                <a href={`tel:${SCHOOL_INFO.phoneFormatted}`} className="text-xs text-slate-600 mt-0.5 font-bold hover:text-[#047857] transition-colors block">
+                  {SCHOOL_INFO.phone}
+                </a>
+              </div>
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-3">
+              <div className="w-9 h-9 bg-slate-100 rounded-xl flex items-center justify-center text-[#0a2540] shrink-0">
+                <span className="material-symbols-outlined text-lg">mail</span>
+              </div>
+              <div>
+                <h4 className="font-bold text-xs text-[#0a2540]">Courrier Électronique</h4>
+                <a href={`mailto:${SCHOOL_INFO.email}`} className="text-xs text-slate-600 mt-0.5 font-bold hover:text-[#047857] transition-colors block">
+                  {SCHOOL_INFO.email}
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-8 bg-slate-200 rounded-3xl h-64 lg:h-72 border border-slate-300 relative overflow-hidden flex items-center justify-center shadow-inner">
+            <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#0a2540_1px,transparent_1px)] [background-size:16px_16px]" />
+            <div className="bg-white p-5 rounded-3xl shadow-xl text-center space-y-2 z-10 max-w-sm border border-slate-100">
+              <div className="w-10 h-10 bg-[#0a2540] text-white rounded-full flex items-center justify-center mx-auto shadow-md">
+                <span className="material-symbols-outlined text-xl">school</span>
+              </div>
+              <div>
+                <h4 className="font-extrabold text-[#0a2540] text-sm">{SCHOOL_INFO.shortName}</h4>
+                <p className="text-xs text-slate-500">Attécoubé Santé 3 (23 BP 519 Abidjan 23)</p>
+              </div>
+              <a href={SCHOOL_INFO.mapsUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-xs font-bold transition-all shadow-sm">
+                <span className="material-symbols-outlined text-base">map</span> Ouvrir dans Google Maps
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* MODAL PRÉINSCRIPTION */}
       {inscriptionModal && (
         <InscriptionModal 
