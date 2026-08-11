@@ -9,9 +9,9 @@ const MEDIA_CONFIG = {
   facadeCard: "/facade.jpg",
   generalImage: "/enseignement-general.jpg",
   techniqueImage: "/technique.jpg",
-  actu1: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=600",
-  actu2: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=600",
-  actu3: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=600",
+  actu1: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=600", // Calendrier / Dates
+  actu2: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=600", // Vie scolaire
+  actu3: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=600", // Festif & Culturel
 };
 
 // ============================================================================
@@ -225,6 +225,7 @@ function BulletinNumeriqueSearch() {
 export default function App() {
   const [aiOpen, setAiOpen] = useState(false);
   const [detailsModal, setDetailsModal] = useState<'general' | 'technique' | null>(null);
+  const [actuModal, setActuModal] = useState<'dates' | 'viescolaire' | 'festif' | null>(null);
   const [inscriptionModal, setInscriptionModal] = useState(false);
   const [inscriptionStep, setInscriptionStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -271,7 +272,6 @@ export default function App() {
     setInscriptionModal(true);
   };
 
-  // SOUMISSION PRÊTE POUR LE BACKEND (SUPABASE / API)
   const handleReservationSubmit = async () => {
     setIsSubmitting(true);
 
@@ -300,11 +300,10 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-[#1e293b] font-sans antialiased">
       
-      {/* 1. HEADER (CORRIGÉ MOBILE) */}
+      {/* 1. HEADER */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-3 sm:px-6 lg:px-10 py-2.5 shadow-sm">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
           
-          {/* LOGO + NOM DU COLLÈGE */}
           <div className="flex items-center gap-2 min-w-0">
             <img src={MEDIA_CONFIG.logo} alt="Logo JBS2" className="h-9 sm:h-11 w-auto object-contain shrink-0" />
             <div className="min-w-0">
@@ -320,7 +319,6 @@ export default function App() {
             </div>
           </div>
 
-          {/* NAVIGATION DESKTOP */}
           <nav className="hidden xl:flex items-center gap-7 text-xs font-bold text-slate-700">
             <a href="#accueil" className="text-[#0a2540] border-b-2 border-[#0a2540] pb-1">Accueil</a>
             <a href="#formations" className="hover:text-[#0a2540] transition-colors pb-1">Formations</a>
@@ -329,7 +327,6 @@ export default function App() {
             <a href="#contact" className="hover:text-[#0a2540] transition-colors pb-1">Nous Trouver</a>
           </nav>
 
-          {/* BOUTONS D'ACTION MOBILES ET DESKTOP */}
           <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
             <button 
               onClick={() => setAiOpen(true)}
@@ -611,53 +608,110 @@ export default function App() {
 
       </section>
 
-      {/* 5. ACTUALITÉS */}
+      {/* 5. ACTUALITÉS & ÉVÉNEMENTS ACADÉMIQUES (RESTRUCTURÉ) */}
       <section id="actualites" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
         <div>
-          <span className="bg-[#f59e0b] text-[#0a2540] text-[11px] font-extrabold px-3 py-1 rounded-md uppercase tracking-wider">VIE DE L'ÉTABLISSEMENT</span>
+          <span className="bg-[#f59e0b] text-[#0a2540] text-[11px] font-extrabold px-3 py-1 rounded-md uppercase tracking-wider">
+            VIE DE L'ÉTABLISSEMENT
+          </span>
           <h2 className="text-3xl font-extrabold text-[#0a2540] mt-2">Actualités & Événements Académiques</h2>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">Suivez les temps forts, examens régionaux DRENA 3 et avis de la direction.</p>
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            Consultez les dates clés, la vie scolaire et les événements culturels du Collège J.B. de La Salle 2.
+          </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-            <div className="relative h-48">
-              <img src={MEDIA_CONFIG.actu1} alt="Inscriptions" className="w-full h-full object-cover" />
-              <span className="absolute top-3 left-3 bg-[#0a2540] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase">RÉSERVATION DE PLACES</span>
+          
+          {/* CARTE 1 : CERCLE JAUNE - DATES IMPORTANTES DE L'ANNÉE SCOLAIRE */}
+          <div className="bg-white rounded-3xl overflow-hidden border-2 border-amber-300 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+            <div>
+              <div className="relative h-48">
+                <img src={MEDIA_CONFIG.actu1} alt="Dates Importantes" className="w-full h-full object-cover" />
+                <span className="absolute top-3 left-3 bg-[#f59e0b] text-[#0a2540] text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wide">
+                  CALENDRIER SCOLAIRE
+                </span>
+              </div>
+              <div className="p-5 space-y-3">
+                <span className="text-[11px] text-amber-600 font-bold uppercase tracking-wider">ANNÉE ACADÉMIQUE 2026-2027</span>
+                <h3 className="font-bold text-base text-[#0a2540] leading-snug">
+                  Dates Importantes, Découpage & Examens
+                </h3>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Retrouvez le calendrier officiel des trimestres, les périodes de congés scolaires, les examens et les courriers officiels du Ministère.
+                </p>
+              </div>
             </div>
-            <div className="p-5 space-y-3">
-              <span className="text-[11px] text-slate-400 font-medium">28 Juillet 2026</span>
-              <h3 className="font-bold text-base text-[#0a2540] leading-snug">Préinscriptions & Réservations de Places 2026-2027</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">Réservez la place de votre enfant en ligne pour garantir son admission au secrétariat.</p>
-              <button onClick={() => openInscriptionWithFiliere('general')} className="text-xs font-bold text-[#0a2540] flex items-center gap-1 hover:underline">Réserver maintenant →</button>
+            <div className="p-5 pt-0">
+              <button 
+                onClick={() => setActuModal('dates')} 
+                className="w-full py-2.5 bg-[#f59e0b] hover:bg-[#d97706] text-[#0a2540] text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+              >
+                <span>Consulter le calendrier</span>
+                <span className="material-symbols-outlined text-base">arrow_forward</span>
+              </button>
             </div>
           </div>
 
-          <div className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-            <div className="relative h-48">
-              <img src={MEDIA_CONFIG.actu2} alt="Examens" className="w-full h-full object-cover" />
-              <span className="absolute top-3 left-3 bg-[#047857] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase">EXAMENS</span>
+          {/* CARTE 2 : CERCLE VERT - VIE SCOLAIRE & ÉVÉNEMENTS À VENIR */}
+          <div className="bg-white rounded-3xl overflow-hidden border-2 border-emerald-400 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+            <div>
+              <div className="relative h-48">
+                <img src={MEDIA_CONFIG.actu2} alt="Vie Scolaire" className="w-full h-full object-cover" />
+                <span className="absolute top-3 left-3 bg-[#047857] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wide">
+                  VIE SCOLAIRE
+                </span>
+              </div>
+              <div className="p-5 space-y-3">
+                <span className="text-[11px] text-[#047857] font-bold uppercase tracking-wider">ACTIVITÉS & CLUBS</span>
+                <h3 className="font-bold text-base text-[#0a2540] leading-snug">
+                  Vie Scolaire & Événements Pédagogiques
+                </h3>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Découvrez la vie des élèves, les conseils de classe, les examens blancs DRENA 3 et les activités des clubs scientifiques.
+                </p>
+              </div>
             </div>
-            <div className="p-5 space-y-3">
-              <span className="text-[11px] text-slate-400 font-medium">15 Mai 2026</span>
-              <h3 className="font-bold text-base text-[#0a2540] leading-snug">Résultats des Examens Blancs DRENA 3 (BEPC & BAC)</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">Excellentes performances de nos élèves de 3ème, Terminale A, D, G1 et G2 aux épreuves régionales de la DRENA 3.</p>
-              <button className="text-xs font-bold text-[#0a2540] flex items-center gap-1 hover:underline">Lire la suite →</button>
+            <div className="p-5 pt-0">
+              <button 
+                onClick={() => setActuModal('viescolaire')} 
+                className="w-full py-2.5 bg-[#047857] hover:bg-[#065f46] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+              >
+                <span>Découvrir la vie scolaire</span>
+                <span className="material-symbols-outlined text-base">arrow_forward</span>
+              </button>
             </div>
           </div>
 
-          <div className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-            <div className="relative h-48">
-              <img src={MEDIA_CONFIG.actu3} alt="Vie Scolaire" className="w-full h-full object-cover" />
-              <span className="absolute top-3 left-3 bg-[#0b3c5d] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase">VIE SCOLAIRE</span>
+          {/* CARTE 3 : CERCLE BLEU - ACTUALITÉ FESTIVE, CULTURELLE & ÉVASIVE */}
+          <div className="bg-white rounded-3xl overflow-hidden border-2 border-indigo-300 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+            <div>
+              <div className="relative h-48">
+                <img src={MEDIA_CONFIG.actu3} alt="Culturel et Festif" className="w-full h-full object-cover" />
+                <span className="absolute top-3 left-3 bg-[#0b3c5d] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wide">
+                  CULTURE & ÉVASION
+                </span>
+              </div>
+              <div className="p-5 space-y-3">
+                <span className="text-[11px] text-[#0b3c5d] font-bold uppercase tracking-wider">FÊTES & TRADITIONS</span>
+                <h3 className="font-bold text-base text-[#0a2540] leading-snug">
+                  Actualités Festives & Journées Culturelles
+                </h3>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Moments forts de l'établissement : Journée du Mérite, cérémonies de graduation, sorties éducatives et célébrations lasalliennes.
+                </p>
+              </div>
             </div>
-            <div className="p-5 space-y-3">
-              <span className="text-[11px] text-slate-400 font-medium">02 Juin 2026</span>
-              <h3 className="font-bold text-base text-[#0a2540] leading-snug">Remise des Diplômes et Journée d'Orientation Professionnelle</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">Des cabinets comptables et entreprises partenaires viendront présenter les débouchés de la filière tertiaire aux élèves de Terminale.</p>
-              <button className="text-xs font-bold text-[#0a2540] flex items-center gap-1 hover:underline">Lire la suite →</button>
+            <div className="p-5 pt-0">
+              <button 
+                onClick={() => setActuModal('festif')} 
+                className="w-full py-2.5 bg-[#0a2540] hover:bg-[#061726] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+              >
+                <span>Voir les événements</span>
+                <span className="material-symbols-outlined text-base">arrow_forward</span>
+              </button>
             </div>
           </div>
+
         </div>
       </section>
 
@@ -723,6 +777,193 @@ export default function App() {
           </div>
         </div>
       </section>
+
+      {/* MODALS D'ACTUALITÉS SPÉCIFIQUES (AU CLIC SUR LES 3 CARTE) */}
+      {actuModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative border border-slate-100 max-h-[85vh] overflow-y-auto">
+            <button onClick={() => setActuModal(null)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-700">
+              <span className="material-symbols-outlined text-2xl">close</span>
+            </button>
+
+            {/* MODAL 1 : DATES IMPORTANTES DE L'ANNÉE SCOLAIRE */}
+            {actuModal === 'dates' && (
+              <div className="space-y-5 text-xs">
+                <div className="flex items-center gap-3 border-b pb-3">
+                  <div className="w-10 h-10 bg-amber-100 text-[#f59e0b] rounded-xl flex items-center justify-center font-bold shrink-0">
+                    <span className="material-symbols-outlined">calendar_month</span>
+                  </div>
+                  <div>
+                    <span className="bg-[#f59e0b] text-[#0a2540] text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">ANNÉE ACADÉMIQUE 2026-2027</span>
+                    <h3 className="font-extrabold text-lg text-[#0a2540]">Dates Importantes & Calendrier Officiel</h3>
+                  </div>
+                </div>
+
+                {/* DÉCOUPAGE TRIMESTRIEL */}
+                <div className="bg-amber-50/50 p-4 rounded-2xl border border-amber-200 space-y-3">
+                  <h4 className="font-bold text-sm text-[#0a2540] flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-base text-[#f59e0b]">schedule</span>
+                    Découpage Trimestriel :
+                  </h4>
+                  <ul className="space-y-2 text-slate-700">
+                    <li className="flex justify-between border-b border-amber-100 pb-1">
+                      <span className="font-semibold">1er Trimestre :</span>
+                      <span>Lundi 08 Septembre 2026 — Vendredi 27 Novembre 2026</span>
+                    </li>
+                    <li className="flex justify-between border-b border-amber-100 pb-1">
+                      <span className="font-semibold">2ème Trimestre :</span>
+                      <span>Lundi 30 Novembre 2026 — Vendredi 26 Février 2027</span>
+                    </li>
+                    <li className="flex justify-between">
+                      <span className="font-semibold">3ème Trimestre :</span>
+                      <span>Lundi 01 Mars 2027 — Vendredi 14 Mai 2027</span>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* CONGÉS & VACANCES */}
+                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
+                  <h4 className="font-bold text-sm text-[#0a2540] flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-base text-[#0a2540]">beach_access</span>
+                    Congés Scolaires & Examens :
+                  </h4>
+                  <ul className="space-y-2 text-slate-700">
+                    <li className="flex justify-between border-b pb-1">
+                      <span>Congés de Toussaint :</span>
+                      <strong className="text-slate-800">Fin Octobre 2026</strong>
+                    </li>
+                    <li className="flex justify-between border-b pb-1">
+                      <span>Congés de Noël & Nouvel An :</span>
+                      <strong className="text-slate-800">Décembre 2026 — Janvier 2027</strong>
+                    </li>
+                    <li className="flex justify-between border-b pb-1">
+                      <span>Congés de Pâques :</span>
+                      <strong className="text-slate-800">Avril 2027</strong>
+                    </li>
+                    <li className="flex justify-between">
+                      <span>Épreuves Écrites BEPC & BAC :</span>
+                      <strong className="text-[#047857]">Mai — Juin 2027</strong>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* EMPLACEMENT 2 COURRIERS OFFICIELS */}
+                <div className="p-4 bg-blue-50 border border-blue-200 rounded-2xl space-y-2">
+                  <h4 className="font-bold text-sm text-[#0a2540] flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-base text-blue-600">description</span>
+                    Courriers Officiels du Ministère (MENA) :
+                  </h4>
+                  <div className="grid sm:grid-cols-2 gap-2 pt-1">
+                    <div className="p-3 bg-white rounded-xl border border-blue-100 flex items-center justify-between">
+                      <div>
+                        <p className="font-bold text-slate-800">Note Circulaire Rentrée 2026-2027</p>
+                        <p className="text-[10px] text-slate-400">Ministère de l'Éducation Nationale</p>
+                      </div>
+                      <span className="material-symbols-outlined text-blue-600">picture_as_pdf</span>
+                    </div>
+                    <div className="p-3 bg-white rounded-xl border border-blue-100 flex items-center justify-between">
+                      <div>
+                        <p className="font-bold text-slate-800">Calendrier National des Examens</p>
+                        <p className="text-[10px] text-slate-400">Direction des Examens et Concours</p>
+                      </div>
+                      <span className="material-symbols-outlined text-blue-600">picture_as_pdf</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* MODAL 2 : VIE SCOLAIRE & ÉVÉNEMENTS À VENIR */}
+            {actuModal === 'viescolaire' && (
+              <div className="space-y-5 text-xs">
+                <div className="flex items-center gap-3 border-b pb-3">
+                  <div className="w-10 h-10 bg-emerald-100 text-[#047857] rounded-xl flex items-center justify-center font-bold shrink-0">
+                    <span className="material-symbols-outlined">groups</span>
+                  </div>
+                  <div>
+                    <span className="bg-[#047857] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">PÉDAGOGIE & DISCIPLINE</span>
+                    <h3 className="font-extrabold text-lg text-[#0a2540]">Vie Scolaire & Événements à Venir</h3>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="p-4 bg-slate-50 border rounded-2xl space-y-1.5">
+                    <span className="bg-emerald-100 text-[#047857] font-bold text-[10px] px-2 py-0.5 rounded-md">15 MAI 2026</span>
+                    <h4 className="font-bold text-sm text-[#0a2540]">Résultats des Examens Blancs DRENA 3</h4>
+                    <p className="text-slate-600">
+                      Analyse des taux de réussite aux épreuves régionales préparatoires pour les classes de 3ème, Terminales A, D, G1 et G2.
+                    </p>
+                  </div>
+
+                  <div className="p-4 bg-slate-50 border rounded-2xl space-y-1.5">
+                    <span className="bg-emerald-100 text-[#047857] font-bold text-[10px] px-2 py-0.5 rounded-md">20 OCTOBRE 2026</span>
+                    <h4 className="font-bold text-sm text-[#0a2540]">Élection des Délégués de Classe & Bureau des Élèves</h4>
+                    <p className="text-slate-600">
+                      Sensibilisation à la citoyenneté, élection des représentants d'élèves et installation du Conseil des Délégués.
+                    </p>
+                  </div>
+
+                  <div className="p-4 bg-slate-50 border rounded-2xl space-y-1.5">
+                    <span className="bg-emerald-100 text-[#047857] font-bold text-[10px] px-2 py-0.5 rounded-md">12 NOVEMBRE 2026</span>
+                    <h4 className="font-bold text-sm text-[#0a2540]">Lancement des Clubs Scientifiques & Génie en Herbe</h4>
+                    <p className="text-slate-600">
+                      Inscriptions aux ateliers d'informatique, de débat, de théâtre et aux rencontres de compétition inter-classes.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* MODAL 3 : ACTUALITÉ FESTIVE, CULTURELLE & ÉVASIVE */}
+            {actuModal === 'festif' && (
+              <div className="space-y-5 text-xs">
+                <div className="flex items-center gap-3 border-b pb-3">
+                  <div className="w-10 h-10 bg-indigo-100 text-[#0a2540] rounded-xl flex items-center justify-center font-bold shrink-0">
+                    <span className="material-symbols-outlined">celebration</span>
+                  </div>
+                  <div>
+                    <span className="bg-[#0a2540] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">CULTURE & RÉCONPENSES</span>
+                    <h3 className="font-extrabold text-lg text-[#0a2540]">Actualités Festives & Culturelles</h3>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="p-4 bg-indigo-50/50 border border-indigo-100 rounded-2xl space-y-1.5">
+                    <span className="bg-[#0a2540] text-white font-bold text-[10px] px-2 py-0.5 rounded-md">02 JUIN 2026</span>
+                    <h4 className="font-bold text-sm text-[#0a2540]">Remise des Diplômes & Journée d'Orientation Professionnelle</h4>
+                    <p className="text-slate-600">
+                      Cérémonie solennelle de graduation pour les élèves de Terminale et rencontre avec les cabinets partenaires et universités.
+                    </p>
+                  </div>
+
+                  <div className="p-4 bg-indigo-50/50 border border-indigo-100 rounded-2xl space-y-1.5">
+                    <span className="bg-[#0a2540] text-white font-bold text-[10px] px-2 py-0.5 rounded-md">15 FÉVRIER 2027</span>
+                    <h4 className="font-bold text-sm text-[#0a2540]">Journée Culturelle & Foire Gastronomique de la Salle</h4>
+                    <p className="text-slate-600">
+                      Présentation des danses traditionnelles, concours de tenues traditionnelles ivoiriennes et dégustation culinaire régionale.
+                    </p>
+                  </div>
+
+                  <div className="p-4 bg-indigo-50/50 border border-indigo-100 rounded-2xl space-y-1.5">
+                    <span className="bg-[#0a2540] text-white font-bold text-[10px] px-2 py-0.5 rounded-md">25 AVRIL 2027</span>
+                    <h4 className="font-bold text-sm text-[#0a2540]">Excursion Éducative & Journée Sportive Lasallienne</h4>
+                    <p className="text-slate-600">
+                      Sortie de découverte pédagogique à Yamoussoukro et tournois sportifs interdisciplinaires (Football, Handball, Athlétisme).
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="pt-4 border-t flex justify-end">
+              <button onClick={() => setActuModal(null)} className="px-5 py-2.5 bg-[#0a2540] text-white rounded-xl text-xs font-bold">
+                Fermer
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
 
       {/* MODAL : DÉTAILS CURSUS */}
       {detailsModal && (
@@ -814,7 +1055,6 @@ export default function App() {
               </button>
             </div>
 
-            {/* BARRE DE PROGRESSION EN 2 ÉTAPES PRINCIPALES */}
             <div className="space-y-1.5">
               <div className="flex justify-between text-xs font-bold text-[#0a2540]">
                 <span>
@@ -829,7 +1069,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* ÉTAPE 1 : FORMULAIRE DE RÉSERVATION */}
             {inscriptionStep === 1 && (
               <div className="space-y-4 text-xs">
                 <h4 className="font-bold text-sm text-slate-800 flex items-center gap-1.5">
@@ -837,7 +1076,6 @@ export default function App() {
                   Informations de l'Élève Candidate :
                 </h4>
 
-                {/* 1. Matricule */}
                 <div>
                   <label className="block font-bold text-slate-700 mb-1">Matricule de l'élève (si attribué)</label>
                   <input 
@@ -849,7 +1087,6 @@ export default function App() {
                   />
                 </div>
 
-                {/* 2. Nom & Prénom */}
                 <div className="grid sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block font-bold text-slate-700 mb-1">Nom de l'Élève *</label>
@@ -873,7 +1110,6 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* 3. Classe sollicitée */}
                 <div>
                   <label className="block font-bold text-slate-700 mb-1">Classe Sollicitée *</label>
                   <select 
@@ -902,7 +1138,6 @@ export default function App() {
                   </select>
                 </div>
 
-                {/* 4. Statut : Affecté de l'État ou Pas */}
                 <div className="p-4 bg-slate-50 rounded-2xl border space-y-2">
                   <span className="font-bold text-slate-700">Statut de l'Élève :</span>
                   <div className="grid sm:grid-cols-2 gap-3 pt-1">
@@ -928,7 +1163,6 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* 5. Établissement d'Origine & Moyenne de Fin d'Année (MGA) */}
                 <div className="grid sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block font-bold text-slate-700 mb-1">Établissement d'Origine *</label>
@@ -958,10 +1192,8 @@ export default function App() {
               </div>
             )}
 
-            {/* ÉTAPE 2 : AFFICHAGE DYNAMIQUE DES FRAIS D'INSCRIPTION & SCOLARITÉ */}
             {inscriptionStep === 2 && (
               <div className="space-y-5 text-xs">
-                
                 <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
                   <h4 className="font-bold text-sm text-[#0a2540] border-b pb-2">Récapitulatif de la Réservation</h4>
                   <div className="grid grid-cols-2 gap-2 text-slate-600">
@@ -973,7 +1205,6 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* TABLEAU DES FRAIS DE SCOLARITÉ CALCULÉS */}
                 <div className="bg-emerald-50/70 border border-emerald-200 p-5 rounded-2xl space-y-4">
                   <div className="flex items-center gap-2 text-[#047857] font-extrabold text-sm">
                     <span className="material-symbols-outlined">payments</span>
@@ -1007,7 +1238,6 @@ export default function App() {
               </div>
             )}
 
-            {/* ÉTAPE 3 : CONFIRMATION PRÊTE POUR LE BACKEND */}
             {inscriptionStep === 3 && (
               <div className="space-y-4 text-xs text-center py-4">
                 <div className="w-16 h-16 bg-emerald-100 text-[#047857] rounded-full flex items-center justify-center mx-auto border-4 border-emerald-50">
@@ -1030,7 +1260,6 @@ export default function App() {
               </div>
             )}
 
-            {/* BOUTONS D'ACTION DU FORMULAIRE DE RÉSERVATION */}
             <div className="flex justify-between pt-4 border-t">
               {inscriptionStep === 2 && (
                 <button 
