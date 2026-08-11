@@ -410,84 +410,86 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-[#1e293b] font-sans antialiased">
       
-      {/* IMPRESSION : FICHE OFFICIELLE A4 */}
+      {/* IMPRESSION : FICHE OFFICIELLE A4 DE QUALITÉ PROFESSIONNELLE */}
       <div className="hidden print:block p-8 bg-white text-slate-900 font-sans max-w-4xl mx-auto space-y-6">
         {/* Entête Institutionnel */}
-        <div className="flex items-center justify-between border-b-2 border-[#0a2540] pb-4">
+        <div className="flex items-center justify-between border-b-2 border-slate-900 pb-4">
           <div className="flex items-center gap-4">
             <img src={MEDIA_CONFIG.logo} alt="Logo JBS2" className="h-16 w-auto object-contain" />
             <div>
-              <h1 className="text-xs font-black text-[#0a2540] uppercase tracking-tight">
+              <h1 className="text-[11px] font-bold text-slate-800 uppercase tracking-tight leading-snug">
                 Ministère de l'Éducation Nationale, de l'Alphabétisation et de l'Enseignement Technique (MENAET)
               </h1>
-              <h2 className="text-sm font-black text-[#0a2540] uppercase tracking-tight mt-1">{SCHOOL_INFO.fullNamePart1}</h2>
-              <h3 className="text-xs font-extrabold text-[#047857] uppercase">{SCHOOL_INFO.fullNamePart2}</h3>
-              <p className="text-[10px] text-slate-600">{SCHOOL_INFO.address} • Tél: {SCHOOL_INFO.phone}</p>
+              <h2 className="text-sm font-black text-[#0a2540] uppercase tracking-tight mt-0.5">{SCHOOL_INFO.fullNamePart1}</h2>
+              <h3 className="text-xs font-bold text-[#047857] uppercase">{SCHOOL_INFO.fullNamePart2}</h3>
+              <p className="text-[10px] text-slate-600 mt-0.5">{SCHOOL_INFO.address} • Tél: {SCHOOL_INFO.phone}</p>
             </div>
           </div>
-          <div className="text-right text-[10px] font-bold text-slate-600 space-y-0.5 shrink-0">
-            <p className="uppercase">RÉPUBLIQUE DE CÔTE D'IVOIRE</p>
-            <p className="text-slate-500">Union - Discipline - Travail</p>
-            <p className="text-[#047857] font-black">DRENA ABIDJAN 3</p>
+          <div className="text-right text-[10px] font-bold text-slate-700 space-y-0.5 shrink-0">
+            <p className="uppercase tracking-wider">RÉPUBLIQUE DE CÔTE D'IVOIRE</p>
+            <p className="text-slate-500 font-medium">Union - Discipline - Travail</p>
+            <p className="text-[#047857] font-extrabold mt-1">DRENA ABIDJAN 3</p>
           </div>
         </div>
 
         {/* Titre du document */}
-        <div className="text-center space-y-1 py-2 bg-slate-50 rounded-xl border border-slate-200">
+        <div className="text-center space-y-1 py-2 bg-slate-50 rounded-xl border border-slate-300">
           <h2 className="text-base font-black text-[#0a2540] uppercase tracking-wider">BORDEREAU OFFICIEL DE PRÉINSCRIPTION</h2>
           <p className="text-xs font-bold text-[#047857]">ANNÉE SCOLAIRE 2026 - 2027</p>
-          <p className="text-[10px] text-slate-500 font-mono">Fiche Réf: <strong>{referenceNum || 'JBS2-2026-0000'}</strong> • Date: {new Date().toLocaleDateString('fr-FR')}</p>
+          <p className="text-[10px] text-slate-600 font-mono">
+            Fiche Réf: <strong className="text-slate-900">{referenceNum || 'JBS2-2026-0000'}</strong> • Date: {new Date().toLocaleDateString('fr-FR')}
+          </p>
         </div>
 
         {/* Information Élève */}
         <div className="space-y-2">
-          <h3 className="text-xs font-black text-[#0a2540] uppercase border-b pb-1 flex items-center gap-1">
+          <h3 className="text-xs font-extrabold text-[#0a2540] uppercase border-b border-slate-300 pb-1">
             1. IDENTITÉ DE L'ÉLÈVE CANDIDAT(E)
           </h3>
-          <div className="grid grid-cols-2 gap-3 text-xs bg-slate-50/50 p-3 rounded-lg border border-slate-200">
-            <p>Nom & Prénoms : <strong className="text-[#0a2540] uppercase">{formData.nom} {formData.prenom}</strong></p>
-            <p>Matricule Éducation : <strong>{formData.matricule || 'Non attribué'}</strong></p>
-            <p>Classe Demandée : <strong className="text-[#047857]">{formData.classe}</strong></p>
-            <p>Statut : <strong>{formData.statut === 'affecte' ? "Affecté(e) de l'État (DRENA 3)" : "Non-Affecté / Inscription Libre"}</strong></p>
-            <p>Établissement d'Origine : <strong>{formData.etablissementOrigine}</strong></p>
-            <p>Moyenne Annuelle (MGA) : <strong className="text-[#047857]">{formData.mga ? `${formData.mga} / 20` : 'Non renseignée'}</strong></p>
+          <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <p className="text-slate-700">Nom & Prénoms : <strong className="text-[#0a2540] uppercase font-bold">{formData.nom} {formData.prenom}</strong></p>
+            <p className="text-slate-700">Matricule Éducation : <strong className="text-slate-900 font-bold">{formData.matricule || 'Non attribué'}</strong></p>
+            <p className="text-slate-700">Classe Demandée : <strong className="text-[#047857] font-bold">{formData.classe}</strong></p>
+            <p className="text-slate-700">Statut : <strong className="text-slate-900 font-bold">{formData.statut === 'affecte' ? "Affecté(e) de l'État (DRENA 3)" : "Non-Affecté / Inscription Libre"}</strong></p>
+            <p className="text-slate-700">Établissement d'Origine : <strong className="text-slate-900 font-bold">{formData.etablissementOrigine}</strong></p>
+            <p className="text-slate-700">Moyenne Annuelle (MGA) : <strong className="text-[#047857] font-bold">{formData.mga ? `${formData.mga} / 20` : 'Non renseignée'}</strong></p>
           </div>
         </div>
 
         {/* Frais & Modalités */}
         <div className="space-y-2">
-          <h3 className="text-xs font-black text-[#0a2540] uppercase border-b pb-1 flex items-center gap-1">
+          <h3 className="text-xs font-extrabold text-[#0a2540] uppercase border-b border-slate-300 pb-1">
             2. DÉTAIL DES FRAIS D'INSCRIPTION & SCOLARITÉ
           </h3>
-          <table className="w-full text-xs text-left border border-slate-200">
+          <table className="w-full text-xs text-left border border-slate-300 rounded-lg overflow-hidden">
             <thead className="bg-[#0a2540] text-white">
               <tr>
-                <th className="p-2 border">Rubrique</th>
-                <th className="p-2 border text-right">Montant FCFA</th>
+                <th className="p-2.5 font-bold">Rubrique</th>
+                <th className="p-2.5 font-bold text-right">Montant FCFA</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-slate-200">
               <tr>
-                <td className="p-2 border font-medium">Frais Dépôt de Dossier & Inscription Annexes</td>
-                <td className="p-2 border text-right font-bold">{currentFees.inscription.toLocaleString()} FCFA</td>
+                <td className="p-2.5 font-medium text-slate-800">Frais Dépôt de Dossier & Inscription Annexes</td>
+                <td className="p-2.5 text-right font-bold text-slate-900">{currentFees.inscription.toLocaleString()} FCFA</td>
               </tr>
               <tr>
-                <td className="p-2 border font-medium">Frais de Scolarité Annuelle</td>
-                <td className="p-2 border text-right font-bold">{currentFees.scolarite.toLocaleString()} FCFA</td>
+                <td className="p-2.5 font-medium text-slate-800">Frais de Scolarité Annuelle</td>
+                <td className="p-2.5 text-right font-bold text-slate-900">{currentFees.scolarite.toLocaleString()} FCFA</td>
               </tr>
               <tr className="bg-emerald-50">
-                <td className="p-2 border font-black text-[#0a2540]">MONTANT TOTAL À RÉGLER AU SECRÉTARIAT</td>
-                <td className="p-2 border text-right font-black text-[#047857] text-sm">{currentFees.total.toLocaleString()} FCFA</td>
+                <td className="p-2.5 font-black text-[#0a2540] uppercase">MONTANT TOTAL À RÉGLER AU SECRÉTARIAT</td>
+                <td className="p-2.5 text-right font-black text-[#047857] text-sm">{currentFees.total.toLocaleString()} FCFA</td>
               </tr>
             </tbody>
           </table>
-          <p className="text-[10px] text-slate-500 italic">* {currentFees.note}</p>
+          <p className="text-[10px] text-slate-500 italic font-medium pt-0.5">* {currentFees.note}</p>
         </div>
 
         {/* Consignes pour le dépôt */}
-        <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 text-[10px] text-amber-900 space-y-1">
-          <p className="font-bold uppercase">📋 PIÈCES À FOURNIR LORS DU DÉPÔT PHYSIQUE DU DOSSIER :</p>
-          <ul className="list-disc pl-4 space-y-0.5">
+        <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-[10px] text-amber-900 space-y-1">
+          <p className="font-extrabold uppercase tracking-wide text-amber-950">📋 PIÈCES À FOURNIR LORS DU DÉPÔT PHYSIQUE DU DOSSIER :</p>
+          <ul className="list-disc pl-4 space-y-0.5 font-medium">
             <li>Dernier bulletin de l'année précédente</li>
             <li>Reçu d'inscription en ligne</li>
             <li>Extrait original pour les nouveaux</li>
@@ -495,14 +497,14 @@ export default function App() {
         </div>
 
         {/* Signatures */}
-        <div className="grid grid-cols-2 gap-8 pt-6 text-center text-xs">
-          <div className="border border-slate-300 rounded-xl p-4 h-28 flex flex-col justify-between">
-            <p className="font-bold text-[#0a2540]">Signature du Parent / Tuteur Legal</p>
-            <p className="text-[9px] text-slate-400">« Lu et approuvé »</p>
+        <div className="grid grid-cols-2 gap-8 pt-4 text-center text-xs">
+          <div className="border border-slate-300 rounded-xl p-4 h-28 flex flex-col justify-between bg-slate-50/50">
+            <p className="font-bold text-[#0a2540]">Signature du Parent / Tuteur Légal</p>
+            <p className="text-[9px] text-slate-400 italic">« Lu et approuvé »</p>
           </div>
-          <div className="border border-slate-300 rounded-xl p-4 h-28 flex flex-col justify-between">
+          <div className="border border-slate-300 rounded-xl p-4 h-28 flex flex-col justify-between bg-slate-50/50">
             <p className="font-bold text-[#0a2540]">Cachet & Validation Secrétariat JBS2</p>
-            <p className="text-[9px] text-slate-400">Date et signature de l'agent</p>
+            <p className="text-[9px] text-slate-400 italic">Date et signature de l'agent</p>
           </div>
         </div>
       </div>
