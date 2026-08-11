@@ -11,7 +11,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const MEDIA_CONFIG = {
   logo: "/logo.png",
-  heroBackground: "/facade.jpg", // Filigrane identique à la façade
+  heroBackground: "/facade.jpg",
   facadeCard: "/facade.jpg",
   generalImage: "/enseignement-general.jpg",
   techniqueImage: "/technique.jpg",
@@ -232,6 +232,7 @@ export default function App() {
   const [inscriptionModal, setInscriptionModal] = useState(false);
   const [inscriptionStep, setInscriptionStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [referenceNum, setReferenceNum] = useState('');
 
   const [formData, setFormData] = useState({
     matricule: '',
@@ -278,6 +279,9 @@ export default function App() {
   // Soumission réelle de la Préinscription à Supabase
   const handleReservationSubmit = async () => {
     setIsSubmitting(true);
+    const generatedRef = `JBS2-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+    setReferenceNum(generatedRef);
+
     try {
       const { error } = await supabase.from('preinscriptions').insert([
         {
@@ -406,8 +410,105 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-[#1e293b] font-sans antialiased">
       
+      {/* IMPRESSION : FICHE OFFICIELLE A4 */}
+      <div className="hidden print:block p-8 bg-white text-slate-900 font-sans max-w-4xl mx-auto space-y-6">
+        {/* Entête Institutionnel */}
+        <div className="flex items-center justify-between border-b-2 border-[#0a2540] pb-4">
+          <div className="flex items-center gap-4">
+            <img src={MEDIA_CONFIG.logo} alt="Logo JBS2" className="h-16 w-auto object-contain" />
+            <div>
+              <h1 className="text-xs font-black text-[#0a2540] uppercase tracking-tight">
+                Ministère de l'Éducation Nationale, de l'Alphabétisation et de l'Enseignement Technique (MENAET)
+              </h1>
+              <h2 className="text-sm font-black text-[#0a2540] uppercase tracking-tight mt-1">{SCHOOL_INFO.fullNamePart1}</h2>
+              <h3 className="text-xs font-extrabold text-[#047857] uppercase">{SCHOOL_INFO.fullNamePart2}</h3>
+              <p className="text-[10px] text-slate-600">{SCHOOL_INFO.address} • Tél: {SCHOOL_INFO.phone}</p>
+            </div>
+          </div>
+          <div className="text-right text-[10px] font-bold text-slate-600 space-y-0.5 shrink-0">
+            <p className="uppercase">RÉPUBLIQUE DE CÔTE D'IVOIRE</p>
+            <p className="text-slate-500">Union - Discipline - Travail</p>
+            <p className="text-[#047857] font-black">DRENA ABIDJAN 3</p>
+          </div>
+        </div>
+
+        {/* Titre du document */}
+        <div className="text-center space-y-1 py-2 bg-slate-50 rounded-xl border border-slate-200">
+          <h2 className="text-base font-black text-[#0a2540] uppercase tracking-wider">BORDEREAU OFFICIEL DE PRÉINSCRIPTION</h2>
+          <p className="text-xs font-bold text-[#047857]">ANNÉE SCOLAIRE 2026 - 2027</p>
+          <p className="text-[10px] text-slate-500 font-mono">Fiche Réf: <strong>{referenceNum || 'JBS2-2026-0000'}</strong> • Date: {new Date().toLocaleDateString('fr-FR')}</p>
+        </div>
+
+        {/* Information Élève */}
+        <div className="space-y-2">
+          <h3 className="text-xs font-black text-[#0a2540] uppercase border-b pb-1 flex items-center gap-1">
+            1. IDENTITÉ DE L'ÉLÈVE CANDIDAT(E)
+          </h3>
+          <div className="grid grid-cols-2 gap-3 text-xs bg-slate-50/50 p-3 rounded-lg border border-slate-200">
+            <p>Nom & Prénoms : <strong className="text-[#0a2540] uppercase">{formData.nom} {formData.prenom}</strong></p>
+            <p>Matricule Éducation : <strong>{formData.matricule || 'Non attribué'}</strong></p>
+            <p>Classe Demandée : <strong className="text-[#047857]">{formData.classe}</strong></p>
+            <p>Statut : <strong>{formData.statut === 'affecte' ? "Affecté(e) de l'État (DRENA 3)" : "Non-Affecté / Inscription Libre"}</strong></p>
+            <p>Établissement d'Origine : <strong>{formData.etablissementOrigine}</strong></p>
+            <p>Moyenne Annuelle (MGA) : <strong className="text-[#047857]">{formData.mga ? `${formData.mga} / 20` : 'Non renseignée'}</strong></p>
+          </div>
+        </div>
+
+        {/* Frais & Modalités */}
+        <div className="space-y-2">
+          <h3 className="text-xs font-black text-[#0a2540] uppercase border-b pb-1 flex items-center gap-1">
+            2. DÉTAIL DES FRAIS D'INSCRIPTION & SCOLARITÉ
+          </h3>
+          <table className="w-full text-xs text-left border border-slate-200">
+            <thead className="bg-[#0a2540] text-white">
+              <tr>
+                <th className="p-2 border">Rubrique</th>
+                <th className="p-2 border text-right">Montant FCFA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="p-2 border font-medium">Frais Dépôt de Dossier & Inscription Annexes</td>
+                <td className="p-2 border text-right font-bold">{currentFees.inscription.toLocaleString()} FCFA</td>
+              </tr>
+              <tr>
+                <td className="p-2 border font-medium">Frais de Scolarité Annuelle</td>
+                <td className="p-2 border text-right font-bold">{currentFees.scolarite.toLocaleString()} FCFA</td>
+              </tr>
+              <tr className="bg-emerald-50">
+                <td className="p-2 border font-black text-[#0a2540]">MONTANT TOTAL À RÉGLER AU SECRÉTARIAT</td>
+                <td className="p-2 border text-right font-black text-[#047857] text-sm">{currentFees.total.toLocaleString()} FCFA</td>
+              </tr>
+            </tbody>
+          </table>
+          <p className="text-[10px] text-slate-500 italic">* {currentFees.note}</p>
+        </div>
+
+        {/* Consignes pour le dépôt */}
+        <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 text-[10px] text-amber-900 space-y-1">
+          <p className="font-bold uppercase">📋 PIÈCES À FOURNIR LORS DU DÉPÔT PHYSIQUE DU DOSSIER :</p>
+          <ul className="list-disc pl-4 space-y-0.5">
+            <li>Dernier bulletin de l'année précédente</li>
+            <li>Reçu d'inscription en ligne</li>
+            <li>Extrait original pour les nouveaux</li>
+          </ul>
+        </div>
+
+        {/* Signatures */}
+        <div className="grid grid-cols-2 gap-8 pt-6 text-center text-xs">
+          <div className="border border-slate-300 rounded-xl p-4 h-28 flex flex-col justify-between">
+            <p className="font-bold text-[#0a2540]">Signature du Parent / Tuteur Legal</p>
+            <p className="text-[9px] text-slate-400">« Lu et approuvé »</p>
+          </div>
+          <div className="border border-slate-300 rounded-xl p-4 h-28 flex flex-col justify-between">
+            <p className="font-bold text-[#0a2540]">Cachet & Validation Secrétariat JBS2</p>
+            <p className="text-[9px] text-slate-400">Date et signature de l'agent</p>
+          </div>
+        </div>
+      </div>
+
       {/* 1. HEADER RESPONSIVE */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 lg:px-10 py-2.5 shadow-sm">
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 lg:px-10 py-2.5 shadow-sm print:hidden">
         <div className="max-w-[90rem] mx-auto flex items-center justify-between gap-4">
           
           <div className="flex items-center gap-2.5 min-w-0">
@@ -457,7 +558,7 @@ export default function App() {
       </header>
 
       {/* 2. HERO SECTION */}
-      <section id="accueil" className="relative bg-[#0a2540] text-white overflow-hidden py-10 lg:py-14 px-4 lg:px-12">
+      <section id="accueil" className="relative bg-[#0a2540] text-white overflow-hidden py-10 lg:py-14 px-4 lg:px-12 print:hidden">
         <div 
           className="absolute inset-0 opacity-15 bg-cover bg-center mix-blend-overlay pointer-events-none"
           style={{ backgroundImage: `url(${MEDIA_CONFIG.heroBackground})` }}
@@ -538,7 +639,7 @@ export default function App() {
       </section>
 
       {/* 3. SECTION FORMATIONS & PRÉINSCRIPTION */}
-      <section id="formations" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
+      <section id="formations" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8 print:hidden">
         <div className="grid lg:grid-cols-2 gap-6">
           
           <div className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between">
@@ -612,7 +713,7 @@ export default function App() {
       </section>
 
       {/* 4. PORTAILS NUMÉRIQUES */}
-      <section id="portails" className="max-w-7xl mx-auto px-4 lg:px-10 py-8 space-y-6">
+      <section id="portails" className="max-w-7xl mx-auto px-4 lg:px-10 py-8 space-y-6 print:hidden">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:shadow-md transition-shadow">
             <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-[#0a2540]">
@@ -663,7 +764,7 @@ export default function App() {
       </section>
 
       {/* 5. DÉCOUVERTE & ACTIVITÉS DYNAMIQUES */}
-      <section id="activites" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
+      <section id="activites" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8 print:hidden">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
@@ -843,7 +944,7 @@ export default function App() {
 
       {/* MODAL PHOTO AGRANDIE */}
       {selectedPhoto && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md print:hidden">
           <div className="bg-white rounded-3xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl space-y-4 relative overflow-hidden">
             <button 
               onClick={() => setSelectedPhoto(null)} 
@@ -869,7 +970,7 @@ export default function App() {
 
       {/* MODAL PRÉINSCRIPTION */}
       {inscriptionModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm print:hidden">
           <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative border border-slate-100 max-h-[90vh] overflow-y-auto">
             
             <div className="flex items-start justify-between border-b pb-4">
@@ -893,7 +994,7 @@ export default function App() {
                 <span>
                   {inscriptionStep === 1 && "Étape 1 : Informations de l'élève"}
                   {inscriptionStep === 2 && "Étape 2 : Frais d'Inscription & Scolarité"}
-                  {inscriptionStep === 3 && "Confirmation de Préinscription"}
+                  {inscriptionStep === 3 && "Confirmation & Impression"}
                 </span>
                 <span>{inscriptionStep === 1 ? '50%' : '100%'}</span>
               </div>
@@ -1080,16 +1181,24 @@ export default function App() {
                 <div className="space-y-1">
                   <h4 className="font-extrabold text-lg text-[#0a2540]">Préinscription Enregistrée !</h4>
                   <p className="text-slate-500 max-w-md mx-auto">
-                    La préinscription de <strong>{formData.nom} {formData.prenom}</strong> en classe de <strong>{formData.classe}</strong> a été enregistrée avec succès dans la base de données de l'établissement.
+                    La préinscription de <strong>{formData.nom} {formData.prenom}</strong> a été validée dans le système.
                   </p>
                 </div>
 
                 <div className="bg-slate-50 p-4 rounded-2xl border text-left space-y-2 max-w-md mx-auto">
-                  <p className="font-bold text-[#0a2540] border-b pb-1">Bordereau de Préinscription :</p>
-                  <p className="flex justify-between"><span>Matricule :</span> <strong>{formData.matricule || 'N/A'}</strong></p>
-                  <p className="flex justify-between"><span>Total Frais à Régler :</span> <strong className="text-[#047857]">{currentFees.total.toLocaleString()} FCFA</strong></p>
-                  <p className="flex justify-between"><span>Lieu de Dépôt :</span> <strong>Secrétariat J.B. de La Salle 2 (Attécoubé Santé 3)</strong></p>
+                  <p className="font-bold text-[#0a2540] border-b pb-1">Récapitulatif Fiche Officielle :</p>
+                  <p className="flex justify-between"><span>Réf. Dossier :</span> <strong className="text-[#0a2540] font-mono">{referenceNum}</strong></p>
+                  <p className="flex justify-between"><span>Frais Totaux :</span> <strong className="text-[#047857]">{currentFees.total.toLocaleString()} FCFA</strong></p>
+                  <p className="flex justify-between"><span>Dépôt Physique :</span> <strong>Secrétariat J.B. de La Salle 2</strong></p>
                 </div>
+
+                <button 
+                  onClick={() => window.print()}
+                  className="w-full py-3.5 bg-[#047857] hover:bg-[#065f46] text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-lg">print</span>
+                  <span>Imprimer le Bordereau Officiel A4</span>
+                </button>
               </div>
             )}
 
@@ -1123,12 +1232,12 @@ export default function App() {
                   {isSubmitting ? (
                     <>
                       <span className="material-symbols-outlined animate-spin text-base">sync</span>
-                      <span>Enregistrement dans Supabase...</span>
+                      <span>Enregistrement...</span>
                     </>
                   ) : (
                     <>
                       <span className="material-symbols-outlined text-base">how_to_reg</span>
-                      <span>Valider la Préinscription</span>
+                      <span>Valider & Générer la Fiche</span>
                     </>
                   )}
                 </button>
@@ -1137,9 +1246,9 @@ export default function App() {
               {inscriptionStep === 3 && (
                 <button 
                   onClick={() => setInscriptionModal(false)} 
-                  className="px-6 py-3 bg-[#0a2540] text-white rounded-xl text-xs font-bold ml-auto cursor-pointer"
+                  className="px-6 py-3 bg-slate-200 text-slate-800 hover:bg-slate-300 rounded-xl text-xs font-bold ml-auto cursor-pointer"
                 >
-                  Fermer & Imprimer la Fiche
+                  Fermer
                 </button>
               )}
             </div>
@@ -1150,7 +1259,7 @@ export default function App() {
 
       {/* MODAL LOGIN ADMIN */}
       {showAdminLogin && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm print:hidden">
           <div className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4 relative">
             <button onClick={() => setShowAdminLogin(false)} className="absolute top-3 right-3 text-slate-400 cursor-pointer">
               <span className="material-symbols-outlined">close</span>
@@ -1180,7 +1289,7 @@ export default function App() {
       )}
 
       {/* 6. NOUS TROUVER & CONTACT */}
-      <section id="contact" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
+      <section id="contact" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8 print:hidden">
         <div>
           <span className="bg-[#0a2540] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-md uppercase tracking-wider">LOCALISATION & CONTACT</span>
           <h2 className="text-2xl font-extrabold text-[#0a2540] mt-1">Nous Trouver</h2>
@@ -1243,7 +1352,7 @@ export default function App() {
       </section>
 
       {/* FOOTER */}
-      <footer className="bg-[#0a2540] text-white text-xs py-10 border-t border-white/10 mt-12">
+      <footer className="bg-[#0a2540] text-white text-xs py-10 border-t border-white/10 mt-12 print:hidden">
         <div className="max-w-7xl mx-auto px-4 lg:px-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="space-y-2">
             <div className="flex items-center gap-2 font-extrabold text-sm">
