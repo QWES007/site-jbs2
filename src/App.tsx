@@ -9,9 +9,9 @@ const MEDIA_CONFIG = {
   facadeCard: "/facade.jpg",
   generalImage: "/enseignement-general.jpg",
   techniqueImage: "/technique.jpg",
-  actu1: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=600", // Calendrier / Dates
-  actu2: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=600", // Vie scolaire
-  actu3: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=600", // Festif & Culturel
+  actu1: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=600",
+  actu2: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=600",
+  actu3: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=600",
 };
 
 // ============================================================================
@@ -22,9 +22,12 @@ const SCHOOL_INFO = {
   shortName: "J.B. de La Salle 2",
   address: "Attécoubé Santé 3, 23 BP 519 Abidjan 23",
   phone: "07 48 627 869",
-  phoneFormatted: "+225 07 48 62 78 69",
+  phoneFormatted: "+2250748627869",
+  whatsappUrl: "https://wa.me/2250748627869?text=Bonjour,%20je%20souhaite%20des%20informations%20sur%20le%20Coll%C3%A8ge%20JBS2",
   email: "college.jbs2@gmail.com",
   mapsUrl: "https://www.google.com/maps?q=5.340777,-4.052753",
+  facebookUrl: "https://facebook.com",
+  drenaUrl: "https://drenaabidjan3.ci/",
 };
 
 // ============================================================================
@@ -226,6 +229,7 @@ export default function App() {
   const [aiOpen, setAiOpen] = useState(false);
   const [detailsModal, setDetailsModal] = useState<'general' | 'technique' | null>(null);
   const [actuModal, setActuModal] = useState<'dates' | 'viescolaire' | 'festif' | null>(null);
+  const [footerModal, setFooterModal] = useState<'mentions' | 'fournitures' | null>(null);
   const [inscriptionModal, setInscriptionModal] = useState(false);
   const [inscriptionStep, setInscriptionStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -439,7 +443,6 @@ export default function App() {
       <section id="formations" className="max-w-7xl mx-auto px-4 lg:px-10 py-16 space-y-10">
         <div className="grid lg:grid-cols-2 gap-8">
           
-          {/* Carte Enseignement Général */}
           <div className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between">
             <div>
               <div className="relative h-64 overflow-hidden">
@@ -481,7 +484,6 @@ export default function App() {
             </div>
           </div>
 
-          {/* Carte Technique Tertiaire */}
           <div className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between">
             <div>
               <div className="relative h-64 overflow-hidden">
@@ -594,13 +596,23 @@ export default function App() {
             </a>
           </div>
 
+          {/* CARTE 4 : DRENA 3 (REMPLACÉE) */}
           <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-[#047857]">
-              <span className="material-symbols-outlined text-2xl">groups</span>
+            <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-[#f59e0b]">
+              <span className="material-symbols-outlined text-2xl">account_balance</span>
             </div>
-            <h3 className="font-bold text-base text-[#0a2540]">Clubs & Vie Sociale</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">Rejoignez nos clubs sportifs, d'art oratoire, de génie en herbe et informatique.</p>
-            <button className="text-xs font-bold text-[#047857] flex items-center gap-1 hover:underline">Découvrir les clubs →</button>
+            <h3 className="font-bold text-base text-[#0a2540]">Site de la DRENA 3</h3>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Portail officiel de la Direction Régionale de l'Éducation Nationale et de l'Alphabétisation Abidjan 3.
+            </p>
+            <a 
+              href="https://drenaabidjan3.ci/" 
+              target="_blank" 
+              rel="noreferrer" 
+              className="text-xs font-bold text-[#f59e0b] flex items-center gap-1 hover:underline"
+            >
+              Visiter la DRENA 3 →
+            </a>
           </div>
         </div>
 
@@ -608,7 +620,7 @@ export default function App() {
 
       </section>
 
-      {/* 5. ACTUALITÉS & ÉVÉNEMENTS ACADÉMIQUES (RESTRUCTURÉ) */}
+      {/* 5. ACTUALITÉS & ÉVÉNEMENTS ACADÉMIQUES */}
       <section id="actualites" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
         <div>
           <span className="bg-[#f59e0b] text-[#0a2540] text-[11px] font-extrabold px-3 py-1 rounded-md uppercase tracking-wider">
@@ -621,8 +633,6 @@ export default function App() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          
-          {/* CARTE 1 : CERCLE JAUNE - DATES IMPORTANTES DE L'ANNÉE SCOLAIRE */}
           <div className="bg-white rounded-3xl overflow-hidden border-2 border-amber-300 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
             <div>
               <div className="relative h-48">
@@ -652,7 +662,6 @@ export default function App() {
             </div>
           </div>
 
-          {/* CARTE 2 : CERCLE VERT - VIE SCOLAIRE & ÉVÉNEMENTS À VENIR */}
           <div className="bg-white rounded-3xl overflow-hidden border-2 border-emerald-400 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
             <div>
               <div className="relative h-48">
@@ -682,7 +691,6 @@ export default function App() {
             </div>
           </div>
 
-          {/* CARTE 3 : CERCLE BLEU - ACTUALITÉ FESTIVE, CULTURELLE & ÉVASIVE */}
           <div className="bg-white rounded-3xl overflow-hidden border-2 border-indigo-300 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
             <div>
               <div className="relative h-48">
@@ -711,7 +719,6 @@ export default function App() {
               </button>
             </div>
           </div>
-
         </div>
       </section>
 
@@ -778,7 +785,60 @@ export default function App() {
         </div>
       </section>
 
-      {/* MODALS D'ACTUALITÉS SPÉCIFIQUES (AU CLIC SUR LES 3 CARTE) */}
+      {/* MODAL MENTIONS ET FOURNITURES */}
+      {footerModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative border border-slate-100 max-h-[85vh] overflow-y-auto">
+            <button onClick={() => setFooterModal(null)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-700">
+              <span className="material-symbols-outlined text-2xl">close</span>
+            </button>
+
+            {footerModal === 'mentions' ? (
+              <div className="space-y-4 text-xs">
+                <span className="bg-[#0a2540] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">INFORMATIONS LÉGALES</span>
+                <h3 className="font-extrabold text-xl text-[#0a2540]">Mentions Légales & Agréments</h3>
+                <div className="space-y-3 text-slate-600 leading-relaxed">
+                  <p><strong>Établissement :</strong> {SCHOOL_INFO.name}</p>
+                  <p><strong>Adresse Officielle :</strong> {SCHOOL_INFO.address}</p>
+                  <p><strong>Autorisation de Création :</strong> Agréé par le Ministère de l'Éducation Nationale et de l'Alphabétisation de Côte d'Ivoire (DRENA 3 Abidjan).</p>
+                  <p><strong>Régime :</strong> Établissement Privé d'Enseignement Général et Technique Tertiaire.</p>
+                  <p><strong>Directeur des Études :</strong> M. le Directeur — Secrétariat joignable au {SCHOOL_INFO.phone}.</p>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4 text-xs">
+                <span className="bg-[#047857] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">RENTRÉE 2026-2027</span>
+                <h3 className="font-extrabold text-xl text-[#0a2540]">Listes de Fournitures Scolaires</h3>
+                <div className="space-y-3">
+                  <div className="p-3 bg-slate-50 border rounded-xl flex items-center justify-between">
+                    <div>
+                      <p className="font-bold text-[#0a2540]">Liste des fournitures — Premier Cycle (6ème à la 3ème)</p>
+                      <p className="text-[10px] text-slate-400">Format PDF officiel DRENA 3</p>
+                    </div>
+                    <a href={`tel:${SCHOOL_INFO.phoneFormatted}`} className="px-3 py-1.5 bg-[#047857] text-white rounded-lg text-[11px] font-bold">Demander au secrétariat</a>
+                  </div>
+
+                  <div className="p-3 bg-slate-50 border rounded-xl flex items-center justify-between">
+                    <div>
+                      <p className="font-bold text-[#0a2540]">Liste des fournitures — Second Cycle & Technique (G1, G2, AB)</p>
+                      <p className="text-[10px] text-slate-400">Format PDF officiel DRENA 3</p>
+                    </div>
+                    <a href={`tel:${SCHOOL_INFO.phoneFormatted}`} className="px-3 py-1.5 bg-[#0a2540] text-white rounded-lg text-[11px] font-bold">Demander au secrétariat</a>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="pt-4 border-t flex justify-end">
+              <button onClick={() => setFooterModal(null)} className="px-5 py-2.5 bg-[#0a2540] text-white rounded-xl text-xs font-bold">
+                Fermer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODALS D'ACTUALITÉS */}
       {actuModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative border border-slate-100 max-h-[85vh] overflow-y-auto">
@@ -786,7 +846,6 @@ export default function App() {
               <span className="material-symbols-outlined text-2xl">close</span>
             </button>
 
-            {/* MODAL 1 : DATES IMPORTANTES DE L'ANNÉE SCOLAIRE */}
             {actuModal === 'dates' && (
               <div className="space-y-5 text-xs">
                 <div className="flex items-center gap-3 border-b pb-3">
@@ -799,7 +858,6 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* DÉCOUPAGE TRIMESTRIEL */}
                 <div className="bg-amber-50/50 p-4 rounded-2xl border border-amber-200 space-y-3">
                   <h4 className="font-bold text-sm text-[#0a2540] flex items-center gap-1.5">
                     <span className="material-symbols-outlined text-base text-[#f59e0b]">schedule</span>
@@ -821,7 +879,6 @@ export default function App() {
                   </ul>
                 </div>
 
-                {/* CONGÉS & VACANCES */}
                 <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
                   <h4 className="font-bold text-sm text-[#0a2540] flex items-center gap-1.5">
                     <span className="material-symbols-outlined text-base text-[#0a2540]">beach_access</span>
@@ -847,7 +904,6 @@ export default function App() {
                   </ul>
                 </div>
 
-                {/* EMPLACEMENT 2 COURRIERS OFFICIELS */}
                 <div className="p-4 bg-blue-50 border border-blue-200 rounded-2xl space-y-2">
                   <h4 className="font-bold text-sm text-[#0a2540] flex items-center gap-1.5">
                     <span className="material-symbols-outlined text-base text-blue-600">description</span>
@@ -873,7 +929,6 @@ export default function App() {
               </div>
             )}
 
-            {/* MODAL 2 : VIE SCOLAIRE & ÉVÉNEMENTS À VENIR */}
             {actuModal === 'viescolaire' && (
               <div className="space-y-5 text-xs">
                 <div className="flex items-center gap-3 border-b pb-3">
@@ -902,19 +957,10 @@ export default function App() {
                       Sensibilisation à la citoyenneté, élection des représentants d'élèves et installation du Conseil des Délégués.
                     </p>
                   </div>
-
-                  <div className="p-4 bg-slate-50 border rounded-2xl space-y-1.5">
-                    <span className="bg-emerald-100 text-[#047857] font-bold text-[10px] px-2 py-0.5 rounded-md">12 NOVEMBRE 2026</span>
-                    <h4 className="font-bold text-sm text-[#0a2540]">Lancement des Clubs Scientifiques & Génie en Herbe</h4>
-                    <p className="text-slate-600">
-                      Inscriptions aux ateliers d'informatique, de débat, de théâtre et aux rencontres de compétition inter-classes.
-                    </p>
-                  </div>
                 </div>
               </div>
             )}
 
-            {/* MODAL 3 : ACTUALITÉ FESTIVE, CULTURELLE & ÉVASIVE */}
             {actuModal === 'festif' && (
               <div className="space-y-5 text-xs">
                 <div className="flex items-center gap-3 border-b pb-3">
@@ -932,23 +978,7 @@ export default function App() {
                     <span className="bg-[#0a2540] text-white font-bold text-[10px] px-2 py-0.5 rounded-md">02 JUIN 2026</span>
                     <h4 className="font-bold text-sm text-[#0a2540]">Remise des Diplômes & Journée d'Orientation Professionnelle</h4>
                     <p className="text-slate-600">
-                      Cérémonie solennelle de graduation pour les élèves de Terminale et rencontre avec les cabinets partenaires et universités.
-                    </p>
-                  </div>
-
-                  <div className="p-4 bg-indigo-50/50 border border-indigo-100 rounded-2xl space-y-1.5">
-                    <span className="bg-[#0a2540] text-white font-bold text-[10px] px-2 py-0.5 rounded-md">15 FÉVRIER 2027</span>
-                    <h4 className="font-bold text-sm text-[#0a2540]">Journée Culturelle & Foire Gastronomique de la Salle</h4>
-                    <p className="text-slate-600">
-                      Présentation des danses traditionnelles, concours de tenues traditionnelles ivoiriennes et dégustation culinaire régionale.
-                    </p>
-                  </div>
-
-                  <div className="p-4 bg-indigo-50/50 border border-indigo-100 rounded-2xl space-y-1.5">
-                    <span className="bg-[#0a2540] text-white font-bold text-[10px] px-2 py-0.5 rounded-md">25 AVRIL 2027</span>
-                    <h4 className="font-bold text-sm text-[#0a2540]">Excursion Éducative & Journée Sportive Lasallienne</h4>
-                    <p className="text-slate-600">
-                      Sortie de découverte pédagogique à Yamoussoukro et tournois sportifs interdisciplinaires (Football, Handball, Athlétisme).
+                      Cérémonie solennelle de graduation pour les élèves de Terminale et rencontre avec les cabinets partenaires.
                     </p>
                   </div>
                 </div>
@@ -1357,6 +1387,7 @@ export default function App() {
       {/* FOOTER */}
       <footer className="bg-[#0a2540] text-white text-xs py-12 border-t border-white/10 mt-12">
         <div className="max-w-7xl mx-auto px-4 lg:px-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          
           <div className="space-y-3">
             <div className="flex items-center gap-2 font-extrabold text-base">
               <span className="material-symbols-outlined text-[#f59e0b]">school</span>
@@ -1365,43 +1396,104 @@ export default function App() {
             <p className="text-slate-400 leading-relaxed text-[11px]">
               Fondé sur les valeurs de foi, de service et de communauté, notre collège privé technique est un pilier de l'éducation générale et tertiaire en Côte d'Ivoire.
             </p>
-            <span className="inline-block bg-white/10 text-slate-300 text-[10px] font-bold px-2.5 py-1 rounded-md">
+            <a 
+              href={SCHOOL_INFO.drenaUrl} 
+              target="_blank" 
+              rel="noreferrer" 
+              className="inline-block bg-white/10 hover:bg-white/20 text-slate-300 text-[10px] font-bold px-2.5 py-1 rounded-md transition-colors"
+            >
               DRENA 3 - Abidjan
-            </span>
+            </a>
           </div>
 
           <div>
             <h4 className="font-bold text-sm text-[#f59e0b] mb-3 uppercase tracking-wider">LIENS UTILES</h4>
             <ul className="space-y-2 text-slate-300 text-[11px]">
-              <li><a href="#mentions" className="hover:underline">Mentions Légales</a></li>
-              <li><a href="#drena" className="hover:underline">Portail Administratif DRENA 3</a></li>
-              <li><a href="#plan" className="hover:underline">Plan du Site</a></li>
-              <li><a href="#contact" className="hover:underline">Contact & Secrétariat</a></li>
+              <li>
+                <button onClick={() => setFooterModal('mentions')} className="hover:underline text-left">
+                  Mentions Légales & Agréments
+                </button>
+              </li>
+              <li>
+                <a href={SCHOOL_INFO.drenaUrl} target="_blank" rel="noreferrer" className="hover:underline">
+                  Portail Administratif DRENA 3
+                </a>
+              </li>
+              <li>
+                <a href="#accueil" className="hover:underline">
+                  Plan du Site & Accueil
+                </a>
+              </li>
+              <li>
+                <a href="#contact" className="hover:underline">
+                  Contact & Secrétariat
+                </a>
+              </li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-bold text-sm text-[#f59e0b] mb-3 uppercase tracking-wider">ACADÉMIQUE</h4>
             <ul className="space-y-2 text-slate-300 text-[11px]">
-              <li><a href="#calendrier" className="hover:underline">Calendrier Scolaire 2026-2027</a></li>
-              <li><a href="#fournitures" className="hover:underline">Listes de Fournitures Scolaires</a></li>
-              <li><a href="#examens" className="hover:underline">Examens Blancs & Épreuves</a></li>
-              <li><a href="#assiduite" className="hover:underline">Suivi du Carnet d'Assiduité</a></li>
+              <li>
+                <button onClick={() => setActuModal('dates')} className="hover:underline text-left">
+                  Calendrier Scolaire 2026-2027
+                </button>
+              </li>
+              <li>
+                <button onClick={() => setFooterModal('fournitures')} className="hover:underline text-left">
+                  Listes de Fournitures Scolaires
+                </button>
+              </li>
+              <li>
+                <button onClick={() => setActuModal('viescolaire')} className="hover:underline text-left">
+                  Examens Blancs & Épreuves
+                </button>
+              </li>
+              <li>
+                <a href="#portails" className="hover:underline">
+                  Suivi du Carnet d'Assiduité
+                </a>
+              </li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-bold text-sm text-[#f59e0b] mb-3 uppercase tracking-wider">SUIVEZ-NOUS</h4>
-            <p className="text-slate-400 text-[11px] mb-3">Restez informés des actualités et événements sur nos réseaux officiels.</p>
+            <p className="text-slate-400 text-[11px] mb-3">
+              Restez informés des actualités et échangez avec le secrétariat sur nos canaux officiels.
+            </p>
             <div className="flex gap-2">
-              <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 cursor-pointer">
-                <span className="material-symbols-outlined text-sm">qr_code_2</span>
-              </div>
-              <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 cursor-pointer">
-                <span className="material-symbols-outlined text-sm">public</span>
-              </div>
+              <a 
+                href={SCHOOL_INFO.whatsappUrl} 
+                target="_blank" 
+                rel="noreferrer" 
+                title="Contacter le Secrétariat sur WhatsApp"
+                className="w-9 h-9 bg-emerald-600/30 hover:bg-emerald-600 text-white rounded-lg flex items-center justify-center transition-all"
+              >
+                <span className="material-symbols-outlined text-lg">chat</span>
+              </a>
+              <a 
+                href={SCHOOL_INFO.facebookUrl} 
+                target="_blank" 
+                rel="noreferrer" 
+                title="Page Facebook Officielle"
+                className="w-9 h-9 bg-blue-600/30 hover:bg-blue-600 text-white rounded-lg flex items-center justify-center transition-all"
+              >
+                <span className="material-symbols-outlined text-lg">public</span>
+              </a>
+              <a 
+                href={SCHOOL_INFO.mapsUrl} 
+                target="_blank" 
+                rel="noreferrer" 
+                title="Localisation Google Maps"
+                className="w-9 h-9 bg-white/10 hover:bg-white/20 text-white rounded-lg flex items-center justify-center transition-all"
+              >
+                <span className="material-symbols-outlined text-lg">location_on</span>
+              </a>
             </div>
           </div>
+
         </div>
 
         <div className="max-w-7xl mx-auto px-4 lg:px-10 mt-12 pt-6 border-t border-white/10 text-center text-slate-400 text-[11px]">
