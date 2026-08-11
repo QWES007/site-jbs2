@@ -38,7 +38,7 @@ const calculateSchoolFees = (classe: string, statut: string) => {
   if (isAffecte) {
     return {
       inscription: 10000,
-      scolarite: 15000, // Frais annexes & participation
+      scolarite: 15000,
       total: 25000,
       note: "Prise en charge par l'État de Côte d'Ivoire (Seuls les frais annexes d'inscription s'appliquent)."
     };
@@ -236,9 +236,9 @@ export default function App() {
     nom: '',
     prenom: '',
     classe: '6ème — Enseignement Général',
-    statut: 'affecte', // 'affecte' ou 'non_affecte'
+    statut: 'affecte',
     etablissementOrigine: '',
-    mga: '', // Moyenne de Fin d'Année
+    mga: '',
     filiere: 'general',
   });
 
@@ -290,10 +290,9 @@ export default function App() {
 
     console.log("📥 payload prêt pour envoi au backend:", reservationPayload);
 
-    // Simulation d'attente d'un appel API/Backend
     await new Promise(resolve => setTimeout(resolve, 800));
     setIsSubmitting(false);
-    setInscriptionStep(3); // Aller à la confirmation
+    setInscriptionStep(3);
   };
 
   const currentFees = calculateSchoolFees(formData.classe, formData.statut);
@@ -301,47 +300,58 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-[#1e293b] font-sans antialiased">
       
-      {/* HEADER */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 lg:px-10 py-3 flex items-center justify-between shadow-sm">
-        <div className="flex items-center gap-3">
-          <img src={MEDIA_CONFIG.logo} alt="Logo JBS2" className="h-11 w-auto object-contain" />
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-extrabold text-lg text-[#0a2540] tracking-tight">{SCHOOL_INFO.shortName}</span>
-              <span className="bg-[#0b3c5d] text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">DRENA 3</span>
+      {/* 1. HEADER (CORRIGÉ MOBILE) */}
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-3 sm:px-6 lg:px-10 py-2.5 shadow-sm">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
+          
+          {/* LOGO + NOM DU COLLÈGE */}
+          <div className="flex items-center gap-2 min-w-0">
+            <img src={MEDIA_CONFIG.logo} alt="Logo JBS2" className="h-9 sm:h-11 w-auto object-contain shrink-0" />
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="font-extrabold text-sm sm:text-lg text-[#0a2540] tracking-tight whitespace-nowrap truncate">
+                  {SCHOOL_INFO.shortName}
+                </span>
+                <span className="hidden sm:inline-block bg-[#0b3c5d] text-white text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase shrink-0">
+                  DRENA 3
+                </span>
+              </div>
+              <p className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">Attécoubé Santé 3 • Abidjan</p>
             </div>
-            <p className="text-xs text-slate-500 font-medium">Attécoubé Santé 3 • Abidjan</p>
           </div>
-        </div>
 
-        <nav className="hidden xl:flex items-center gap-7 text-xs font-bold text-slate-700">
-          <a href="#accueil" className="text-[#0a2540] border-b-2 border-[#0a2540] pb-1">Accueil</a>
-          <a href="#formations" className="hover:text-[#0a2540] transition-colors pb-1">Formations</a>
-          <a href="#portails" className="hover:text-[#0a2540] transition-colors pb-1">Portails Numériques</a>
-          <a href="#actualites" className="hover:text-[#0a2540] transition-colors pb-1">Actualités & Examens</a>
-          <a href="#contact" className="hover:text-[#0a2540] transition-colors pb-1">Nous Trouver</a>
-        </nav>
+          {/* NAVIGATION DESKTOP */}
+          <nav className="hidden xl:flex items-center gap-7 text-xs font-bold text-slate-700">
+            <a href="#accueil" className="text-[#0a2540] border-b-2 border-[#0a2540] pb-1">Accueil</a>
+            <a href="#formations" className="hover:text-[#0a2540] transition-colors pb-1">Formations</a>
+            <a href="#portails" className="hover:text-[#0a2540] transition-colors pb-1">Portails Numériques</a>
+            <a href="#actualites" className="hover:text-[#0a2540] transition-colors pb-1">Actualités & Examens</a>
+            <a href="#contact" className="hover:text-[#0a2540] transition-colors pb-1">Nous Trouver</a>
+          </nav>
 
-        <div className="flex items-center gap-2 sm:gap-3">
-          <button 
-            onClick={() => setAiOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-2 bg-[#f59e0b] hover:bg-[#d97706] text-white rounded-xl text-xs font-bold transition-all shadow-sm"
-          >
-            <span className="material-symbols-outlined text-base">smart_toy</span>
-            <span>Assistant IA</span>
-          </button>
+          {/* BOUTONS D'ACTION MOBILES ET DESKTOP */}
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+            <button 
+              onClick={() => setAiOpen(true)}
+              className="flex items-center gap-1 px-2.5 sm:px-3 py-2 bg-[#f59e0b] hover:bg-[#d97706] text-white rounded-xl text-[11px] sm:text-xs font-bold transition-all shadow-sm"
+            >
+              <span className="material-symbols-outlined text-sm sm:text-base">smart_toy</span>
+              <span className="hidden sm:inline">Assistant IA</span>
+            </button>
 
-          <button 
-            onClick={() => openInscriptionWithFiliere('general')}
-            className="flex items-center gap-1.5 px-4 py-2 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-xs font-bold transition-all shadow-sm"
-          >
-            <span className="material-symbols-outlined text-base">how_to_reg</span>
-            <span>Réservation en Ligne</span>
-          </button>
+            <button 
+              onClick={() => openInscriptionWithFiliere('general')}
+              className="flex items-center gap-1 px-2.5 sm:px-4 py-2 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-[11px] sm:text-xs font-bold transition-all shadow-sm whitespace-nowrap"
+            >
+              <span className="material-symbols-outlined text-sm sm:text-base">how_to_reg</span>
+              <span>Réservation<span className="hidden sm:inline"> en Ligne</span></span>
+            </button>
+          </div>
+
         </div>
       </header>
 
-      {/* HERO SECTION */}
+      {/* 2. HERO SECTION */}
       <section id="accueil" className="relative bg-[#0a2540] text-white overflow-hidden py-12 lg:py-20 px-4 lg:px-12">
         <div 
           className="absolute inset-0 opacity-20 bg-cover bg-center mix-blend-overlay pointer-events-none"
@@ -428,7 +438,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* SECTION FORMATIONS */}
+      {/* 3. SECTION FORMATIONS */}
       <section id="formations" className="max-w-7xl mx-auto px-4 lg:px-10 py-16 space-y-10">
         <div className="grid lg:grid-cols-2 gap-8">
           
@@ -464,7 +474,6 @@ export default function App() {
                 Détails du cursus
               </button>
               
-              {/* BOUTON D'ACTION : PRÉINSCRIPTION ENSEIGNEMENT GÉNÉRAL */}
               <button 
                 onClick={() => openInscriptionWithFiliere('general')}
                 className="w-full py-3.5 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md"
@@ -508,7 +517,6 @@ export default function App() {
                 Découvrir les métiers & programmes
               </button>
               
-              {/* BOUTON D'ACTION : PRÉINSCRIPTION TECHNIQUE TERTIAIRE */}
               <button 
                 onClick={() => openInscriptionWithFiliere('technique')}
                 className="w-full py-3.5 bg-[#0a2540] hover:bg-[#061726] text-white rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md"
@@ -522,7 +530,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* PORTAILS NUMÉRIQUES */}
+      {/* 4. PORTAILS NUMÉRIQUES */}
       <section id="portails" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
@@ -603,7 +611,7 @@ export default function App() {
 
       </section>
 
-      {/* ACTUALITÉS */}
+      {/* 5. ACTUALITÉS */}
       <section id="actualites" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
         <div>
           <span className="bg-[#f59e0b] text-[#0a2540] text-[11px] font-extrabold px-3 py-1 rounded-md uppercase tracking-wider">VIE DE L'ÉTABLISSEMENT</span>
@@ -653,7 +661,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* NOUS TROUVER & CONTACT */}
+      {/* 6. NOUS TROUVER & CONTACT */}
       <section id="contact" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
         <div>
           <span className="bg-[#0a2540] text-white text-[11px] font-extrabold px-3 py-1 rounded-md uppercase tracking-wider">LOCALISATION & CONTACT</span>
