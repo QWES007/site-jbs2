@@ -14,6 +14,58 @@ const MEDIA_CONFIG = {
   actu3: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=600",
 };
 
+// GALERIE DES ACTIVITÉS DE L'ÉCOLE (Prête à recevoir plusieurs photos de toutes sortes)
+const SCHOOL_ACTIVITIES = [
+  {
+    id: 1,
+    title: "Journée du Mérite & Récompenses",
+    category: "fetes",
+    date: "Mai 2026",
+    image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=600",
+    desc: "Célébration des meilleurs élèves de l'année académique."
+  },
+  {
+    id: 2,
+    title: "Tournoi Inter-classes de Football & Basket",
+    category: "sports",
+    date: "Avril 2026",
+    image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&q=80&w=600",
+    desc: "Compétition sportive annuelle entre le 1er et 2nd cycle."
+  },
+  {
+    id: 3,
+    title: "Sortie Éducative & Visite d'Entreprise",
+    category: "pedagogie",
+    date: "Mars 2026",
+    image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=600",
+    desc: "Immersion des élèves des séries G1 et G2 en milieu professionnel."
+  },
+  {
+    id: 4,
+    title: "Atelier Scientifique & Informatique",
+    category: "pedagogie",
+    date: "Février 2026",
+    image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=600",
+    desc: "Pratique sur ordinateurs et démonstrations en laboratoire."
+  },
+  {
+    id: 5,
+    title: "Fête Culturelle & Danses Traditionnelles",
+    category: "fetes",
+    date: "Décembre 2025",
+    image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&q=80&w=600",
+    desc: "Mise en valeur du patrimoine culturel et des talents des élèves."
+  },
+  {
+    id: 6,
+    title: "Séance de Sensibilisation & Secourisme",
+    category: "vie_scolaire",
+    date: "Novembre 2025",
+    image: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=600",
+    desc: "Formation aux premiers secours et conseils de citoyenneté."
+  }
+];
+
 // ============================================================================
 // INFORMATIONS OFFICIELLES DU COLLÈGE
 // ============================================================================
@@ -73,7 +125,7 @@ const calculateSchoolFees = (classe: string, statut: string) => {
 };
 
 // ============================================================================
-// COMPOSANT: RECHERCHE DE BULLETIN NUMÉRIQUE (Lit le notes.json)
+// COMPOSANT: RECHERCHE DE BULLETIN NUMÉRIQUE
 // ============================================================================
 function BulletinNumeriqueSearch() {
   const [query, setQuery] = useState('');
@@ -94,7 +146,6 @@ function BulletinNumeriqueSearch() {
       const data = await res.json();
       
       const searchTerm = query.toLowerCase().trim();
-      
       const found = data.find((s: any) => 
         s.matricule.toLowerCase().includes(searchTerm) || 
         s.nom.toLowerCase().includes(searchTerm)
@@ -103,10 +154,10 @@ function BulletinNumeriqueSearch() {
       if (found) {
         setStudent(found);
       } else {
-        setError(`Aucun élève trouvé pour "${query}". Vérifiez le matricule ou l'orthographe du nom.`);
+        setError(`Aucun élève trouvé pour "${query}". Vérifiez le matricule ou l'orthographe.`);
       }
     } catch (err) {
-      setError("Impossible de charger les notes. Assurez-vous que les notes ont été exportées (fichier notes.json manquant).");
+      setError("Fichier notes.json introuvable.");
     } finally {
       setSearching(false);
     }
@@ -122,8 +173,8 @@ function BulletinNumeriqueSearch() {
           <span className="bg-[#047857] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-md uppercase">
             3ème TRIMESTRE 2025-2026
           </span>
-          <h4 className="font-bold text-lg mt-1 text-white">Consulter le Bulletin Numérique</h4>
-          <p className="text-xs text-slate-300">Entrez le matricule ou le nom de l'élève pour générer le récapitulatif des moyennes.</p>
+          <h4 className="font-bold text-base sm:text-lg mt-1 text-white">Consulter le Bulletin Numérique</h4>
+          <p className="text-xs text-slate-300">Entrez le matricule ou le nom de l'élève pour générer le récapitulatif.</p>
         </div>
       </div>
 
@@ -150,22 +201,22 @@ function BulletinNumeriqueSearch() {
       {student && (
         <div className="mt-6 bg-white rounded-2xl p-6 sm:p-8 text-slate-800 shadow-2xl relative overflow-hidden">
           <div className="text-center border-b-2 border-slate-200 pb-4 mb-6 space-y-1">
-            <h3 className="font-extrabold text-xl text-[#0a2540]">{SCHOOL_INFO.shortName}</h3>
+            <h3 className="font-extrabold text-lg text-[#0a2540]">{SCHOOL_INFO.shortName}</h3>
             <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Bulletin Récapitulatif - 3ème Trimestre</p>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6 bg-slate-50 p-4 rounded-xl border border-slate-100">
             <div className="col-span-2">
               <p className="text-[10px] font-bold text-slate-400 uppercase">Nom & Prénoms</p>
-              <p className="font-bold text-sm text-[#0a2540]">{student.nom}</p>
+              <p className="font-bold text-xs sm:text-sm text-[#0a2540]">{student.nom}</p>
             </div>
             <div>
               <p className="text-[10px] font-bold text-slate-400 uppercase">Matricule</p>
-              <p className="font-bold text-sm text-[#0a2540]">{student.matricule}</p>
+              <p className="font-bold text-xs sm:text-sm text-[#0a2540]">{student.matricule}</p>
             </div>
             <div>
               <p className="text-[10px] font-bold text-slate-400 uppercase">Classe</p>
-              <p className="font-bold text-sm text-[#047857]">{student.classe}</p>
+              <p className="font-bold text-xs sm:text-sm text-[#047857]">{student.classe}</p>
             </div>
           </div>
 
@@ -190,7 +241,7 @@ function BulletinNumeriqueSearch() {
                 {student.notes && Object.entries(student.notes).map(([matiere, note]) => (
                   <tr key={matiere} className="hover:bg-slate-50 transition-colors">
                     <td className="p-3 font-medium text-slate-700">{matiere}</td>
-                    <td className={`p-3 font-bold text-center ${Number(note) >= 10 ? 'text-[#047857]' : (Number(note) < 10 ? 'text-red-600' : 'text-slate-400')}`}>
+                    <td className={`p-3 font-bold text-center ${Number(note) >= 10 ? 'text-[#047857]' : 'text-red-600'}`}>
                       {note as React.ReactNode}
                     </td>
                   </tr>
@@ -201,17 +252,17 @@ function BulletinNumeriqueSearch() {
 
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-emerald-50 p-4 rounded-xl border border-emerald-100">
             <div className="flex items-center gap-4 text-center sm:text-left">
-              <div className="w-16 h-16 bg-[#047857] text-white rounded-full flex items-center justify-center font-black text-xl shadow-md border-4 border-white">
+              <div className="w-14 h-14 bg-[#047857] text-white rounded-full flex items-center justify-center font-black text-lg shadow-md border-4 border-white">
                 {student.moyenne}
               </div>
               <div>
                 <p className="text-xs font-bold text-[#047857] uppercase tracking-wider">Moyenne Trimestrielle</p>
-                <p className="text-sm font-extrabold text-[#0a2540]">
+                <p className="text-xs font-extrabold text-[#0a2540]">
                   Rang : {student.rang !== 'N/A' && student.rang !== 'nan' ? student.rang : 'Non classé'}
                 </p>
               </div>
             </div>
-            <button onClick={() => window.print()} className="w-full sm:w-auto px-6 py-3 bg-[#0a2540] hover:bg-[#061726] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 transition-all shadow-md">
+            <button onClick={() => window.print()} className="w-full sm:w-auto px-5 py-2.5 bg-[#0a2540] hover:bg-[#061726] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 transition-all shadow-md">
               <span className="material-symbols-outlined text-base">print</span> Imprimer le bulletin
             </button>
           </div>
@@ -233,8 +284,11 @@ export default function App() {
   const [inscriptionStep, setInscriptionStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activePortalTab, setActivePortalTab] = useState<'eleves' | 'parents' | 'profs'>('eleves');
+  
+  // Filtre pour la galerie photos des activités
+  const [selectedCategory, setSelectedCategory] = useState<string>('tous');
+  const [selectedPhoto, setSelectedPhoto] = useState<any | null>(null);
 
-  // FORMULAIRE DE PRÉ-INSCRIPTION / RÉSERVATION DE PLACE
   const [formData, setFormData] = useState({
     matricule: '',
     nom: '',
@@ -247,7 +301,7 @@ export default function App() {
   });
 
   const [messages, setMessages] = useState([
-    { id: '1', sender: 'assistant', text: `Bonjour ! Je suis l'Assistant Virtuel du Collège J.B. de La Salle 2. Comment puis-je vous aider aujourd'hui ? Vous pouvez aussi contacter le secrétariat au ${SCHOOL_INFO.phone}.` }
+    { id: '1', sender: 'assistant', text: `Bonjour ! Je suis l'Assistant Virtuel du Collège J.B. de La Salle 2. Comment puis-je vous aider aujourd'hui ? Vous pouvez contacter le secrétariat au ${SCHOOL_INFO.phone}.` }
   ]);
   const [inputValue, setInputValue] = useState('');
 
@@ -260,7 +314,7 @@ export default function App() {
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         sender: 'assistant',
-        text: `Merci pour votre message ! Le secrétariat d'Attécoubé Santé 3 reste joignable au ${SCHOOL_INFO.phone} ou par email à ${SCHOOL_INFO.email}.`
+        text: `Merci pour votre message ! Le secrétariat d'Attécoubé Santé 3 reste joignable au ${SCHOOL_INFO.phone}.`
       }]);
     }, 600);
   };
@@ -277,22 +331,6 @@ export default function App() {
 
   const handleReservationSubmit = async () => {
     setIsSubmitting(true);
-
-    const reservationPayload = {
-      matricule_eleve: formData.matricule,
-      nom: formData.nom,
-      prenom: formData.prenom,
-      classe_sollicitee: formData.classe,
-      statut_affecte: formData.statut === 'affecte',
-      etablissement_origine: formData.etablissementOrigine,
-      mga: parseFloat(formData.mga) || 0,
-      filiere: formData.filiere,
-      frais_estimes: calculateSchoolFees(formData.classe, formData.statut),
-      created_at: new Date().toISOString()
-    };
-
-    console.log("📥 payload prêt pour envoi au backend:", reservationPayload);
-
     await new Promise(resolve => setTimeout(resolve, 800));
     setIsSubmitting(false);
     setInscriptionStep(3);
@@ -300,22 +338,26 @@ export default function App() {
 
   const currentFees = calculateSchoolFees(formData.classe, formData.statut);
 
+  const filteredActivities = selectedCategory === 'tous' 
+    ? SCHOOL_ACTIVITIES 
+    : SCHOOL_ACTIVITIES.filter(a => a.category === selectedCategory);
+
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-[#1e293b] font-sans antialiased">
       
-      {/* 1. HEADER (Nom sur 2 lignes, 2ème ligne centrée) */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 lg:px-10 py-2.5 shadow-sm">
+      {/* 1. HEADER */}
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 lg:px-10 py-2 shadow-sm">
         <div className="max-w-[90rem] mx-auto flex items-center justify-between gap-4">
           
           <div className="flex items-center gap-3 min-w-0">
-            <img src={MEDIA_CONFIG.logo} alt="Logo JBS2" className="h-10 w-auto object-contain shrink-0" />
+            <img src={MEDIA_CONFIG.logo} alt="Logo JBS2" className="h-9 w-auto object-contain shrink-0" />
             <div className="min-w-0 flex flex-col justify-center">
               <div className="flex items-center gap-2">
                 <div className="flex flex-col">
-                  <span className="font-extrabold text-xs sm:text-sm text-[#0a2540] tracking-tight leading-snug">
+                  <span className="font-extrabold text-xs text-[#0a2540] tracking-tight leading-snug">
                     {SCHOOL_INFO.fullNamePart1}
                   </span>
-                  <span className="font-extrabold text-xs sm:text-sm text-[#0a2540] tracking-tight leading-snug text-center">
+                  <span className="font-extrabold text-xs text-[#0a2540] tracking-tight leading-snug text-center">
                     {SCHOOL_INFO.fullNamePart2}
                   </span>
                 </div>
@@ -323,32 +365,32 @@ export default function App() {
                   DRENA 3
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500 font-medium truncate mt-0.5">{SCHOOL_INFO.address}</p>
+              <p className="text-[10px] text-slate-500 font-medium truncate mt-0.5">{SCHOOL_INFO.address}</p>
             </div>
           </div>
 
-          <nav className="hidden xl:flex items-center gap-7 text-xs font-bold text-slate-700">
+          <nav className="hidden xl:flex items-center gap-6 text-xs font-bold text-slate-700">
             <a href="#accueil" className="text-[#0a2540] border-b-2 border-[#0a2540] pb-1">Accueil</a>
             <a href="#formations" className="hover:text-[#0a2540] transition-colors pb-1">Formations</a>
             <a href="#portails" className="hover:text-[#0a2540] transition-colors pb-1">Portails Numériques</a>
-            <a href="#actualites" className="hover:text-[#0a2540] transition-colors pb-1">Actualités</a>
+            <a href="#activites" className="hover:text-[#0a2540] transition-colors pb-1">Découverte & Activités</a>
             <a href="#contact" className="hover:text-[#0a2540] transition-colors pb-1">Nous Trouver</a>
           </nav>
 
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2 shrink-0">
             <button 
               onClick={() => setAiOpen(true)}
-              className="flex items-center gap-1.5 px-4 py-2 bg-[#f59e0b] hover:bg-[#d97706] text-white rounded-xl text-xs font-bold transition-all shadow-sm"
+              className="flex items-center gap-1 px-3 py-1.5 bg-[#f59e0b] hover:bg-[#d97706] text-white rounded-xl text-xs font-bold transition-all shadow-sm"
             >
-              <span className="material-symbols-outlined text-base">smart_toy</span>
+              <span className="material-symbols-outlined text-sm">smart_toy</span>
               <span className="hidden sm:inline">Assistant IA</span>
             </button>
 
             <button 
               onClick={() => openInscriptionWithFiliere('general')}
-              className="flex items-center gap-1.5 px-5 py-2 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-xs font-bold transition-all shadow-sm whitespace-nowrap"
+              className="flex items-center gap-1.5 px-4 py-1.5 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-xs font-bold transition-all shadow-sm whitespace-nowrap"
             >
-              <span className="material-symbols-outlined text-base">how_to_reg</span>
+              <span className="material-symbols-outlined text-sm">how_to_reg</span>
               <span>Réservation<span className="hidden sm:inline"> en Ligne</span></span>
             </button>
           </div>
@@ -356,89 +398,90 @@ export default function App() {
         </div>
       </header>
 
-      {/* 2. HERO SECTION */}
-      <section id="accueil" className="relative bg-[#0a2540] text-white overflow-hidden py-16 lg:py-24 px-4 lg:px-12">
+      {/* 2. HERO SECTION (POLICE RÉDUITE & POLICE DES STATS RÉDUITE COMME SUR L'IMAGE 2) */}
+      <section id="accueil" className="relative bg-[#0a2540] text-white overflow-hidden py-10 lg:py-14 px-4 lg:px-12">
         <div 
           className="absolute inset-0 opacity-20 bg-cover bg-center mix-blend-overlay pointer-events-none"
           style={{ backgroundImage: `url(${MEDIA_CONFIG.heroBackground})` }}
         />
 
-        <div className="max-w-[90rem] mx-auto grid lg:grid-cols-12 gap-12 items-center relative z-10">
-          <div className="lg:col-span-6 space-y-6">
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#f59e0b] text-[#0a2540] text-xs font-extrabold uppercase rounded-full tracking-wide shadow-sm">
-              <span className="material-symbols-outlined text-base">workspace_premium</span>
+        <div className="max-w-[90rem] mx-auto grid lg:grid-cols-12 gap-8 items-center relative z-10">
+          <div className="lg:col-span-7 space-y-4">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#f59e0b] text-[#0a2540] text-[10px] font-extrabold uppercase rounded-full tracking-wide shadow-sm">
+              <span className="material-symbols-outlined text-sm">workspace_premium</span>
               ÉTABLISSEMENT D'EXCELLENCE • DRENA 3
             </span>
             
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tighter">
+            {/* Titre réduit pour correspondre exactement au style visuel de l'image 2 */}
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-tight tracking-tight">
               L'Excellence Éducative et Technique au Cœur d'Attécoubé
             </h1>
 
-            <p className="text-slate-300 text-base sm:text-lg leading-relaxed font-normal max-w-3xl">
+            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed font-normal max-w-2xl">
               Le <em>{SCHOOL_INFO.fullNamePart1} {SCHOOL_INFO.fullNamePart2}</em> forme les leaders de demain à travers un enseignement général rigoureux et un pôle technique tertiaire de haut niveau au service du développement ivoirien.
             </p>
 
-            <div className="flex flex-wrap gap-4 pt-3">
+            <div className="flex flex-wrap gap-3 pt-2">
               <button 
                 onClick={() => openInscriptionWithFiliere('general')}
-                className="flex items-center gap-2.5 px-7 py-3.5 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl font-bold text-sm sm:text-base transition-all shadow-md"
+                className="flex items-center gap-2 px-5 py-2.5 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl font-bold text-xs transition-all shadow-md"
               >
-                <span className="material-symbols-outlined text-xl">event_seat</span>
+                <span className="material-symbols-outlined text-base">event_seat</span>
                 Réserver une place en Ligne
               </button>
-              <a href="#formations" className="flex items-center gap-2.5 px-7 py-3.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-xl font-bold text-sm sm:text-base backdrop-blur-sm transition-all">
-                <span className="material-symbols-outlined text-xl">explore</span>
+              <a href="#formations" className="flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-xl font-bold text-xs backdrop-blur-sm transition-all">
+                <span className="material-symbols-outlined text-base">explore</span>
                 Visiter le Collège
               </a>
             </div>
 
-            {/* SECTION STATISTIQUES */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 pt-8">
-              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10 shadow-inner">
-                <span className="text-3xl sm:text-4xl font-black text-[#f59e0b]">58,88 %</span>
-                <p className="text-xs text-slate-300 font-medium mt-1">Réussite BEPC</p>
+            {/* SECTION STATISTIQUES (Taille de police réduite exactement comme sur l'image 2) */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4">
+              <div className="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/10 shadow-inner text-center sm:text-left">
+                <span className="text-xl sm:text-2xl font-extrabold text-[#f59e0b]">58,88 %</span>
+                <p className="text-[10px] text-slate-300 font-medium mt-0.5">Réussite BEPC</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10 shadow-inner">
-                <span className="text-3xl sm:text-4xl font-black text-[#f59e0b]">49,50 %</span>
-                <p className="text-xs text-slate-300 font-medium mt-1">Réussite BAC</p>
+              <div className="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/10 shadow-inner text-center sm:text-left">
+                <span className="text-xl sm:text-2xl font-extrabold text-[#f59e0b]">49,50 %</span>
+                <p className="text-[10px] text-slate-300 font-medium mt-0.5">Réussite BAC</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10 shadow-inner">
-                <span className="text-3xl sm:text-4xl font-black text-[#f59e0b]">1 450+</span>
-                <p className="text-xs text-slate-300 font-medium mt-1">Élèves Enseignés</p>
+              <div className="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/10 shadow-inner text-center sm:text-left">
+                <span className="text-xl sm:text-2xl font-extrabold text-[#f59e0b]">1 450+</span>
+                <p className="text-[10px] text-slate-300 font-medium mt-0.5">Élèves Enseignés</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10 shadow-inner">
-                <span className="text-3xl sm:text-4xl font-black text-[#f59e0b]">DRENA 3</span>
-                <p className="text-xs text-slate-300 font-medium mt-1">Rang d'Élite</p>
+              <div className="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/10 shadow-inner text-center sm:text-left">
+                <span className="text-xl sm:text-2xl font-extrabold text-[#f59e0b]">DRENA 3</span>
+                <p className="text-[10px] text-slate-300 font-medium mt-0.5">Rang d'Élite</p>
               </div>
             </div>
           </div>
 
-          {/* CARTE PHOTO AGRANDIE */}
-          <div className="lg:col-span-6">
-            <div className="bg-white/10 backdrop-blur-xl p-4 rounded-3xl border border-white/20 shadow-2xl space-y-4">
-              <div className="relative rounded-2xl overflow-hidden h-80 sm:h-96 border-2 border-white/10 shadow-inner">
+          {/* CARTE PHOTO */}
+          <div className="lg:col-span-5">
+            <div className="bg-white/10 backdrop-blur-xl p-3 rounded-2xl border border-white/20 shadow-2xl space-y-3">
+              <div className="relative rounded-xl overflow-hidden h-64 sm:h-72 border border-white/10 shadow-inner">
                 <img src={MEDIA_CONFIG.facadeCard} alt="Façade du Collège" className="w-full h-full object-cover" />
-                <span className="absolute top-4 left-4 bg-[#0a2540]/90 backdrop-blur-md text-white text-xs font-bold px-4 py-1.5 rounded-full flex items-center gap-2 border border-white/20 shadow-md">
-                  <span className="material-symbols-outlined text-sm text-[#f59e0b]">verified</span>
+                <span className="absolute top-3 left-3 bg-[#0a2540]/90 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5 border border-white/20 shadow-md">
+                  <span className="material-symbols-outlined text-xs text-[#f59e0b]">verified</span>
                   Façade Officielle
                 </span>
-                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-5 text-white">
-                  <h3 className="font-extrabold text-lg tracking-tight">{SCHOOL_INFO.shortName}</h3>
-                  <p className="text-sm text-slate-200 flex items-center gap-1.5 mt-1">
-                    <span className="material-symbols-outlined text-base">location_on</span>
+                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 text-white">
+                  <h3 className="font-extrabold text-sm tracking-tight">{SCHOOL_INFO.shortName}</h3>
+                  <p className="text-xs text-slate-200 flex items-center gap-1 mt-0.5">
+                    <span className="material-symbols-outlined text-sm">location_on</span>
                     {SCHOOL_INFO.address}
                   </p>
                 </div>
               </div>
 
-              <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl flex items-center justify-between gap-3">
+              <div className="bg-white/10 backdrop-blur-md p-3 rounded-xl flex items-center justify-between gap-2">
                 <div>
-                  <p className="text-sm font-bold text-white">Cadre d'études & Sécurité</p>
-                  <p className="text-xs text-slate-300">Enseignement Général & Tertiaire</p>
+                  <p className="text-xs font-bold text-white">Cadre d'études & Sécurité</p>
+                  <p className="text-[10px] text-slate-300">Enseignement Général & Tertiaire</p>
                 </div>
-                <a href="#formations" className="bg-[#f59e0b] hover:bg-[#d97706] text-[#0a2540] px-5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-md">
+                <a href="#formations" className="bg-[#f59e0b] hover:bg-[#d97706] text-[#0a2540] px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-1 transition-all shadow-md">
                   <span>Découvrir</span>
-                  <span className="material-symbols-outlined text-base">arrow_forward</span>
+                  <span className="material-symbols-outlined text-sm">arrow_forward</span>
                 </a>
               </div>
             </div>
@@ -447,88 +490,88 @@ export default function App() {
       </section>
 
       {/* 3. SECTION FORMATIONS */}
-      <section id="formations" className="max-w-7xl mx-auto px-4 lg:px-10 py-16 space-y-10">
-        <div className="grid lg:grid-cols-2 gap-8">
+      <section id="formations" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
+        <div className="grid lg:grid-cols-2 gap-6">
           
           <div className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between">
             <div>
-              <div className="relative h-64 overflow-hidden">
+              <div className="relative h-56 overflow-hidden">
                 <img src={MEDIA_CONFIG.generalImage} alt="Enseignement Général" className="w-full h-full object-cover" />
-                <span className="absolute top-4 left-4 bg-[#f59e0b] text-[#0a2540] text-[11px] font-extrabold px-3 py-1 rounded-lg uppercase tracking-wider">
+                <span className="absolute top-3 left-3 bg-[#f59e0b] text-[#0a2540] text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">
                   PREMIER & SECOND CYCLES
                 </span>
-                <div className="absolute bottom-4 left-4 text-white font-extrabold text-2xl drop-shadow-md">
+                <div className="absolute bottom-3 left-3 text-white font-extrabold text-xl drop-shadow-md">
                   Enseignement Général
                 </div>
               </div>
-              <div className="p-6 space-y-4">
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              <div className="p-5 space-y-3">
+                <p className="text-xs text-slate-600 leading-relaxed">
                   De la 6ème à la Terminale (Séries A & D). Un encadrement pédagogique d'élite pour la réussite aux examens nationaux du BEPC et du BAC.
                 </p>
-                <div className="space-y-2 text-xs font-bold text-slate-700">
-                  <p className="flex items-center gap-2"><span className="text-[#047857] text-base">✓</span> Cycle Orientation (6ème - 3ème)</p>
-                  <p className="flex items-center gap-2"><span className="text-[#047857] text-base">✓</span> Cycle Secondaire (2nde - Terminale A/D)</p>
+                <div className="space-y-1.5 text-xs font-bold text-slate-700">
+                  <p className="flex items-center gap-2"><span className="text-[#047857]">✓</span> Cycle Orientation (6ème - 3ème)</p>
+                  <p className="flex items-center gap-2"><span className="text-[#047857]">✓</span> Cycle Secondaire (2nde - Terminale A/D)</p>
                 </div>
               </div>
             </div>
 
-            <div className="p-6 pt-0 space-y-3">
+            <div className="p-5 pt-0 space-y-2">
               <button 
                 onClick={() => setDetailsModal('general')}
-                className="w-full py-3 border border-[#0a2540] text-[#0a2540] hover:bg-slate-50 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-colors"
+                className="w-full py-2.5 border border-[#0a2540] text-[#0a2540] hover:bg-slate-50 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
               >
-                <span className="material-symbols-outlined text-base">info</span>
+                <span className="material-symbols-outlined text-sm">info</span>
                 Détails du cursus
               </button>
               
               <button 
                 onClick={() => openInscriptionWithFiliere('general')}
-                className="w-full py-3.5 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md"
+                className="w-full py-3 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md"
               >
-                <span className="material-symbols-outlined text-lg">event_seat</span>
-                Préinscription & Réservation de Place (Général)
+                <span className="material-symbols-outlined text-base">event_seat</span>
+                Préinscription (Général)
               </button>
             </div>
           </div>
 
           <div className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between">
             <div>
-              <div className="relative h-64 overflow-hidden">
+              <div className="relative h-56 overflow-hidden">
                 <img src={MEDIA_CONFIG.techniqueImage} alt="Technique Tertiaire" className="w-full h-full object-cover" />
-                <span className="absolute top-4 left-4 bg-[#047857] text-white text-[11px] font-extrabold px-3 py-1 rounded-lg uppercase tracking-wider">
+                <span className="absolute top-3 left-3 bg-[#047857] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">
                   PÔLE TERTIAIRE SPÉCIALISÉ
                 </span>
-                <div className="absolute bottom-4 left-4 text-white font-extrabold text-2xl drop-shadow-md">
+                <div className="absolute bottom-3 left-3 text-white font-extrabold text-xl drop-shadow-md">
                   Technique Tertiaire
                 </div>
               </div>
-              <div className="p-6 space-y-4">
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Formations professionnalisantes en G1, G2, Série AB, Comptabilité et Secrétariat. Préparez votre insertion immédiate en entreprise ou vos études supérieures.
+              <div className="p-5 space-y-3">
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Formations professionnalisantes en G1, G2, Série AB, Comptabilité et Secrétariat. Préparez votre insertion immédiate en entreprise.
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-                  <div className="p-2.5 bg-emerald-50 text-[#047857] font-bold rounded-xl text-center">Série G1 (Secrétariat)</div>
-                  <div className="p-2.5 bg-emerald-50 text-[#047857] font-bold rounded-xl text-center">Série G2 (Comptabilité)</div>
-                  <div className="p-2.5 bg-emerald-50 text-[#047857] font-bold rounded-xl text-center">Série AB (Économie)</div>
+                <div className="grid grid-cols-3 gap-2 text-[11px]">
+                  <div className="p-2 bg-emerald-50 text-[#047857] font-bold rounded-lg text-center">Série G1</div>
+                  <div className="p-2 bg-emerald-50 text-[#047857] font-bold rounded-lg text-center">Série G2</div>
+                  <div className="p-2 bg-emerald-50 text-[#047857] font-bold rounded-lg text-center">Série AB</div>
                 </div>
               </div>
             </div>
 
-            <div className="p-6 pt-0 space-y-3">
+            <div className="p-5 pt-0 space-y-2">
               <button 
                 onClick={() => setDetailsModal('technique')}
-                className="w-full py-3 border border-[#047857] text-[#047857] hover:bg-emerald-50 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-colors"
+                className="w-full py-2.5 border border-[#047857] text-[#047857] hover:bg-emerald-50 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
               >
-                <span className="material-symbols-outlined text-base">work</span>
-                Découvrir les métiers & programmes
+                <span className="material-symbols-outlined text-sm">work</span>
+                Découvrir les métiers
               </button>
               
               <button 
                 onClick={() => openInscriptionWithFiliere('technique')}
-                className="w-full py-3.5 bg-[#0a2540] hover:bg-[#061726] text-white rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md"
+                className="w-full py-3 bg-[#0a2540] hover:bg-[#061726] text-white rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md"
               >
-                <span className="material-symbols-outlined text-lg">event_seat</span>
-                Préinscription & Réservation de Place (Technique)
+                <span className="material-symbols-outlined text-base">event_seat</span>
+                Préinscription (Technique)
               </button>
             </div>
           </div>
@@ -536,79 +579,79 @@ export default function App() {
         </div>
       </section>
 
-      {/* 4. PORTAILS NUMÉRIQUES (4 Cartes avec DRENA 3) */}
-      <section id="portails" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
+      {/* 4. PORTAILS NUMÉRIQUES */}
+      <section id="portails" className="max-w-7xl mx-auto px-4 lg:px-10 py-8 space-y-6">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <span className="bg-[#0a2540] text-white text-[11px] font-extrabold px-3 py-1 rounded-md uppercase tracking-wider">
+            <span className="bg-[#0a2540] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-md uppercase tracking-wider">
               ESPACE NUMÉRIQUE SÉCURISÉ
             </span>
-            <h2 className="text-3xl font-extrabold text-[#0a2540] mt-2">Portails Numériques</h2>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1">Accédez directement aux plateformes gouvernementales et scolaires officielles.</p>
+            <h2 className="text-2xl font-extrabold text-[#0a2540] mt-1">Portails Numériques</h2>
+            <p className="text-xs text-slate-500">Accédez directement aux plateformes gouvernementales et scolaires officielles.</p>
           </div>
 
-          <div className="bg-white p-1.5 rounded-2xl border border-slate-200 flex gap-1 shadow-sm">
+          <div className="bg-white p-1 rounded-xl border border-slate-200 flex gap-1 shadow-sm">
             <button 
               onClick={() => setActivePortalTab('eleves')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${activePortalTab === 'eleves' ? 'bg-[#0a2540] text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'}`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${activePortalTab === 'eleves' ? 'bg-[#0a2540] text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'}`}
             >
-              <span className="material-symbols-outlined text-base">school</span> Élèves
+              <span className="material-symbols-outlined text-sm">school</span> Élèves
             </button>
             <button 
               onClick={() => setActivePortalTab('parents')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${activePortalTab === 'parents' ? 'bg-[#0a2540] text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'}`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${activePortalTab === 'parents' ? 'bg-[#0a2540] text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'}`}
             >
-              <span className="material-symbols-outlined text-base">family_restroom</span> Parents
+              <span className="material-symbols-outlined text-sm">family_restroom</span> Parents
             </button>
             <button 
               onClick={() => setActivePortalTab('profs')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${activePortalTab === 'profs' ? 'bg-[#0a2540] text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'}`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${activePortalTab === 'profs' ? 'bg-[#0a2540] text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'}`}
             >
-              <span className="material-symbols-outlined text-base">person</span> Professeurs
+              <span className="material-symbols-outlined text-sm">person</span> Professeurs
             </button>
           </div>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center text-[#0a2540]">
-              <span className="material-symbols-outlined text-2xl">domain</span>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:shadow-md transition-shadow">
+            <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-[#0a2540]">
+              <span className="material-symbols-outlined text-xl">domain</span>
             </div>
-            <h3 className="font-bold text-base text-[#0a2540]">Site de la DESPS</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">Portail officiel de la Direction des Établissements Privés Scolaires de Côte d'Ivoire.</p>
+            <h3 className="font-bold text-sm text-[#0a2540]">Site de la DESPS</h3>
+            <p className="text-xs text-slate-500 leading-relaxed">Portail officiel de la Direction des Établissements Privés Scolaires.</p>
             <a href="https://mena-desps.org/" target="_blank" rel="noreferrer" className="text-xs font-bold text-[#0a2540] flex items-center gap-1 hover:underline">
               Visiter le site →
             </a>
           </div>
 
-          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-[#f59e0b]">
-              <span className="material-symbols-outlined text-2xl">calculate</span>
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:shadow-md transition-shadow">
+            <div className="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center text-[#f59e0b]">
+              <span className="material-symbols-outlined text-xl">calculate</span>
             </div>
-            <h3 className="font-bold text-base text-[#0a2540]">Moyenne d'Orientation</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">Consultez et calculez vos notes d'orientation BEPC sur le serveur officiel DOB.</p>
+            <h3 className="font-bold text-sm text-[#0a2540]">Moyenne d'Orientation</h3>
+            <p className="text-xs text-slate-500 leading-relaxed">Consultez vos notes d'orientation BEPC sur le serveur officiel DOB.</p>
             <a href="https://bourses.mendob.ci/index.php?adr=consultnotesbepc.inc" target="_blank" rel="noreferrer" className="text-xs font-bold text-[#f59e0b] flex items-center gap-1 hover:underline">
               Calculer ma moyenne →
             </a>
           </div>
 
-          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 bg-[#0b3c5d]/10 rounded-2xl flex items-center justify-center text-[#0b3c5d]">
-              <span className="material-symbols-outlined text-2xl">engineering</span>
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:shadow-md transition-shadow">
+            <div className="w-10 h-10 bg-[#0b3c5d]/10 rounded-xl flex items-center justify-center text-[#0b3c5d]">
+              <span className="material-symbols-outlined text-xl">engineering</span>
             </div>
-            <h3 className="font-bold text-base text-[#0a2540]">Enseignement Technique</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">Plateforme ERSYS-CI dédiée aux informations et diplômes de la formation technique.</p>
+            <h3 className="font-bold text-sm text-[#0a2540]">Enseignement Technique</h3>
+            <p className="text-xs text-slate-500 leading-relaxed">Plateforme ERSYS-CI dédiée aux informations et diplômes techniques.</p>
             <a href="https://www.ersys-ci.net/" target="_blank" rel="noreferrer" className="text-xs font-bold text-[#0b3c5d] flex items-center gap-1 hover:underline">
               Accéder à ERSYS-CI →
             </a>
           </div>
 
-          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-[#047857]">
-              <span className="material-symbols-outlined text-2xl">account_balance</span>
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:shadow-md transition-shadow">
+            <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-[#047857]">
+              <span className="material-symbols-outlined text-xl">account_balance</span>
             </div>
-            <h3 className="font-bold text-base text-[#0a2540]">Portail DRENA 3</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">Site officiel de la Direction Régionale de l'Éducation Nationale et de l'Alphabétisation Abidjan 3.</p>
+            <h3 className="font-bold text-sm text-[#0a2540]">Portail DRENA 3</h3>
+            <p className="text-xs text-slate-500 leading-relaxed">Site officiel de la Direction Régionale de l'Éducation Nationale Abidjan 3.</p>
             <a href={SCHOOL_INFO.drenaUrl} target="_blank" rel="noreferrer" className="text-xs font-bold text-[#047857] flex items-center gap-1 hover:underline">
               Accéder à la DRENA 3 →
             </a>
@@ -619,146 +662,156 @@ export default function App() {
 
       </section>
 
-      {/* 5. ACTUALITÉS & ÉVÉNEMENTS ACADÉMIQUES */}
-      <section id="actualites" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
-        <div>
-          <span className="bg-[#f59e0b] text-[#0a2540] text-[11px] font-extrabold px-3 py-1 rounded-md uppercase tracking-wider">
-            VIE DE L'ÉTABLISSEMENT
-          </span>
-          <h2 className="text-3xl font-extrabold text-[#0a2540] mt-2">Actualités & Événements Académiques</h2>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Consultez les dates clés, la vie scolaire et les événements culturels du Collège J.B. de La Salle 2.
-          </p>
+      {/* 5. DÉCOUVERTE & GALERIE DE TOUTES LES ACTIVITÉS DE L'ÉCOLE */}
+      <section id="activites" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <span className="bg-[#f59e0b] text-[#0a2540] text-[10px] font-extrabold px-2.5 py-0.5 rounded-md uppercase tracking-wider">
+              VIE SCOLAIRE & ACTIVITÉS
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a2540] mt-1">
+              Découverte des Activités de l'École
+            </h2>
+            <p className="text-xs text-slate-500 mt-1">
+              Explorez les moments forts, sorties, événements sportifs et célébrations au Collège J.B. de La Salle 2.
+            </p>
+          </div>
+
+          {/* BARRE DE FILTRES DYNAMIQUES */}
+          <div className="flex flex-wrap gap-1.5 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm text-xs font-bold">
+            <button 
+              onClick={() => setSelectedCategory('tous')}
+              className={`px-3 py-1.5 rounded-xl transition-all ${selectedCategory === 'tous' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}
+            >
+              Toutes
+            </button>
+            <button 
+              onClick={() => setSelectedCategory('fetes')}
+              className={`px-3 py-1.5 rounded-xl transition-all ${selectedCategory === 'fetes' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}
+            >
+              Fêtes & Culture
+            </button>
+            <button 
+              onClick={() => setSelectedCategory('sports')}
+              className={`px-3 py-1.5 rounded-xl transition-all ${selectedCategory === 'sports' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}
+            >
+              Sports
+            </button>
+            <button 
+              onClick={() => setSelectedCategory('pedagogie')}
+              className={`px-3 py-1.5 rounded-xl transition-all ${selectedCategory === 'pedagogie' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}
+            >
+              Pédagogie & Sorties
+            </button>
+          </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-3xl overflow-hidden border-2 border-amber-300 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-            <div>
-              <div className="relative h-48">
-                <img src={MEDIA_CONFIG.actu1} alt="Dates Importantes" className="w-full h-full object-cover" />
-                <span className="absolute top-3 left-3 bg-[#f59e0b] text-[#0a2540] text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wide">
-                  CALENDRIER SCOLAIRE
-                </span>
+        {/* GRILLE MULTI-PHOTOS DE TOUTES SORTES */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredActivities.map(act => (
+            <div 
+              key={act.id} 
+              className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all group flex flex-col justify-between"
+            >
+              <div>
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src={act.image} 
+                    alt={act.title} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                  />
+                  <span className="absolute top-3 left-3 bg-[#0a2540]/90 backdrop-blur-md text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase">
+                    {act.date}
+                  </span>
+                </div>
+                <div className="p-5 space-y-2">
+                  <h3 className="font-bold text-base text-[#0a2540] leading-snug group-hover:text-[#047857] transition-colors">
+                    {act.title}
+                  </h3>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    {act.desc}
+                  </p>
+                </div>
               </div>
-              <div className="p-5 space-y-3">
-                <span className="text-[11px] text-amber-600 font-bold uppercase tracking-wider">ANNÉE ACADÉMIQUE 2026-2027</span>
-                <h3 className="font-bold text-base text-[#0a2540] leading-snug">
-                  Dates Importantes, Découpage & Examens
-                </h3>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  Retrouvez le calendrier officiel des trimestres, les périodes de congés scolaires, les examens et les courriers officiels du Ministère.
-                </p>
-              </div>
-            </div>
-            <div className="p-5 pt-0">
-              <button 
-                onClick={() => setActuModal('dates')} 
-                className="w-full py-2.5 bg-[#f59e0b] hover:bg-[#d97706] text-[#0a2540] text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-sm"
-              >
-                <span>Consulter le calendrier</span>
-                <span className="material-symbols-outlined text-base">arrow_forward</span>
-              </button>
-            </div>
-          </div>
 
-          <div className="bg-white rounded-3xl overflow-hidden border-2 border-emerald-400 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-            <div>
-              <div className="relative h-48">
-                <img src={MEDIA_CONFIG.actu2} alt="Vie Scolaire" className="w-full h-full object-cover" />
-                <span className="absolute top-3 left-3 bg-[#047857] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wide">
-                  VIE SCOLAIRE
-                </span>
-              </div>
-              <div className="p-5 space-y-3">
-                <span className="text-[11px] text-[#047857] font-bold uppercase tracking-wider">ACTIVITÉS & CLUBS</span>
-                <h3 className="font-bold text-base text-[#0a2540] leading-snug">
-                  Vie Scolaire & Événements Pédagogiques
-                </h3>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  Découvrez la vie des élèves, les conseils de classe, les examens blancs DRENA 3 et les activités des clubs scientifiques.
-                </p>
+              <div className="p-5 pt-0">
+                <button 
+                  onClick={() => setSelectedPhoto(act)}
+                  className="w-full py-2 bg-slate-100 hover:bg-[#0a2540] hover:text-white text-[#0a2540] text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors"
+                >
+                  <span className="material-symbols-outlined text-base">zoom_in</span>
+                  <span>Agrandir la photo</span>
+                </button>
               </div>
             </div>
-            <div className="p-5 pt-0">
-              <button 
-                onClick={() => setActuModal('viescolaire')} 
-                className="w-full py-2.5 bg-[#047857] hover:bg-[#065f46] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-sm"
-              >
-                <span>Découvrir la vie scolaire</span>
-                <span className="material-symbols-outlined text-base">arrow_forward</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-3xl overflow-hidden border-2 border-indigo-300 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-            <div>
-              <div className="relative h-48">
-                <img src={MEDIA_CONFIG.actu3} alt="Culturel et Festif" className="w-full h-full object-cover" />
-                <span className="absolute top-3 left-3 bg-[#0b3c5d] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wide">
-                  CULTURE & ÉVASION
-                </span>
-              </div>
-              <div className="p-5 space-y-3">
-                <span className="text-[11px] text-[#0b3c5d] font-bold uppercase tracking-wider">FÊTES & TRADITIONS</span>
-                <h3 className="font-bold text-base text-[#0a2540] leading-snug">
-                  Actualités Festives & Journées Culturelles
-                </h3>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  Moments forts de l'établissement : Journée du Mérite, cérémonies de graduation, sorties éducatives et célébrations lasalliennes.
-                </p>
-              </div>
-            </div>
-            <div className="p-5 pt-0">
-              <button 
-                onClick={() => setActuModal('festif')} 
-                className="w-full py-2.5 bg-[#0a2540] hover:bg-[#061726] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-sm"
-              >
-                <span>Voir les événements</span>
-                <span className="material-symbols-outlined text-base">arrow_forward</span>
-              </button>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
+
+      {/* MODAL PHOTO AGRANDIE */}
+      {selectedPhoto && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="bg-white rounded-3xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl space-y-4 relative overflow-hidden">
+            <button 
+              onClick={() => setSelectedPhoto(null)} 
+              className="absolute top-3 right-3 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black"
+            >
+              <span className="material-symbols-outlined text-xl">close</span>
+            </button>
+
+            <div className="rounded-2xl overflow-hidden h-72 sm:h-96">
+              <img src={selectedPhoto.image} alt={selectedPhoto.title} className="w-full h-full object-cover" />
+            </div>
+
+            <div className="space-y-1">
+              <span className="bg-[#047857] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-md uppercase">
+                {selectedPhoto.date}
+              </span>
+              <h3 className="font-extrabold text-lg text-[#0a2540]">{selectedPhoto.title}</h3>
+              <p className="text-xs text-slate-600">{selectedPhoto.desc}</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 6. NOUS TROUVER & CONTACT */}
       <section id="contact" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
         <div>
-          <span className="bg-[#0a2540] text-white text-[11px] font-extrabold px-3 py-1 rounded-md uppercase tracking-wider">LOCALISATION & CONTACT</span>
-          <h2 className="text-3xl font-extrabold text-[#0a2540] mt-2">Nous Trouver</h2>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">Situé dans le quartier paisible d'Attécoubé Santé 3, notre établissement offre un cadre d'études moderne, sécurisé et propice à la concentration.</p>
+          <span className="bg-[#0a2540] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-md uppercase tracking-wider">LOCALISATION & CONTACT</span>
+          <h2 className="text-2xl font-extrabold text-[#0a2540] mt-1">Nous Trouver</h2>
+          <p className="text-xs text-slate-500 mt-1">Situé à Attécoubé Santé 3, notre établissement offre un cadre sécurisé et propice aux études.</p>
         </div>
 
         <div className="grid lg:grid-cols-12 gap-8 items-start">
-          <div className="lg:col-span-4 space-y-4">
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-4">
-              <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-[#0a2540] shrink-0">
-                <span className="material-symbols-outlined">location_on</span>
+          <div className="lg:col-span-4 space-y-3">
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-3">
+              <div className="w-9 h-9 bg-slate-100 rounded-xl flex items-center justify-center text-[#0a2540] shrink-0">
+                <span className="material-symbols-outlined text-lg">location_on</span>
               </div>
               <div>
-                <h4 className="font-bold text-sm text-[#0a2540]">Adresse Officielle</h4>
+                <h4 className="font-bold text-xs text-[#0a2540]">Adresse Officielle</h4>
                 <p className="text-xs text-slate-600 mt-0.5 font-medium">{SCHOOL_INFO.address}</p>
               </div>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-4">
-              <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-[#0a2540] shrink-0">
-                <span className="material-symbols-outlined">call</span>
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-3">
+              <div className="w-9 h-9 bg-slate-100 rounded-xl flex items-center justify-center text-[#0a2540] shrink-0">
+                <span className="material-symbols-outlined text-lg">call</span>
               </div>
               <div>
-                <h4 className="font-bold text-sm text-[#0a2540]">Téléphone (Secrétariat)</h4>
+                <h4 className="font-bold text-xs text-[#0a2540]">Téléphone (Secrétariat)</h4>
                 <a href={`tel:${SCHOOL_INFO.phoneFormatted}`} className="text-xs text-slate-600 mt-0.5 font-bold hover:text-[#047857] transition-colors block">
                   {SCHOOL_INFO.phone}
                 </a>
               </div>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-4">
-              <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-[#0a2540] shrink-0">
-                <span className="material-symbols-outlined">mail</span>
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-3">
+              <div className="w-9 h-9 bg-slate-100 rounded-xl flex items-center justify-center text-[#0a2540] shrink-0">
+                <span className="material-symbols-outlined text-lg">mail</span>
               </div>
               <div>
-                <h4 className="font-bold text-sm text-[#0a2540]">Courrier Électronique</h4>
+                <h4 className="font-bold text-xs text-[#0a2540]">Courrier Électronique</h4>
                 <a href={`mailto:${SCHOOL_INFO.email}`} className="text-xs text-slate-600 mt-0.5 font-bold hover:text-[#047857] transition-colors block">
                   {SCHOOL_INFO.email}
                 </a>
@@ -766,17 +819,17 @@ export default function App() {
             </div>
           </div>
 
-          <div className="lg:col-span-8 bg-slate-200 rounded-3xl h-72 lg:h-80 border border-slate-300 relative overflow-hidden flex items-center justify-center shadow-inner">
+          <div className="lg:col-span-8 bg-slate-200 rounded-3xl h-64 lg:h-72 border border-slate-300 relative overflow-hidden flex items-center justify-center shadow-inner">
             <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#0a2540_1px,transparent_1px)] [background-size:16px_16px]" />
-            <div className="bg-white p-6 rounded-3xl shadow-xl text-center space-y-3 z-10 max-w-sm border border-slate-100">
-              <div className="w-12 h-12 bg-[#0a2540] text-white rounded-full flex items-center justify-center mx-auto shadow-md">
-                <span className="material-symbols-outlined text-2xl">school</span>
+            <div className="bg-white p-5 rounded-3xl shadow-xl text-center space-y-2 z-10 max-w-sm border border-slate-100">
+              <div className="w-10 h-10 bg-[#0a2540] text-white rounded-full flex items-center justify-center mx-auto shadow-md">
+                <span className="material-symbols-outlined text-xl">school</span>
               </div>
               <div>
-                <h4 className="font-extrabold text-[#0a2540] text-base">{SCHOOL_INFO.shortName}</h4>
+                <h4 className="font-extrabold text-[#0a2540] text-sm">{SCHOOL_INFO.shortName}</h4>
                 <p className="text-xs text-slate-500">Attécoubé Santé 3 (23 BP 519 Abidjan 23)</p>
               </div>
-              <a href={SCHOOL_INFO.mapsUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-xs font-bold transition-all shadow-sm">
+              <a href={SCHOOL_INFO.mapsUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-xs font-bold transition-all shadow-sm">
                 <span className="material-symbols-outlined text-base">map</span> Ouvrir dans Google Maps
               </a>
             </div>
@@ -784,714 +837,56 @@ export default function App() {
         </div>
       </section>
 
-      {/* MODAL MENTIONS ET FOURNITURES */}
-      {footerModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative border border-slate-100 max-h-[85vh] overflow-y-auto">
-            <button onClick={() => setFooterModal(null)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-700">
-              <span className="material-symbols-outlined text-2xl">close</span>
-            </button>
-
-            {footerModal === 'mentions' ? (
-              <div className="space-y-4 text-xs">
-                <span className="bg-[#0a2540] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">INFORMATIONS LÉGALES</span>
-                <h3 className="font-extrabold text-xl text-[#0a2540]">Mentions Légales & Agréments</h3>
-                <div className="space-y-3 text-slate-600 leading-relaxed">
-                  <p><strong>Établissement :</strong> {SCHOOL_INFO.fullNamePart1} {SCHOOL_INFO.fullNamePart2}</p>
-                  <p><strong>Adresse Officielle :</strong> {SCHOOL_INFO.address}</p>
-                  <p><strong>Autorisation de Création :</strong> Agréé par le Ministère de l'Éducation Nationale et de l'Alphabétisation de Côte d'Ivoire (DRENA 3 Abidjan).</p>
-                  <p><strong>Régime :</strong> Établissement Privé d'Enseignement Général et Technique Tertiaire.</p>
-                  <p><strong>Directeur des Études :</strong> M. le Directeur — Secrétariat joignable au {SCHOOL_INFO.phone}.</p>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-4 text-xs">
-                <span className="bg-[#047857] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">RENTRÉE 2026-2027</span>
-                <h3 className="font-extrabold text-xl text-[#0a2540]">Listes de Fournitures Scolaires</h3>
-                <div className="space-y-3">
-                  <div className="p-3 bg-slate-50 border rounded-xl flex items-center justify-between">
-                    <div>
-                      <p className="font-bold text-[#0a2540]">Liste des fournitures — Premier Cycle (6ème à la 3ème)</p>
-                      <p className="text-[10px] text-slate-400">Format PDF officiel DRENA 3</p>
-                    </div>
-                    <a href={`tel:${SCHOOL_INFO.phoneFormatted}`} className="px-3 py-1.5 bg-[#047857] text-white rounded-lg text-[11px] font-bold">Demander au secrétariat</a>
-                  </div>
-
-                  <div className="p-3 bg-slate-50 border rounded-xl flex items-center justify-between">
-                    <div>
-                      <p className="font-bold text-[#0a2540]">Liste des fournitures — Second Cycle & Technique (G1, G2, AB)</p>
-                      <p className="text-[10px] text-slate-400">Format PDF officiel DRENA 3</p>
-                    </div>
-                    <a href={`tel:${SCHOOL_INFO.phoneFormatted}`} className="px-3 py-1.5 bg-[#047857] text-white rounded-lg text-[11px] font-bold">Demander au secrétariat</a>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div className="pt-4 border-t flex justify-end">
-              <button onClick={() => setFooterModal(null)} className="px-5 py-2.5 bg-[#0a2540] text-white rounded-xl text-xs font-bold">
-                Fermer
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* MODALS D'ACTUALITÉS */}
-      {actuModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative border border-slate-100 max-h-[85vh] overflow-y-auto">
-            <button onClick={() => setActuModal(null)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-700">
-              <span className="material-symbols-outlined text-2xl">close</span>
-            </button>
-
-            {actuModal === 'dates' && (
-              <div className="space-y-5 text-xs">
-                <div className="flex items-center gap-3 border-b pb-3">
-                  <div className="w-10 h-10 bg-amber-100 text-[#f59e0b] rounded-xl flex items-center justify-center font-bold shrink-0">
-                    <span className="material-symbols-outlined">calendar_month</span>
-                  </div>
-                  <div>
-                    <span className="bg-[#f59e0b] text-[#0a2540] text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">ANNÉE ACADÉMIQUE 2026-2027</span>
-                    <h3 className="font-extrabold text-lg text-[#0a2540]">Dates Importantes & Calendrier Officiel</h3>
-                  </div>
-                </div>
-
-                <div className="bg-amber-50/50 p-4 rounded-2xl border border-amber-200 space-y-3">
-                  <h4 className="font-bold text-sm text-[#0a2540] flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-base text-[#f59e0b]">schedule</span>
-                    Découpage Trimestriel :
-                  </h4>
-                  <ul className="space-y-2 text-slate-700">
-                    <li className="flex justify-between border-b border-amber-100 pb-1">
-                      <span className="font-semibold">1er Trimestre :</span>
-                      <span>Lundi 08 Septembre 2026 — Vendredi 27 Novembre 2026</span>
-                    </li>
-                    <li className="flex justify-between border-b border-amber-100 pb-1">
-                      <span className="font-semibold">2ème Trimestre :</span>
-                      <span>Lundi 30 Novembre 2026 — Vendredi 26 Février 2027</span>
-                    </li>
-                    <li className="flex justify-between">
-                      <span className="font-semibold">3ème Trimestre :</span>
-                      <span>Lundi 01 Mars 2027 — Vendredi 14 Mai 2027</span>
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
-                  <h4 className="font-bold text-sm text-[#0a2540] flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-base text-[#0a2540]">beach_access</span>
-                    Congés Scolaires & Examens :
-                  </h4>
-                  <ul className="space-y-2 text-slate-700">
-                    <li className="flex justify-between border-b pb-1">
-                      <span>Congés de Toussaint :</span>
-                      <strong className="text-slate-800">Fin Octobre 2026</strong>
-                    </li>
-                    <li className="flex justify-between border-b pb-1">
-                      <span>Congés de Noël & Nouvel An :</span>
-                      <strong className="text-slate-800">Décembre 2026 — Janvier 2027</strong>
-                    </li>
-                    <li className="flex justify-between border-b pb-1">
-                      <span>Congés de Pâques :</span>
-                      <strong className="text-slate-800">Avril 2027</strong>
-                    </li>
-                    <li className="flex justify-between">
-                      <span>Épreuves Écrites BEPC & BAC :</span>
-                      <strong className="text-[#047857]">Mai — Juin 2027</strong>
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="p-4 bg-blue-50 border border-blue-200 rounded-2xl space-y-2">
-                  <h4 className="font-bold text-sm text-[#0a2540] flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-base text-blue-600">description</span>
-                    Courriers Officiels du Ministère (MENA) :
-                  </h4>
-                  <div className="grid sm:grid-cols-2 gap-2 pt-1">
-                    <div className="p-3 bg-white rounded-xl border border-blue-100 flex items-center justify-between">
-                      <div>
-                        <p className="font-bold text-slate-800">Note Circulaire Rentrée 2026-2027</p>
-                        <p className="text-[10px] text-slate-400">Ministère de l'Éducation Nationale</p>
-                      </div>
-                      <span className="material-symbols-outlined text-blue-600">picture_as_pdf</span>
-                    </div>
-                    <div className="p-3 bg-white rounded-xl border border-blue-100 flex items-center justify-between">
-                      <div>
-                        <p className="font-bold text-slate-800">Calendrier National des Examens</p>
-                        <p className="text-[10px] text-slate-400">Direction des Examens et Concours</p>
-                      </div>
-                      <span className="material-symbols-outlined text-blue-600">picture_as_pdf</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {actuModal === 'viescolaire' && (
-              <div className="space-y-5 text-xs">
-                <div className="flex items-center gap-3 border-b pb-3">
-                  <div className="w-10 h-10 bg-emerald-100 text-[#047857] rounded-xl flex items-center justify-center font-bold shrink-0">
-                    <span className="material-symbols-outlined">groups</span>
-                  </div>
-                  <div>
-                    <span className="bg-[#047857] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">PÉDAGOGIE & DISCIPLINE</span>
-                    <h3 className="font-extrabold text-lg text-[#0a2540]">Vie Scolaire & Événements à Venir</h3>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="p-4 bg-slate-50 border rounded-2xl space-y-1.5">
-                    <span className="bg-emerald-100 text-[#047857] font-bold text-[10px] px-2 py-0.5 rounded-md">15 MAI 2026</span>
-                    <h4 className="font-bold text-sm text-[#0a2540]">Résultats des Examens Blancs DRENA 3</h4>
-                    <p className="text-slate-600">
-                      Analyse des taux de réussite aux épreuves régionales préparatoires pour les classes de 3ème, Terminales A, D, G1 et G2.
-                    </p>
-                  </div>
-
-                  <div className="p-4 bg-slate-50 border rounded-2xl space-y-1.5">
-                    <span className="bg-emerald-100 text-[#047857] font-bold text-[10px] px-2 py-0.5 rounded-md">20 OCTOBRE 2026</span>
-                    <h4 className="font-bold text-sm text-[#0a2540]">Élection des Délégués de Classe & Bureau des Élèves</h4>
-                    <p className="text-slate-600">
-                      Sensibilisation à la citoyenneté, élection des représentants d'élèves et installation du Conseil des Délégués.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {actuModal === 'festif' && (
-              <div className="space-y-5 text-xs">
-                <div className="flex items-center gap-3 border-b pb-3">
-                  <div className="w-10 h-10 bg-indigo-100 text-[#0a2540] rounded-xl flex items-center justify-center font-bold shrink-0">
-                    <span className="material-symbols-outlined">celebration</span>
-                  </div>
-                  <div>
-                    <span className="bg-[#0a2540] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">CULTURE & RÉCONPENSES</span>
-                    <h3 className="font-extrabold text-lg text-[#0a2540]">Actualités Festives & Culturelles</h3>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="p-4 bg-indigo-50/50 border border-indigo-100 rounded-2xl space-y-1.5">
-                    <span className="bg-[#0a2540] text-white font-bold text-[10px] px-2 py-0.5 rounded-md">02 JUIN 2026</span>
-                    <h4 className="font-bold text-sm text-[#0a2540]">Remise des Diplômes & Journée d'Orientation Professionnelle</h4>
-                    <p className="text-slate-600">
-                      Cérémonie solennelle de graduation pour les élèves de Terminale et rencontre avec les cabinets partenaires.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div className="pt-4 border-t flex justify-end">
-              <button onClick={() => setActuModal(null)} className="px-5 py-2.5 bg-[#0a2540] text-white rounded-xl text-xs font-bold">
-                Fermer
-              </button>
-            </div>
-
-          </div>
-        </div>
-      )}
-
-      {/* MODAL : DÉTAILS CURSUS */}
-      {detailsModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-6 shadow-2xl relative">
-            <button onClick={() => setDetailsModal(null)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-700">
-              <span className="material-symbols-outlined text-2xl">close</span>
-            </button>
-
-            {detailsModal === 'general' ? (
-              <div className="space-y-4">
-                <span className="bg-[#f59e0b] text-[#0a2540] text-xs font-extrabold px-3 py-1 rounded-md uppercase">PREMIER & SECOND CYCLES</span>
-                <h3 className="text-2xl font-extrabold text-[#0a2540]">Enseignement Général — Programme & Débouchés</h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Le pôle Enseignement Général prépare intensivement aux examens d'État avec un taux de réussite d'élite.
-                </p>
-                
-                <div className="grid sm:grid-cols-2 gap-4 text-xs pt-2">
-                  <div className="p-4 bg-slate-50 border rounded-2xl space-y-2">
-                    <h4 className="font-bold text-[#0a2540] text-sm">Premier Cycle (6ème à la 3ème)</h4>
-                    <p className="text-slate-500">Acquisition des fondamentaux scientifiques et littéraires. Épreuves préparatoires au BEPC.</p>
-                  </div>
-                  <div className="p-4 bg-slate-50 border rounded-2xl space-y-2">
-                    <h4 className="font-bold text-[#0a2540] text-sm">Second Cycle (Séries A & D)</h4>
-                    <p className="text-slate-500">Spécialisation en BAC A (Littéraire, Langues, Philosophie) et BAC D (Sciences Expérimentales, Biologie, Mathématiques).</p>
-                  </div>
-                </div>
-
-                <div className="pt-4 flex justify-end gap-3">
-                  <button onClick={() => setDetailsModal(null)} className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold">Fermer</button>
-                  <button onClick={() => { setDetailsModal(null); openInscriptionWithFiliere('general'); }} className="px-5 py-2 bg-[#047857] text-white rounded-xl text-xs font-bold flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-base">event_seat</span> Réserver une place
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <span className="bg-[#047857] text-white text-xs font-extrabold px-3 py-1 rounded-md uppercase">PÔLE TERTIAIRE SPÉCIALISÉ</span>
-                <h3 className="text-2xl font-extrabold text-[#0a2540]">Technique Tertiaire — Métiers G1, G2 & Série AB</h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Formation pratique et théorique orientée vers les besoins immédiats des entreprises, cabinets comptables et structures économiques.
-                </p>
-
-                <div className="grid sm:grid-cols-3 gap-4 text-xs pt-2">
-                  <div className="p-4 bg-emerald-50/50 border border-emerald-100 rounded-2xl space-y-2">
-                    <h4 className="font-bold text-[#047857] text-sm">Série G1 : Secrétariat</h4>
-                    <p className="text-slate-600">Bureautique avancée, correspondance administrative, dactylographie, accueil et gestion d'agenda de direction.</p>
-                  </div>
-                  <div className="p-4 bg-emerald-50/50 border border-emerald-100 rounded-2xl space-y-2">
-                    <h4 className="font-bold text-[#047857] text-sm">Série G2 : Comptabilité</h4>
-                    <p className="text-slate-600">Comptabilité générale SYSCOHADA, mathématiques financières, logiciels SAGE, fiscalité et gestion de paie.</p>
-                  </div>
-                  <div className="p-4 bg-emerald-50/50 border border-emerald-100 rounded-2xl space-y-2">
-                    <h4 className="font-bold text-[#047857] text-sm">Série AB : Économie</h4>
-                    <p className="text-slate-600">Sciences économiques et sociales, analyse de marché, gestion financière et fondamentaux du droit des affaires.</p>
-                  </div>
-                </div>
-
-                <div className="pt-4 flex justify-end gap-3">
-                  <button onClick={() => setDetailsModal(null)} className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold">Fermer</button>
-                  <button onClick={() => { setDetailsModal(null); openInscriptionWithFiliere('technique'); }} className="px-5 py-2 bg-[#0a2540] text-white rounded-xl text-xs font-bold flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-base">event_seat</span> Réserver une place
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* MODAL : FORMULAIRE DE PRÉ-INSCRIPTION / RÉSERVATION DE PLACES */}
-      {inscriptionModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative border border-slate-100 max-h-[90vh] overflow-y-auto">
-            
-            <div className="flex items-start justify-between border-b pb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#0a2540] text-white rounded-xl flex items-center justify-center font-bold">
-                  <span className="material-symbols-outlined">event_seat</span>
-                </div>
-                <div>
-                  <span className="bg-emerald-100 text-[#047857] text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">RÉSERVATION DE PLACES 2026-2027</span>
-                  <h3 className="font-extrabold text-lg text-[#0a2540]">Formulaire de Préinscription</h3>
-                  <p className="text-xs text-slate-500">{SCHOOL_INFO.fullNamePart1} {SCHOOL_INFO.fullNamePart2}</p>
-                </div>
-              </div>
-              <button onClick={() => setInscriptionModal(false)} className="text-slate-400 hover:text-slate-700">
-                <span className="material-symbols-outlined text-2xl">close</span>
-              </button>
-            </div>
-
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-xs font-bold text-[#0a2540]">
-                <span>
-                  {inscriptionStep === 1 && "Étape 1 : Formulaire de Réservation"}
-                  {inscriptionStep === 2 && "Étape 2 : Frais d'Inscription & Scolarité"}
-                  {inscriptionStep === 3 && "Confirmation : Place Réservée"}
-                </span>
-                <span>{inscriptionStep === 1 ? '50%' : '100%'}</span>
-              </div>
-              <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                <div className="h-full bg-[#047857] transition-all duration-300" style={{ width: inscriptionStep === 1 ? '50%' : '100%' }} />
-              </div>
-            </div>
-
-            {inscriptionStep === 1 && (
-              <div className="space-y-4 text-xs">
-                <h4 className="font-bold text-sm text-slate-800 flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[#047857]">badge</span>
-                  Informations de l'Élève Candidate :
-                </h4>
-
-                <div>
-                  <label className="block font-bold text-slate-700 mb-1">Matricule de l'élève (si attribué)</label>
-                  <input 
-                    type="text" 
-                    placeholder="Ex: 25170040G (Optionnel si nouveau)" 
-                    value={formData.matricule} 
-                    onChange={e => setFormData(prev => ({ ...prev, matricule: e.target.value }))} 
-                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#0a2540] font-medium" 
-                  />
-                </div>
-
-                <div className="grid sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block font-bold text-slate-700 mb-1">Nom de l'Élève *</label>
-                    <input 
-                      type="text" 
-                      placeholder="Ex: KOUASSI" 
-                      value={formData.nom} 
-                      onChange={e => setFormData(prev => ({ ...prev, nom: e.target.value }))} 
-                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#0a2540] font-medium" 
-                    />
-                  </div>
-                  <div>
-                    <label className="block font-bold text-slate-700 mb-1">Prénom(s) de l'Élève *</label>
-                    <input 
-                      type="text" 
-                      placeholder="Ex: Jean-Marc Emmanuel" 
-                      value={formData.prenom} 
-                      onChange={e => setFormData(prev => ({ ...prev, prenom: e.target.value }))} 
-                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#0a2540] font-medium" 
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block font-bold text-slate-700 mb-1">Classe Sollicitée *</label>
-                  <select 
-                    value={formData.classe} 
-                    onChange={e => setFormData(prev => ({ ...prev, classe: e.target.value }))}
-                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none font-bold text-slate-800 focus:border-[#0a2540]"
-                  >
-                    <optgroup label="Enseignement Général">
-                      <option value="6ème — Enseignement Général">6ème — Enseignement Général</option>
-                      <option value="5ème — Enseignement Général">5ème — Enseignement Général</option>
-                      <option value="4ème — Enseignement Général">4ème — Enseignement Général</option>
-                      <option value="3ème — Enseignement Général">3ème — Enseignement Général</option>
-                      <option value="2nde A / D">2nde A / D</option>
-                      <option value="1ère A / D">1ère A / D</option>
-                      <option value="Terminale A / D">Terminale A / D</option>
-                    </optgroup>
-                    <optgroup label="Technique Tertiaire">
-                      <option value="2nde G1/G2/AB">2nde G1 / G2 / AB</option>
-                      <option value="1ère G1 (Secrétariat)">1ère G1 (Secrétariat)</option>
-                      <option value="1ère G2 (Comptabilité)">1ère G2 (Comptabilité)</option>
-                      <option value="1ère AB (Économie)">1ère AB (Économie)</option>
-                      <option value="Série G1 (Secrétariat - Terminale)">Série G1 (Secrétariat - Terminale)</option>
-                      <option value="Série G2 (Comptabilité - Terminale)">Série G2 (Comptabilité - Terminale)</option>
-                      <option value="Série AB (Économie - Terminale)">Série AB (Économie - Terminale)</option>
-                    </optgroup>
-                  </select>
-                </div>
-
-                <div className="p-4 bg-slate-50 rounded-2xl border space-y-2">
-                  <span className="font-bold text-slate-700">Statut de l'Élève :</span>
-                  <div className="grid sm:grid-cols-2 gap-3 pt-1">
-                    <label className={`p-3 border rounded-xl flex items-center gap-2 cursor-pointer transition-all ${formData.statut === 'affecte' ? 'border-[#047857] bg-emerald-50/60 font-bold text-[#047857]' : 'border-slate-200'}`}>
-                      <input 
-                        type="radio" 
-                        name="statut" 
-                        checked={formData.statut === 'affecte'} 
-                        onChange={() => setFormData(prev => ({ ...prev, statut: 'affecte' }))} 
-                      />
-                      <span>Affecté de l'État (DRENA 3)</span>
-                    </label>
-
-                    <label className={`p-3 border rounded-xl flex items-center gap-2 cursor-pointer transition-all ${formData.statut === 'non_affecte' ? 'border-[#0a2540] bg-slate-100 font-bold text-[#0a2540]' : 'border-slate-200'}`}>
-                      <input 
-                        type="radio" 
-                        name="statut" 
-                        checked={formData.statut === 'non_affecte'} 
-                        onChange={() => setFormData(prev => ({ ...prev, statut: 'non_affecte' }))} 
-                      />
-                      <span>Non-affecté / Inscription Libre</span>
-                    </label>
-                  </div>
-                </div>
-
-                <div className="grid sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block font-bold text-slate-700 mb-1">Établissement d'Origine *</label>
-                    <input 
-                      type="text" 
-                      placeholder="Ex: EPP Attécoubé 1 ou Collège X" 
-                      value={formData.etablissementOrigine} 
-                      onChange={e => setFormData(prev => ({ ...prev, etablissementOrigine: e.target.value }))} 
-                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#0a2540]" 
-                    />
-                  </div>
-                  <div>
-                    <label className="block font-bold text-slate-700 mb-1">Moyenne de Fin d'Année (MGA) *</label>
-                    <input 
-                      type="number" 
-                      step="0.01" 
-                      min="0" 
-                      max="20" 
-                      placeholder="Ex: 14.25 / 20" 
-                      value={formData.mga} 
-                      onChange={e => setFormData(prev => ({ ...prev, mga: e.target.value }))} 
-                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#0a2540] font-bold text-[#047857]" 
-                    />
-                  </div>
-                </div>
-
-              </div>
-            )}
-
-            {inscriptionStep === 2 && (
-              <div className="space-y-5 text-xs">
-                <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
-                  <h4 className="font-bold text-sm text-[#0a2540] border-b pb-2">Récapitulatif de la Réservation</h4>
-                  <div className="grid grid-cols-2 gap-2 text-slate-600">
-                    <p>Candidate : <strong className="text-slate-800">{formData.nom || '—'} {formData.prenom}</strong></p>
-                    <p>Classe : <strong className="text-[#047857]">{formData.classe}</strong></p>
-                    <p>Statut : <strong>{formData.statut === 'affecte' ? "Affecté de l'État" : "Non-affecté / Inscription Libre"}</strong></p>
-                    <p>MGA : <strong className="text-[#047857]">{formData.mga ? `${formData.mga} / 20` : '—'}</strong></p>
-                    <p className="col-span-2">Établissement d'Origine : <strong>{formData.etablissementOrigine || '—'}</strong></p>
-                  </div>
-                </div>
-
-                <div className="bg-emerald-50/70 border border-emerald-200 p-5 rounded-2xl space-y-4">
-                  <div className="flex items-center gap-2 text-[#047857] font-extrabold text-sm">
-                    <span className="material-symbols-outlined">payments</span>
-                    <span>Détail des Frais d'Inscription & Scolarité</span>
-                  </div>
-
-                  <div className="space-y-2 bg-white p-4 rounded-xl border border-emerald-100 shadow-sm">
-                    <div className="flex justify-between items-center border-b pb-2">
-                      <span className="font-semibold text-slate-600">Frais d'Inscription & Dossier :</span>
-                      <span className="font-bold text-slate-800">{currentFees.inscription.toLocaleString()} FCFA</span>
-                    </div>
-
-                    <div className="flex justify-between items-center border-b pb-2 pt-1">
-                      <span className="font-semibold text-slate-600">Frais de Scolarité Annuelle :</span>
-                      <span className="font-bold text-slate-800">{currentFees.scolarite.toLocaleString()} FCFA</span>
-                    </div>
-
-                    <div className="flex justify-between items-center pt-2 text-sm font-black text-[#0a2540]">
-                      <span>MONTANT TOTAL À PAYER :</span>
-                      <span className="text-base text-[#047857] bg-emerald-100 px-3 py-1 rounded-lg">
-                        {currentFees.total.toLocaleString()} FCFA
-                      </span>
-                    </div>
-                  </div>
-
-                  <p className="text-[11px] text-slate-500 italic bg-white/50 p-2.5 rounded-lg border border-emerald-100">
-                    💡 {currentFees.note}
-                  </p>
-                </div>
-
-              </div>
-            )}
-
-            {inscriptionStep === 3 && (
-              <div className="space-y-4 text-xs text-center py-4">
-                <div className="w-16 h-16 bg-emerald-100 text-[#047857] rounded-full flex items-center justify-center mx-auto border-4 border-emerald-50">
-                  <span className="material-symbols-outlined text-3xl">check_circle</span>
-                </div>
-
-                <div className="space-y-1">
-                  <h4 className="font-extrabold text-lg text-[#0a2540]">Réservation de Place Enregistrée !</h4>
-                  <p className="text-slate-500 max-w-md mx-auto">
-                    La préinscription de <strong>{formData.nom} {formData.prenom}</strong> en classe de <strong>{formData.classe}</strong> a été enregistrée avec succès dans le système.
-                  </p>
-                </div>
-
-                <div className="bg-slate-50 p-4 rounded-2xl border text-left space-y-2 max-w-md mx-auto">
-                  <p className="font-bold text-[#0a2540] border-b pb-1">Bordereau de Réservation :</p>
-                  <p className="flex justify-between"><span>Matricule :</span> <strong>{formData.matricule || 'N/A'}</strong></p>
-                  <p className="flex justify-between"><span>Total Frais à Réglera :</span> <strong className="text-[#047857]">{currentFees.total.toLocaleString()} FCFA</strong></p>
-                  <p className="flex justify-between"><span>Lieu de Dépôt :</span> <strong>Secrétariat J.B. de La Salle 2 (Attécoubé Santé 3)</strong></p>
-                </div>
-              </div>
-            )}
-
-            <div className="flex justify-between pt-4 border-t">
-              {inscriptionStep === 2 && (
-                <button 
-                  onClick={() => setInscriptionStep(1)} 
-                  className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold"
-                >
-                  Retour
-                </button>
-              )}
-
-              {inscriptionStep === 1 && (
-                <button 
-                  onClick={() => setInscriptionStep(2)} 
-                  disabled={!formData.nom || !formData.prenom || !formData.etablissementOrigine}
-                  className="px-6 py-3 bg-[#0a2540] hover:bg-[#061726] text-white rounded-xl text-xs font-bold flex items-center gap-1.5 ml-auto disabled:opacity-50 shadow-md"
-                >
-                  <span>Étape Suivante (Calcul des Frais)</span>
-                  <span className="material-symbols-outlined text-base">arrow_forward</span>
-                </button>
-              )}
-
-              {inscriptionStep === 2 && (
-                <button 
-                  onClick={handleReservationSubmit} 
-                  disabled={isSubmitting}
-                  className="px-6 py-3 bg-[#047857] hover:bg-[#065f46] text-white rounded-xl text-xs font-bold flex items-center gap-2 ml-auto shadow-md transition-all disabled:opacity-50"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <span className="material-symbols-outlined animate-spin text-base">sync</span>
-                      <span>Enregistrement dans le système...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span className="material-symbols-outlined text-base">how_to_reg</span>
-                      <span>Valider la Réservation en Ligne</span>
-                    </>
-                  )}
-                </button>
-              )}
-
-              {inscriptionStep === 3 && (
-                <button 
-                  onClick={() => setInscriptionModal(false)} 
-                  className="px-6 py-3 bg-[#0a2540] text-white rounded-xl text-xs font-bold ml-auto"
-                >
-                  Fermer & Imprimer la Fiche
-                </button>
-              )}
-            </div>
-
-          </div>
-        </div>
-      )}
-
-      {/* MODAL ASSISTANT IA */}
-      {aiOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl max-w-md w-full h-[520px] flex flex-col shadow-2xl overflow-hidden border border-slate-100">
-            <div className="p-4 bg-[#0a2540] text-white flex justify-between items-center">
-              <span className="font-bold text-sm flex items-center gap-2">
-                <span className="material-symbols-outlined text-base text-[#f59e0b]">smart_toy</span>
-                Assistant IA Lasallien
-              </span>
-              <button onClick={() => setAiOpen(false)} className="hover:opacity-75"><span className="material-symbols-outlined">close</span></button>
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50 text-xs">
-              {messages.map(m => (
-                <div key={m.id} className={`flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[85%] p-3 rounded-2xl ${m.sender === 'user' ? 'bg-[#0a2540] text-white' : 'bg-white border border-slate-200 text-slate-800 shadow-sm'}`}>
-                    {m.text}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="p-3 bg-white border-t border-slate-200 flex gap-2">
-              <input 
-                type="text" 
-                placeholder="Posez votre question..." 
-                value={inputValue} 
-                onChange={e => setInputValue(e.target.value)} 
-                onKeyDown={e => e.key === 'Enter' && handleSend()}
-                className="flex-1 p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#0a2540]" 
-              />
-              <button onClick={handleSend} className="p-2.5 bg-[#0a2540] text-white rounded-xl hover:bg-[#061726] transition-colors">
-                <span className="material-symbols-outlined text-base">send</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* FOOTER */}
-      <footer className="bg-[#0a2540] text-white text-xs py-12 border-t border-white/10 mt-12">
+      <footer className="bg-[#0a2540] text-white text-xs py-10 border-t border-white/10 mt-12">
         <div className="max-w-7xl mx-auto px-4 lg:px-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           
-          <div className="space-y-3">
-            <div className="flex items-center gap-2 font-extrabold text-base">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 font-extrabold text-sm">
               <span className="material-symbols-outlined text-[#f59e0b]">school</span>
               {SCHOOL_INFO.shortName}
             </div>
             <p className="text-slate-400 leading-relaxed text-[11px]">
-              Fondé sur les valeurs de foi, de service et de communauté, notre collège privé technique est un pilier de l'éducation générale et tertiaire en Côte d'Ivoire.
+              Établissement privé d'enseignement général et technique tertiaire d'excellence à Abidjan.
             </p>
           </div>
 
           <div>
-            <h4 className="font-bold text-sm text-[#f59e0b] mb-3 uppercase tracking-wider">LIENS UTILES</h4>
-            <ul className="space-y-2 text-slate-300 text-[11px]">
-              <li>
-                <button onClick={() => setFooterModal('mentions')} className="hover:underline text-left">
-                  Mentions Légales & Agréments
-                </button>
-              </li>
-              <li>
-                <a href="#accueil" className="hover:underline">
-                  Plan du Site & Accueil
-                </a>
-              </li>
-              <li>
-                <a href="#contact" className="hover:underline">
-                  Contact & Secrétariat
-                </a>
-              </li>
+            <h4 className="font-bold text-xs text-[#f59e0b] mb-2 uppercase tracking-wider">LIENS UTILES</h4>
+            <ul className="space-y-1.5 text-slate-300 text-[11px]">
+              <li><button onClick={() => setFooterModal('mentions')} className="hover:underline text-left">Mentions Légales & Agréments</button></li>
+              <li><a href="#accueil" className="hover:underline">Plan du Site & Accueil</a></li>
+              <li><a href="#contact" className="hover:underline">Contact & Secrétariat</a></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-bold text-sm text-[#f59e0b] mb-3 uppercase tracking-wider">ACADÉMIQUE</h4>
-            <ul className="space-y-2 text-slate-300 text-[11px]">
-              <li>
-                <button onClick={() => setActuModal('dates')} className="hover:underline text-left">
-                  Calendrier Scolaire 2026-2027
-                </button>
-              </li>
-              <li>
-                <button onClick={() => setFooterModal('fournitures')} className="hover:underline text-left">
-                  Listes de Fournitures Scolaires
-                </button>
-              </li>
-              <li>
-                <button onClick={() => setActuModal('viescolaire')} className="hover:underline text-left">
-                  Examens Blancs & Épreuves
-                </button>
-              </li>
-              <li>
-                <a href="#portails" className="hover:underline">
-                  Suivi du Carnet d'Assiduité
-                </a>
-              </li>
+            <h4 className="font-bold text-xs text-[#f59e0b] mb-2 uppercase tracking-wider">ACADÉMIQUE</h4>
+            <ul className="space-y-1.5 text-slate-300 text-[11px]">
+              <li><button onClick={() => setActuModal('dates')} className="hover:underline text-left">Calendrier Scolaire 2026-2027</button></li>
+              <li><button onClick={() => setFooterModal('fournitures')} className="hover:underline text-left">Listes de Fournitures Scolaires</button></li>
+              <li><a href="#portails" className="hover:underline">Bulletins Numériques</a></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-bold text-sm text-[#f59e0b] mb-3 uppercase tracking-wider">SUIVEZ-NOUS</h4>
-            <p className="text-slate-400 text-[11px] mb-3">
-              Restez informés des actualités et échangez avec le secrétariat sur nos canaux officiels.
-            </p>
-            <div className="flex gap-2">
-              <a 
-                href={SCHOOL_INFO.whatsappUrl} 
-                target="_blank" 
-                rel="noreferrer" 
-                title="Contacter le Secrétariat sur WhatsApp"
-                className="w-9 h-9 bg-emerald-600/30 hover:bg-emerald-600 text-white rounded-lg flex items-center justify-center transition-all"
-              >
-                <span className="material-symbols-outlined text-lg">chat</span>
+            <h4 className="font-bold text-xs text-[#f59e0b] mb-2 uppercase tracking-wider">RÉSEAUX & CONTACT</h4>
+            <div className="flex gap-2 pt-1">
+              <a href={SCHOOL_INFO.whatsappUrl} target="_blank" rel="noreferrer" className="w-8 h-8 bg-emerald-600/30 hover:bg-emerald-600 text-white rounded-lg flex items-center justify-center transition-all">
+                <span className="material-symbols-outlined text-base">chat</span>
               </a>
-              <a 
-                href={SCHOOL_INFO.facebookUrl} 
-                target="_blank" 
-                rel="noreferrer" 
-                title="Page Facebook Officielle"
-                className="w-9 h-9 bg-blue-600/30 hover:bg-blue-600 text-white rounded-lg flex items-center justify-center transition-all"
-              >
-                <span className="material-symbols-outlined text-lg">public</span>
+              <a href={SCHOOL_INFO.facebookUrl} target="_blank" rel="noreferrer" className="w-8 h-8 bg-blue-600/30 hover:bg-blue-600 text-white rounded-lg flex items-center justify-center transition-all">
+                <span className="material-symbols-outlined text-base">public</span>
               </a>
-              <a 
-                href={SCHOOL_INFO.mapsUrl} 
-                target="_blank" 
-                rel="noreferrer" 
-                title="Localisation Google Maps"
-                className="w-9 h-9 bg-white/10 hover:bg-white/20 text-white rounded-lg flex items-center justify-center transition-all"
-              >
-                <span className="material-symbols-outlined text-lg">location_on</span>
-              </a>
-              <a 
-                href={SCHOOL_INFO.drenaUrl} 
-                target="_blank" 
-                rel="noreferrer" 
-                title="Site officiel DRENA 3"
-                className="w-9 h-9 bg-emerald-600/30 hover:bg-emerald-600 text-white rounded-lg flex items-center justify-center transition-all"
-              >
-                <span className="material-symbols-outlined text-lg">account_balance</span>
+              <a href={SCHOOL_INFO.drenaUrl} target="_blank" rel="noreferrer" className="w-8 h-8 bg-emerald-600/30 hover:bg-emerald-600 text-white rounded-lg flex items-center justify-center transition-all">
+                <span className="material-symbols-outlined text-base">account_balance</span>
               </a>
             </div>
           </div>
 
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 lg:px-10 mt-12 pt-6 border-t border-white/10 text-center text-slate-400 text-[11px]">
+        <div className="max-w-7xl mx-auto px-4 lg:px-10 mt-8 pt-4 border-t border-white/10 text-center text-slate-400 text-[10px]">
           © 2026 {SCHOOL_INFO.fullNamePart1} {SCHOOL_INFO.fullNamePart2}. Tous droits réservés.
         </div>
       </footer>
