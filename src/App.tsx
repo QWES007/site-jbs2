@@ -18,7 +18,8 @@ const MEDIA_CONFIG = {
 // INFORMATIONS OFFICIELLES DU COLLÈGE
 // ============================================================================
 const SCHOOL_INFO = {
-  fullName: "Collège privé technique Jean Baptiste de la Salle 2",
+  fullNamePart1: "Collège privé technique Jean Baptiste", // Correction: Partie 1 du nom pour header
+  fullNamePart2: "de la Salle 2", // Correction: Partie 2 du nom pour header
   shortName: "J.B. de La Salle 2",
   address: "Attécoubé Santé 3, 23 BP 519 Abidjan 23",
   phone: "07 48 627 869",
@@ -27,6 +28,7 @@ const SCHOOL_INFO = {
   email: "college.jbs2@gmail.com",
   mapsUrl: "https://www.google.com/maps?q=5.340777,-4.052753",
   facebookUrl: "https://facebook.com",
+  drenaUrl: "https://drenaabidjan3.ci/", // Correction: URL de la DRENA (utilisée dans le footer)
 };
 
 // ============================================================================
@@ -301,7 +303,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-[#1e293b] font-sans antialiased">
       
-      {/* 1. HEADER (Nom sur 2 lignes complet et visible) */}
+      {/* 1. HEADER (Correction: Nom complet sur 2 lignes, partie 2 centrée) */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 lg:px-10 py-2.5 shadow-sm">
         <div className="max-w-[90rem] mx-auto flex items-center justify-between gap-4">
           
@@ -309,8 +311,11 @@ export default function App() {
             <img src={MEDIA_CONFIG.logo} alt="Logo JBS2" className="h-10 w-auto object-contain shrink-0" />
             <div className="min-w-0 flex flex-col justify-center">
               <div className="flex items-center gap-2">
-                <span className="font-extrabold text-xs sm:text-sm text-[#0a2540] tracking-tight leading-snug whitespace-normal max-w-[240px] sm:max-w-xs block">
-                  {SCHOOL_INFO.fullName}
+                {/* CORRECTION: flex-wrap + text-xs + text-sm + whitespace-normal pour afficher sur 2 lignes */}
+                <span className="font-bold text-xs sm:text-sm text-[#0a2540] tracking-tight leading-snug whitespace-normal max-w-[240px] sm:max-w-xs block">
+                  <span>{SCHOOL_INFO.fullNamePart1}</span>
+                  {/* CORRECTION: Partie 2 du nom centrée */}
+                  <span className="block text-center">{SCHOOL_INFO.fullNamePart2}</span>
                 </span>
                 <span className="inline-block bg-[#0b3c5d] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase shrink-0">
                   DRENA 3
@@ -349,7 +354,7 @@ export default function App() {
         </div>
       </header>
 
-      {/* 2. HERO SECTION (Police ajustée) */}
+      {/* 2. HERO SECTION */}
       <section id="accueil" className="relative bg-[#0a2540] text-white overflow-hidden py-14 lg:py-20 px-4 lg:px-12">
         <div 
           className="absolute inset-0 opacity-20 bg-cover bg-center mix-blend-overlay pointer-events-none"
@@ -368,7 +373,7 @@ export default function App() {
             </h1>
 
             <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-normal max-w-2xl">
-              Le <em>{SCHOOL_INFO.fullName}</em> forme les leaders de demain à travers un enseignement général rigoureux et un pôle technique tertiaire de haut niveau au service du développement ivoirien.
+              Le <em>Collège privé technique Jean Baptiste de la Salle 2</em> forme les leaders de demain à travers un enseignement général rigoureux et un pôle technique tertiaire de haut niveau au service du développement ivoirien.
             </p>
 
             <div className="flex flex-wrap gap-3 pt-2">
@@ -529,7 +534,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 4. PORTAILS NUMÉRIQUES */}
+      {/* 4. PORTAILS NUMÉRIQUES (Correction: pas de modification des liens) */}
       <section id="portails" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
@@ -779,7 +784,7 @@ export default function App() {
                 <span className="bg-[#0a2540] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">INFORMATIONS LÉGALES</span>
                 <h3 className="font-extrabold text-xl text-[#0a2540]">Mentions Légales & Agréments</h3>
                 <div className="space-y-3 text-slate-600 leading-relaxed">
-                  <p><strong>Établissement :</strong> {SCHOOL_INFO.fullName}</p>
+                  <p><strong>Établissement :</strong> {SCHOOL_INFO.fullNamePart1} {SCHOOL_INFO.fullNamePart2}</p>
                   <p><strong>Adresse Officielle :</strong> {SCHOOL_INFO.address}</p>
                   <p><strong>Autorisation de Création :</strong> Agréé par le Ministère de l'Éducation Nationale et de l'Alphabétisation de Côte d'Ivoire (DRENA 3 Abidjan).</p>
                   <p><strong>Régime :</strong> Établissement Privé d'Enseignement Général et Technique Tertiaire.</p>
@@ -1058,7 +1063,7 @@ export default function App() {
                 <div>
                   <span className="bg-emerald-100 text-[#047857] text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">RÉSERVATION DE PLACES 2026-2027</span>
                   <h3 className="font-extrabold text-lg text-[#0a2540]">Formulaire de Préinscription</h3>
-                  <p className="text-xs text-slate-500">{SCHOOL_INFO.fullName}</p>
+                  <p className="text-xs text-slate-500">{SCHOOL_INFO.fullNamePart1} {SCHOOL_INFO.fullNamePart2}</p>
                 </div>
               </div>
               <button onClick={() => setInscriptionModal(false)} className="text-slate-400 hover:text-slate-700">
@@ -1459,13 +1464,23 @@ export default function App() {
               >
                 <span className="material-symbols-outlined text-lg">location_on</span>
               </a>
+              {/* Correction: Ajout du lien DRENA dans le footer */}
+              <a 
+                href={SCHOOL_INFO.drenaUrl} 
+                target="_blank" 
+                rel="noreferrer" 
+                title="Site officiel DRENA 3"
+                className="w-9 h-9 bg-blue-100/30 hover:bg-blue-100 text-blue-900 rounded-lg flex items-center justify-center transition-all"
+              >
+                <span className="material-symbols-outlined text-lg">account_balance</span>
+              </a>
             </div>
           </div>
 
         </div>
 
         <div className="max-w-7xl mx-auto px-4 lg:px-10 mt-12 pt-6 border-t border-white/10 text-center text-slate-400 text-[11px]">
-          © 2026 {SCHOOL_INFO.fullName}. Tous droits réservés.
+          © 2026 {SCHOOL_INFO.fullNamePart1} {SCHOOL_INFO.fullNamePart2}. Tous droits réservés.
         </div>
       </footer>
 
