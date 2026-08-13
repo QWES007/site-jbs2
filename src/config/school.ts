@@ -22,7 +22,7 @@ export const SCHOOL_INFO = {
   drenaUrl: "https://drenaabidjan3.ci/",
 
   // 📢 TEXTE DE LA BANDE DÉROULANTE (Modifiable à tout moment)
-  announcementText: "📢 Rentrée Scolaire 2026-2027 : Les préinscriptions en ligne sont ouvertes ! • Consultation des bulletins du 3ème trimestre disponible dans l'Espace Parent • Pour tout renseignement, contactez le secrétariat au 07 48 627 869.",
+  announcementText: "📢 Rentrée Scolaire 2026-2027 : Les préinscriptions en ligne sont ouvertes ! • Consultation des bulletins du 3ème trimestre disponible dans l'Espace Parent • Pour tout renseignement, contactez la direction au 07 48 627 869.",
 
   // 🪟 CONFIGURATION DE LA POP-UP D'INFORMATION (Modifiable à tout moment)
   popup: {
