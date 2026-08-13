@@ -20,6 +20,18 @@ export const SCHOOL_INFO = {
   mapsUrl: "https://www.google.com/maps?q=5.340777,-4.052753",
   facebookUrl: "https://facebook.com",
   drenaUrl: "https://drenaabidjan3.ci/",
+
+  // 📢 TEXTE DE LA BANDE DÉROULANTE (Modifiable à tout moment)
+  announcementText: "📢 Rentrée Scolaire 2026-2027 : Les préinscriptions en ligne sont ouvertes ! • Consultation des bulletins du 3ème trimestre disponible dans l'Espace Parent • Pour tout renseignement, contactez le secrétariat au 07 48 627 869.",
+
+  // 🪟 CONFIGURATION DE LA POP-UP D'INFORMATION (Modifiable à tout moment)
+  popup: {
+    enabled: true, // Mettre à 'false' pour masquer la fenêtre, ou 'true' pour l'afficher
+    title: "Information Importante - Rentrée Scolaire",
+    badge: "AVIS AUX PARENTS",
+    content: "Les préinscriptions et réinscriptions pour l'année scolaire 2026-2027 sont officiellement ouvertes. Veuillez vous rendre au secrétariat muni du dossier complet.",
+    buttonText: "Compris, fermer",
+  }
 };
 
 export const calculateSchoolFees = (classe: string, statut: string): FeeStructure => {

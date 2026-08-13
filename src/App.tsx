@@ -12,6 +12,9 @@ export default function App() {
   const [inscriptionModal, setInscriptionModal] = useState(false);
   const [referenceNum, setReferenceNum] = useState('');
 
+  // Gestion de la Pop-up d'information
+  const [showPopup, setShowPopup] = useState(SCHOOL_INFO.popup?.enabled ?? false);
+
   // Mode Admin
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminPassword, setAdminPassword] = useState('');
@@ -53,6 +56,42 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-[#1e293b] font-sans antialiased">
       
+      {/* 🪟 FENÊTRE POP-UP D'INFORMATION (S'affiche au chargement si activée) */}
+      {showPopup && SCHOOL_INFO.popup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm print:hidden">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative text-slate-800 space-y-5 animate-fadeIn">
+            <button
+              onClick={() => setShowPopup(false)}
+              className="absolute top-4 right-4 w-8 h-8 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full flex items-center justify-center transition-colors cursor-pointer"
+            >
+              ✕
+            </button>
+            <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
+              <div className="w-12 h-12 bg-amber-100 text-[#f59e0b] rounded-2xl flex items-center justify-center shrink-0">
+                <span className="material-symbols-outlined text-2xl">campaign</span>
+              </div>
+              <div>
+                <span className="bg-[#0a2540] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-md uppercase">
+                  {SCHOOL_INFO.popup.badge}
+                </span>
+                <h3 className="font-extrabold text-base sm:text-lg text-[#0a2540] mt-1">
+                  {SCHOOL_INFO.popup.title}
+                </h3>
+              </div>
+            </div>
+            <div className="text-xs text-slate-600 leading-relaxed bg-slate-50 p-4 rounded-2xl border border-slate-100">
+              <p>{SCHOOL_INFO.popup.content}</p>
+            </div>
+            <button
+              onClick={() => setShowPopup(false)}
+              className="w-full py-3.5 bg-[#0a2540] hover:bg-[#061726] text-white font-bold text-xs rounded-xl shadow-lg transition-all cursor-pointer"
+            >
+              {SCHOOL_INFO.popup.buttonText}
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* 1. IMPRESSION A4 (Isolée) */}
       <PrintSheet 
         formData={formData} 
@@ -107,6 +146,18 @@ export default function App() {
           </nav>
         )}
       </header>
+
+      {/* 📢 BANDE DÉROULANTE D'INFORMATIONS (FLASH INFO) */}
+      <div className="bg-[#f59e0b] text-[#0a2540] py-2 px-4 overflow-hidden whitespace-nowrap shadow-inner border-b border-amber-600/20 print:hidden flex items-center">
+        <div className="flex items-center gap-2 bg-[#0a2540] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase shrink-0 z-10 shadow-sm mr-3">
+          <span className="material-symbols-outlined text-xs text-[#f59e0b] animate-pulse">campaign</span>
+          Flash Info
+        </div>
+        <div className="inline-block animate-marquee text-xs font-bold tracking-wide">
+          <span className="mx-4">{SCHOOL_INFO.announcementText}</span>
+          <span className="mx-4">{SCHOOL_INFO.announcementText}</span>
+        </div>
+      </div>
 
       {/* 3. HERO SECTION */}
       <section id="accueil" className="relative bg-[#0a2540] text-white overflow-hidden py-10 lg:py-14 px-4 lg:px-12 print:hidden">
