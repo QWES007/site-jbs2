@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabaseClient'; // Ajustez le chemin selon votre projet
+import { supabase } from '../lib/supabaseClient';
 
 interface Annonce {
   id: string;
@@ -17,7 +17,6 @@ export default function AnnonceModal() {
 
   useEffect(() => {
     async function fetchAnnonce() {
-      // Récupérer la dernière annonce active de type 'popup'
       const { data, error } = await supabase
         .from('annonces')
         .select('*')
@@ -39,36 +38,51 @@ export default function AnnonceModal() {
   if (!isOpen || !annonce) return null;
 
   return (
-
-      {/* Fond sombre */}
+    <div 
+      className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 print:hidden"
+      onClick={() => setIsOpen(false)}
+    >
       <div 
-        className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
-        onClick={() => setIsOpen(false)}
+        className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative text-slate-800 space-y-5"
+        onClick={(e) => e.stopPropagation()}
       >
-        {/* Boîte de la pop-up */}
-        <div 
-          className="bg-white rounded-xl max-w-lg w-full p-6 shadow-2xl relative animate-in fade-in zoom-in duration-200"
-          onClick={(e) => e.stopPropagation()}
+        {/* Bouton fermer */}
+        <button 
+          onClick={() => setIsOpen(false)}
+          className="absolute top-4 right-4 w-8 h-8 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full flex items-center justify-center transition-colors cursor-pointer font-bold"
+          aria-label="Fermer"
         >
-          {/* Bouton fermer */}
-          <button 
-            onClick={() => setIsOpen(false)}
-            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold"
-          >
-            ✕
-          </button>
+          ✕
+        </button>
 
-          {/* Contenu dynamique venu de Supabase */}
-          <h3 className="text-xl font-bold text-gray-900 mb-2">{annonce.titre}</h3>
-          <p className="text-gray-600 leading-relaxed mb-6">{annonce.contenu}</p>
-
-          <button 
-            onClick={() => setIsOpen(false)}
-            className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition"
-          >
-            Fermer
-          </button>
+        {/* En-tête Pop-up */}
+        <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
+          <div className="w-12 h-12 bg-amber-100 text-[#f59e0b] rounded-2xl flex items-center justify-center shrink-0">
+            <span className="material-symbols-outlined text-2xl">campaign</span>
+          </div>
+          <div>
+            <span className="bg-[#0a2540] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-md uppercase">
+              INFORMATION OFFICIELLE
+            </span>
+            <h3 className="font-extrabold text-base sm:text-lg text-[#0a2540] mt-1">
+              {annonce.titre}
+            </h3>
+          </div>
         </div>
+
+        {/* Contenu de l'annonce */}
+        <div className="text-xs text-slate-600 leading-relaxed bg-slate-50 p-4 rounded-2xl border border-slate-100">
+          <p className="whitespace-pre-line">{annonce.contenu}</p>
+        </div>
+
+        {/* Bouton de validation */}
+        <button 
+          onClick={() => setIsOpen(false)}
+          className="w-full py-3.5 bg-[#0a2540] hover:bg-[#061726] text-white font-bold text-xs rounded-xl shadow-lg transition-all cursor-pointer"
+        >
+          J'ai compris
+        </button>
       </div>
+    </div>
   );
 }
