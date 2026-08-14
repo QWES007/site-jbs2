@@ -3,7 +3,6 @@ import { supabase } from '../../lib/supabaseClient';
 import { SCHOOL_INFO } from '../config/school';
 
 export function BandeauFlash() {
-  // Par défaut, on affiche le texte du fichier config le temps du chargement
   const [texte, setTexte] = useState<string>(SCHOOL_INFO.announcementText);
 
   useEffect(() => {
@@ -11,20 +10,25 @@ export function BandeauFlash() {
       try {
         if (!supabase) return;
 
+        // Requête nettoyée sans conflit entre limit() et maybeSingle()
         const { data, error } = await supabase
           .from('annonces')
           .select('contenu')
           .eq('actif', true)
           .eq('type', 'bandeau')
           .order('created_at', { ascending: false })
-          .limit(1)
           .maybeSingle();
 
-        if (data?.contenu && !error) {
+        if (error) {
+          console.error("Erreur Supabase Bandeau :", error.message);
+          return;
+        }
+
+        if (data?.contenu) {
           setTexte(data.contenu);
         }
       } catch (err) {
-        console.error('Erreur récupération bandeau :', err);
+        console.error('Erreur inattendue Bandeau :', err);
       }
     }
 
