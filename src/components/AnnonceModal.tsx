@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabaseClient';
+// ✅ Import avec le bon chemin vers le dossier lib à la racine
+import { supabase } from '../../lib/supabaseClient';
 
 interface Annonce {
   id: string;
