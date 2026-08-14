@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
-import { SCHOOL_INFO } from '../config/school';
 
 export function BandeauFlash() {
-  const [texte, setTexte] = useState<string>(SCHOOL_INFO.announcementText);
+  // On initialise à null pour ne rien afficher par défaut
+  const [texte, setTexte] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchBandeau() {
       try {
         if (!supabase) return;
 
-        // Requête nettoyée sans conflit entre limit() et maybeSingle()
         const { data, error } = await supabase
           .from('annonces')
           .select('contenu')
@@ -21,19 +20,27 @@ export function BandeauFlash() {
 
         if (error) {
           console.error("Erreur Supabase Bandeau :", error.message);
+          setTexte(null);
           return;
         }
 
+        // Si une annonce active existe, on met à jour le texte, sinon on repasse à null
         if (data?.contenu) {
           setTexte(data.contenu);
+        } else {
+          setTexte(null);
         }
       } catch (err) {
         console.error('Erreur inattendue Bandeau :', err);
+        setTexte(null);
       }
     }
 
     fetchBandeau();
   }, []);
+
+  // Si aucun texte actif n'est trouvé dans Supabase, le composant ne rend RIEN (disparition totale)
+  if (!texte) return null;
 
   return (
     <div className="bg-[#f59e0b] text-[#0a2540] py-2 px-4 overflow-hidden whitespace-nowrap shadow-inner border-b border-amber-600/20 print:hidden flex items-center">
