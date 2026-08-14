@@ -6,8 +6,9 @@ import { PrintSheet } from './components/PrintSheet';
 import { BulletinSearch } from './components/BulletinSearch';
 import { InscriptionModal } from './components/InscriptionModal';
 import { Activities } from './components/Activities';
-// 1️⃣ IMPORT DU COMPOSANT DYNAMIQUE SUPABASE
 import AnnonceModal from './components/AnnonceModal';
+// 1️⃣ IMPORT DU BANDEAU DYNAMIQUE SUPABASE
+import { BandeauFlash } from './components/BandeauFlash';
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -55,7 +56,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-[#1e293b] font-sans antialiased">
       
-      {/* 2️⃣ POP-UP DYNAMIQUE SUPABASE (Remplace l'ancienne pop-up statique) */}
+      {/* POP-UP DYNAMIQUE SUPABASE */}
       <AnnonceModal />
 
       {/* 1. IMPRESSION A4 (Isolée) */}
@@ -113,17 +114,8 @@ export default function App() {
         )}
       </header>
 
-      {/* 📢 BANDE DÉROULANTE D'INFORMATIONS (FLASH INFO) */}
-      <div className="bg-[#f59e0b] text-[#0a2540] py-2 px-4 overflow-hidden whitespace-nowrap shadow-inner border-b border-amber-600/20 print:hidden flex items-center">
-        <div className="flex items-center gap-2 bg-[#0a2540] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase shrink-0 z-10 shadow-sm mr-3">
-          <span className="material-symbols-outlined text-xs text-[#f59e0b] animate-pulse">campaign</span>
-          Flash Info
-        </div>
-        <div className="inline-block animate-marquee text-xs font-bold tracking-wide">
-          <span className="mx-4">{SCHOOL_INFO.announcementText}</span>
-          <span className="mx-4">{SCHOOL_INFO.announcementText}</span>
-        </div>
-      </div>
+      {/* 2️⃣ BANDE DÉROULANTE DYNAMIQUE SUPABASE */}
+      <BandeauFlash />
 
       {/* 3. HERO SECTION */}
       <section id="accueil" className="relative bg-[#0a2540] text-white overflow-hidden py-10 lg:py-14 px-4 lg:px-12 print:hidden">
@@ -276,7 +268,7 @@ export default function App() {
               </div>
             </div>
 
-            <div className="bg-[#ffffff] p-4 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-3">
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-3">
               <div className="w-9 h-9 bg-slate-100 rounded-xl flex items-center justify-center text-[#0a2540] shrink-0">
                 <span className="material-symbols-outlined text-lg">mail</span>
               </div>
