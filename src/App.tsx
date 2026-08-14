@@ -6,14 +6,13 @@ import { PrintSheet } from './components/PrintSheet';
 import { BulletinSearch } from './components/BulletinSearch';
 import { InscriptionModal } from './components/InscriptionModal';
 import { Activities } from './components/Activities';
+// 1️⃣ IMPORT DU COMPOSANT DYNAMIQUE SUPABASE
+import AnnonceModal from './components/AnnonceModal';
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [inscriptionModal, setInscriptionModal] = useState(false);
   const [referenceNum, setReferenceNum] = useState('');
-
-  // Gestion de la Pop-up d'information
-  const [showPopup, setShowPopup] = useState(SCHOOL_INFO.popup?.enabled ?? false);
 
   // Mode Admin
   const [isAdmin, setIsAdmin] = useState(false);
@@ -56,41 +55,8 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-[#1e293b] font-sans antialiased">
       
-      {/* 🪟 FENÊTRE POP-UP D'INFORMATION (S'affiche au chargement si activée) */}
-      {showPopup && SCHOOL_INFO.popup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm print:hidden">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative text-slate-800 space-y-5 animate-fadeIn">
-            <button
-              onClick={() => setShowPopup(false)}
-              className="absolute top-4 right-4 w-8 h-8 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full flex items-center justify-center transition-colors cursor-pointer"
-            >
-              ✕
-            </button>
-            <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-              <div className="w-12 h-12 bg-amber-100 text-[#f59e0b] rounded-2xl flex items-center justify-center shrink-0">
-                <span className="material-symbols-outlined text-2xl">campaign</span>
-              </div>
-              <div>
-                <span className="bg-[#0a2540] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-md uppercase">
-                  {SCHOOL_INFO.popup.badge}
-                </span>
-                <h3 className="font-extrabold text-base sm:text-lg text-[#0a2540] mt-1">
-                  {SCHOOL_INFO.popup.title}
-                </h3>
-              </div>
-            </div>
-            <div className="text-xs text-slate-600 leading-relaxed bg-slate-50 p-4 rounded-2xl border border-slate-100">
-              <p>{SCHOOL_INFO.popup.content}</p>
-            </div>
-            <button
-              onClick={() => setShowPopup(false)}
-              className="w-full py-3.5 bg-[#0a2540] hover:bg-[#061726] text-white font-bold text-xs rounded-xl shadow-lg transition-all cursor-pointer"
-            >
-              {SCHOOL_INFO.popup.buttonText}
-            </button>
-          </div>
-        </div>
-      )}
+      {/* 2️⃣ POP-UP DYNAMIQUE SUPABASE (Remplace l'ancienne pop-up statique) */}
+      <AnnonceModal />
 
       {/* 1. IMPRESSION A4 (Isolée) */}
       <PrintSheet 
@@ -310,7 +276,7 @@ export default function App() {
               </div>
             </div>
 
-            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-3">
+            <div className="bg-[#ffffff] p-4 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-3">
               <div className="w-9 h-9 bg-slate-100 rounded-xl flex items-center justify-center text-[#0a2540] shrink-0">
                 <span className="material-symbols-outlined text-lg">mail</span>
               </div>
