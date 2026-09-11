@@ -9,6 +9,8 @@ import { Activities } from './components/Activities';
 import AnnonceModal from './components/AnnonceModal';
 // 1️⃣ IMPORT DU BANDEAU DYNAMIQUE SUPABASE
 import { BandeauFlash } from './components/BandeauFlash';
+// 2️⃣ IMPORT DE LA SECTION DES CHIFFRES CLÉS
+import { Stats } from './components/Stats';
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -165,6 +167,11 @@ export default function App() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* 3️⃣ SECTION CHIFFRES CLÉS (STATS) */}
+      <section className="max-w-7xl mx-auto px-4 lg:px-10 print:hidden">
+        <Stats />
       </section>
 
       {/* 4. FORMATIONS */}
