@@ -104,8 +104,8 @@ export const BulletinSearch: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* 4 CARTES DES PORTAILS NUMÉRIQUES */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* 5 CARTES DES PORTAILS NUMÉRIQUES */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:shadow-md transition-shadow">
           <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-[#0a2540]">
             <span className="material-symbols-outlined text-xl">domain</span>
@@ -147,6 +147,17 @@ export const BulletinSearch: React.FC = () => {
           <p className="text-xs text-slate-500 leading-relaxed">Site officiel de la Direction Régionale Abidjan 3.</p>
           <a href={SCHOOL_INFO.drenaUrl} target="_blank" rel="noreferrer" className="text-xs font-bold text-[#047857] flex items-center gap-1 hover:underline">
             Accéder à la DRENA 3 →
+          </a>
+        </div>
+
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:shadow-md transition-shadow">
+          <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
+            <span className="material-symbols-outlined text-xl">school</span>
+          </div>
+          <h3 className="font-bold text-sm text-[#0a2540]">Site de la DPFC</h3>
+          <p className="text-xs text-slate-500 leading-relaxed">Direction de la Pédagogie et de la Formation Continue.</p>
+          <a href="https://dpfc-ci.net/" target="_blank" rel="noreferrer" className="text-xs font-bold text-blue-600 flex items-center gap-1 hover:underline">
+            Visiter le site →
           </a>
         </div>
       </div>
@@ -246,7 +257,7 @@ export const BulletinSearch: React.FC = () => {
             </form>
           </>
         ) : (
-          /* BULLETIN AFICHE UNE FOIS CONNECTÉ */
+          /* BULLETIN AFFICHE UNE FOIS CONNECTÉ */
           <div className="space-y-4">
             <div className="flex justify-between items-center border-b border-white/10 pb-4">
               <span className="bg-emerald-500 text-white text-[10px] font-extrabold px-3 py-1 rounded-full uppercase flex items-center gap-1">
