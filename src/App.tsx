@@ -11,6 +11,8 @@ import AnnonceModal from './components/AnnonceModal';
 import { BandeauFlash } from './components/BandeauFlash';
 // 2️⃣ IMPORT DE LA SECTION DES CHIFFRES CLÉS
 import { Stats } from './components/Stats';
+// 3️⃣ IMPORT DE VERCEL ANALYTICS
+import { Analytics } from '@vercel/analytics/react';
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -354,6 +356,9 @@ export default function App() {
           </button>
         </div>
       </footer>
+
+      {/* VERCEL ANALYTICS */}
+      <Analytics />
 
     </div>
   );
