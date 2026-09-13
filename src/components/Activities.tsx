@@ -22,7 +22,7 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
   const [newActivity, setNewActivity] = useState({
     title: '',
     category: 'pedagogie',
-    date_label: 'Août 2026',
+    date_label: 'Septembre 2026',
     description: '',
   });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -51,7 +51,7 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
   const handleAddActivity = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newActivity.title || !selectedFile) {
-      alert("Veuillez renseigner le titre et sélectionner une photo/document.");
+      alert("Veuillez renseigner le titre et sélectionner une photo ou un document PDF.");
       return;
     }
 
@@ -85,7 +85,7 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
       if (insertError) throw insertError;
 
       alert("Nouvelle publication enregistrée avec succès !");
-      setNewActivity({ title: '', category: 'pedagogie', date_label: 'Août 2026', description: '' });
+      setNewActivity({ title: '', category: 'pedagogie', date_label: 'Septembre 2026', description: '' });
       setSelectedFile(null);
       fetchActivities();
     } catch (err: any) {
@@ -107,6 +107,10 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
     }
   };
 
+  const isPdfFile = (url: string) => {
+    return url?.toLowerCase().endsWith('.pdf') || url?.includes('.pdf?');
+  };
+
   const filteredActivities = selectedCategory === 'tous' 
     ? activities 
     : activities.filter(a => a.category === selectedCategory);
@@ -126,10 +130,10 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
             )}
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a2540] mt-1">
-            Découverte des Activités de l'École
+            Découverte des Activités & Documents de l'École
           </h2>
           <p className="text-xs text-slate-500 mt-1">
-            Explorez les moments forts, calendriers pédagogiques, sorties et événements récents au Collège J.B. de La Salle 2.
+            Explorez les moments forts, arrêtés officiels, calendriers pédagogiques, sorties et événements au Collège J.B. de La Salle 2.
           </p>
         </div>
 
@@ -148,7 +152,7 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
           <div className="flex justify-between items-center border-b border-amber-200 pb-3">
             <h3 className="font-extrabold text-sm text-[#0a2540] flex items-center gap-2">
               <span className="material-symbols-outlined text-[#f59e0b]">add_a_photo</span>
-              Ajouter un élément (Photo, Calendrier, Avis)
+              Ajouter un élément (Photo, Calendrier, Arrêté PDF)
             </h3>
             <button onClick={() => setIsAdmin(false)} className="text-xs text-slate-500 font-bold hover:underline cursor-pointer">Déconnexion Admin</button>
           </div>
@@ -158,7 +162,7 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
               <label className="block font-bold text-slate-700 mb-1">Titre de l'élément *</label>
               <input 
                 type="text" 
-                placeholder="Ex: Calendrier Officiel du 1er Trimestre" 
+                placeholder="Ex: Arrêtés 2026-2027 régissant l'année scolaire" 
                 value={newActivity.title} 
                 onChange={e => setNewActivity(prev => ({ ...prev, title: e.target.value }))}
                 className="w-full p-2.5 bg-white border border-slate-200 rounded-xl outline-none" 
@@ -173,7 +177,7 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
                 onChange={e => setNewActivity(prev => ({ ...prev, category: e.target.value }))}
                 className="w-full p-2.5 bg-white border border-slate-200 rounded-xl outline-none font-bold text-[#0a2540]"
               >
-                <option value="pedagogie">📚 Pédagogie & Calendrier (Dates, Congés, Examens)</option>
+                <option value="pedagogie">📚 Pédagogie & Calendrier (Dates, Congés, Examens, Arrêtés)</option>
                 <option value="sorties">🚌 Sorties & Visites d'Entreprises</option>
                 <option value="fetes">🎉 Fêtes & Culture</option>
                 <option value="sports">🏆 Sports & Compétitions</option>
@@ -193,10 +197,10 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
             </div>
 
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Image / Affiche à importer *</label>
+              <label className="block font-bold text-slate-700 mb-1">Fichier (Image ou PDF) *</label>
               <input 
                 type="file" 
-                accept="image/*"
+                accept="image/*,.pdf,application/pdf"
                 onChange={e => setSelectedFile(e.target.files ? e.target.files[0] : null)}
                 className="w-full p-2 bg-white border border-slate-200 rounded-xl outline-none text-xs" 
                 required 
@@ -206,7 +210,7 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
             <div className="sm:col-span-2">
               <label className="block font-bold text-slate-700 mb-1">Description / Précisions</label>
               <textarea 
-                placeholder="Écrivez des précisions (ex: dates de début et de fin des congés de Toussaint...)" 
+                placeholder="Écrivez des précisions (ex: dates de début et de fin des congés, références ministérielles...)" 
                 value={newActivity.description} 
                 onChange={e => setNewActivity(prev => ({ ...prev, description: e.target.value }))}
                 className="w-full p-2.5 bg-white border border-slate-200 rounded-xl outline-none h-20"
@@ -237,71 +241,114 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
         </div>
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredActivities.map(act => (
-            <div 
-              key={act.id} 
-              className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all group flex flex-col justify-between relative"
-            >
-              {isAdmin && (
-                <button 
-                  onClick={() => handleDeleteActivity(act.id)}
-                  className="absolute top-3 right-3 z-20 bg-red-600 text-white p-1.5 rounded-full shadow-lg hover:bg-red-700 transition-colors cursor-pointer"
-                  title="Supprimer cet élément"
-                >
-                  <span className="material-symbols-outlined text-sm">delete</span>
-                </button>
-              )}
+          {filteredActivities.map(act => {
+            const isPdf = isPdfFile(act.image_url);
+            return (
+              <div 
+                key={act.id} 
+                className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all group flex flex-col justify-between relative"
+              >
+                {isAdmin && (
+                  <button 
+                    onClick={() => handleDeleteActivity(act.id)}
+                    className="absolute top-3 right-3 z-20 bg-red-600 text-white p-1.5 rounded-full shadow-lg hover:bg-red-700 transition-colors cursor-pointer"
+                    title="Supprimer cet élément"
+                  >
+                    <span className="material-symbols-outlined text-sm">delete</span>
+                  </button>
+                )}
 
-              <div>
-                <div className="relative h-48 overflow-hidden bg-slate-100">
-                  <img 
-                    src={act.image_url} 
-                    alt={act.title} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-                  />
-                  <span className="absolute top-3 left-3 bg-[#0a2540]/90 backdrop-blur-md text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase">
-                    {act.date_label}
-                  </span>
+                <div>
+                  <div className="relative h-48 overflow-hidden bg-slate-100 flex items-center justify-center">
+                    {isPdf ? (
+                      <div className="flex flex-col items-center justify-center p-4 text-center bg-red-50 w-full h-full">
+                        <span className="material-symbols-outlined text-5xl text-red-600 mb-1">picture_as_pdf</span>
+                        <span className="text-[10px] font-bold text-red-700 uppercase tracking-wider bg-red-100 px-2.5 py-0.5 rounded-full">
+                          Document Officiel PDF
+                        </span>
+                      </div>
+                    ) : (
+                      <img 
+                        src={act.image_url} 
+                        alt={act.title} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                      />
+                    )}
+                    <span className="absolute top-3 left-3 bg-[#0a2540]/90 backdrop-blur-md text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase">
+                      {act.date_label}
+                    </span>
+                  </div>
+                  <div className="p-5 space-y-2">
+                    <h3 className="font-bold text-base text-[#0a2540] leading-snug group-hover:text-[#047857] transition-colors">
+                      {act.title}
+                    </h3>
+                    {act.description && (
+                      <p className="text-xs text-slate-500 leading-relaxed">
+                        {act.description}
+                      </p>
+                    )}
+                  </div>
                 </div>
-                <div className="p-5 space-y-2">
-                  <h3 className="font-bold text-base text-[#0a2540] leading-snug group-hover:text-[#047857] transition-colors">
-                    {act.title}
-                  </h3>
-                  {act.description && (
-                    <p className="text-xs text-slate-500 leading-relaxed">
-                      {act.description}
-                    </p>
+
+                <div className="p-5 pt-0">
+                  {isPdf ? (
+                    <a 
+                      href={act.image_url} 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+                    >
+                      <span className="material-symbols-outlined text-base">download</span>
+                      <span>Ouvrir / Télécharger le PDF</span>
+                    </a>
+                  ) : (
+                    <button 
+                      onClick={() => setSelectedPhoto(act)}
+                      className="w-full py-2 bg-slate-100 hover:bg-[#0a2540] hover:text-white text-[#0a2540] text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <span className="material-symbols-outlined text-base">zoom_in</span>
+                      <span>Agrandir l'image</span>
+                    </button>
                   )}
                 </div>
               </div>
-
-              <div className="p-5 pt-0">
-                <button 
-                  onClick={() => setSelectedPhoto(act)}
-                  className="w-full py-2 bg-slate-100 hover:bg-[#0a2540] hover:text-white text-[#0a2540] text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <span className="material-symbols-outlined text-base">zoom_in</span>
-                  <span>Agrandir l'image</span>
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
-      {/* MODAL AGRANDISSEMENT */}
+      {/* MODAL AGRANDISSEMENT (POUR IMAGES & PREVIEW PDF) */}
       {selectedPhoto && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md print:hidden">
           <div className="bg-white rounded-3xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl space-y-4 relative overflow-hidden">
             <button 
               onClick={() => setSelectedPhoto(null)} 
-              className="absolute top-3 right-3 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black cursor-pointer"
+              className="absolute top-3 right-3 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black cursor-pointer z-10"
             >
               <span className="material-symbols-outlined text-xl">close</span>
             </button>
 
-            <div className="rounded-2xl overflow-hidden h-72 sm:h-96">
-              <img src={selectedPhoto.image_url} alt={selectedPhoto.title} className="w-full h-full object-cover" />
+            <div className="rounded-2xl overflow-hidden h-72 sm:h-96 bg-slate-100 flex items-center justify-center">
+              {isPdfFile(selectedPhoto.image_url) ? (
+                <div className="text-center p-6 space-y-4">
+                  <span className="material-symbols-outlined text-6xl text-red-600">picture_as_pdf</span>
+                  <div>
+                    <h4 className="font-bold text-sm text-[#0a2540]">{selectedPhoto.title}</h4>
+                    <p className="text-xs text-slate-500 mt-1">Ce document est un fichier PDF consultable directement.</p>
+                  </div>
+                  <a 
+                    href={selectedPhoto.image_url} 
+                    target="_blank" 
+                    rel="noreferrer" 
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl shadow-lg transition-all"
+                  >
+                    <span className="material-symbols-outlined text-base">open_in_new</span>
+                    Ouvrir le document PDF complet
+                  </a>
+                </div>
+              ) : (
+                <img src={selectedPhoto.image_url} alt={selectedPhoto.title} className="w-full h-full object-cover" />
+              )}
             </div>
 
             <div className="space-y-1">
