@@ -25,7 +25,8 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
     date_label: 'Septembre 2026',
     description: '',
   });
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  // Modification : on passe d'un fichier unique à un tableau de fichiers
+  const [selectedFiles, setSelectedFiles] = useState<File[] | null>(null);
 
   const fetchActivities = async () => {
     setLoadingActivities(true);
@@ -50,43 +51,53 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
 
   const handleAddActivity = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newActivity.title || !selectedFile) {
-      alert("Veuillez renseigner le titre et sélectionner une photo ou un document PDF.");
+    if (!newActivity.title || !selectedFiles || selectedFiles.length === 0) {
+      alert("Veuillez renseigner le titre et sélectionner au moins une photo ou un document PDF.");
       return;
     }
 
     setUploading(true);
     try {
-      const fileExt = selectedFile.name.split('.').pop();
-      const fileName = `${Date.now()}.${fileExt}`;
+      // Boucle sur chaque fichier sélectionné pour un import groupé
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        const fileExt = file.name.split('.').pop();
+        // Si on importe plusieurs fichiers, on ajoute un suffixe numérique pour éviter les doublons de noms
+        const fileName = `${Date.now()}_${i}.${fileExt}`;
 
-      const { error: uploadError } = await supabase.storage
-        .from('activites-photos')
-        .upload(fileName, selectedFile);
+        const { error: uploadError } = await supabase.storage
+          .from('activites-photos')
+          .upload(fileName, file);
 
-      if (uploadError) throw uploadError;
+        if (uploadError) throw uploadError;
 
-      const { data: publicUrlData } = supabase.storage
-        .from('activites-photos')
-        .getPublicUrl(fileName);
+        const { data: publicUrlData } = supabase.storage
+          .from('activites-photos')
+          .getPublicUrl(fileName);
 
-      const imageUrl = publicUrlData.publicUrl;
+        const imageUrl = publicUrlData.publicUrl;
 
-      const { error: insertError } = await supabase.from('activites').insert([
-        {
-          title: newActivity.title,
-          category: newActivity.category,
-          date_label: newActivity.date_label,
-          description: newActivity.description,
-          image_url: imageUrl,
-        }
-      ]);
+        // Si plusieurs photos sont sélectionnées, on peut numéroter le titre (ex: Titre (1/3)) pour garder de l'ordre
+        const itemTitle = selectedFiles.length > 1 
+          ? `${newActivity.title} (${i + 1}/${selectedFiles.length})` 
+          : newActivity.title;
 
-      if (insertError) throw insertError;
+        const { error: insertError } = await supabase.from('activites').insert([
+          {
+            title: itemTitle,
+            category: newActivity.category,
+            date_label: newActivity.date_label,
+            description: newActivity.description,
+            image_url: imageUrl,
+          }
+        ]);
 
-      alert("Nouvelle publication enregistrée avec succès !");
+        if (insertError) throw insertError;
+      }
+
+      alert(`${selectedFiles.length} fichier(s) publié(s) avec succès !`);
       setNewActivity({ title: '', category: 'pedagogie', date_label: 'Septembre 2026', description: '' });
-      setSelectedFile(null);
+      setSelectedFiles(null);
       fetchActivities();
     } catch (err: any) {
       alert("Erreur lors de l'ajout: " + err.message);
@@ -142,7 +153,7 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
           <button onClick={() => setSelectedCategory('pedagogie')} className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'pedagogie' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Pédagogie & Calendrier</button>
           <button onClick={() => setSelectedCategory('sorties')} className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'sorties' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Sorties & Visites</button>
           <button onClick={() => setSelectedCategory('fetes')} className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'fetes' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Fêtes & Culture</button>
-          <button onClick={() => setSelectedCategory('sports')} className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'sports' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Sports</button>
+          <button onClick={() => setSelectedCategory('sports')} className=`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'sports' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Sports</button>
         </div>
       </div>
 
@@ -152,17 +163,17 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
           <div className="flex justify-between items-center border-b border-amber-200 pb-3">
             <h3 className="font-extrabold text-sm text-[#0a2540] flex items-center gap-2">
               <span className="material-symbols-outlined text-[#f59e0b]">add_a_photo</span>
-              Ajouter un élément (Photo, Calendrier, Arrêté PDF)
+              Ajout Multiple (Sélectionnez une ou plusieurs photos en même temps)
             </h3>
             <button onClick={() => setIsAdmin(false)} className="text-xs text-slate-500 font-bold hover:underline cursor-pointer">Déconnexion Admin</button>
           </div>
 
           <form onSubmit={handleAddActivity} className="grid sm:grid-cols-2 gap-4 text-xs">
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Titre de l'élément *</label>
+              <label className="block font-bold text-slate-700 mb-1">Titre de l'activité / Événement *</label>
               <input 
                 type="text" 
-                placeholder="Ex: Arrêtés 2026-2027 régissant l'année scolaire" 
+                placeholder="Ex: Sortie pédagogique au port d'Abidjan" 
                 value={newActivity.title} 
                 onChange={e => setNewActivity(prev => ({ ...prev, title: e.target.value }))}
                 className="w-full p-2.5 bg-white border border-slate-200 rounded-xl outline-none" 
@@ -188,7 +199,7 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
               <label className="block font-bold text-slate-700 mb-1">Date (Mois / Année) *</label>
               <input 
                 type="text" 
-                placeholder="Ex: Année 2026-2027 ou Septembre 2026" 
+                placeholder="Ex: Septembre 2026" 
                 value={newActivity.date_label} 
                 onChange={e => setNewActivity(prev => ({ ...prev, date_label: e.target.value }))}
                 className="w-full p-2.5 bg-white border border-slate-200 rounded-xl outline-none" 
@@ -197,20 +208,22 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
             </div>
 
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Fichier (Image ou PDF) *</label>
+              <label className="block font-bold text-slate-700 mb-1">Fichiers (Multi-sélection autorisée) *</label>
               <input 
                 type="file" 
+                multiple
                 accept="image/*,.pdf,application/pdf"
-                onChange={e => setSelectedFile(e.target.files ? e.target.files[0] : null)}
-                className="w-full p-2 bg-white border border-slate-200 rounded-xl outline-none text-xs" 
+                onChange={e => setSelectedFiles(e.target.files ? Array.from(e.target.files) : null)}
+                className="w-full p-2 bg-white border border-slate-200 rounded-xl outline-none text-xs file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#0a2540] file:text-white hover:file:bg-[#061726] cursor-pointer" 
                 required 
               />
+              <span className="text-[10px] text-slate-500 mt-1 block">Astuce : Maintenez la touche Ctrl (ou Cmd sur Mac) pour sélectionner plusieurs photos en même temps.</span>
             </div>
 
             <div className="sm:col-span-2">
               <label className="block font-bold text-slate-700 mb-1">Description / Précisions</label>
               <textarea 
-                placeholder="Écrivez des précisions (ex: dates de début et de fin des congés, références ministérielles...)" 
+                placeholder="Écrivez des précisions sur cet événement..." 
                 value={newActivity.description} 
                 onChange={e => setNewActivity(prev => ({ ...prev, description: e.target.value }))}
                 className="w-full p-2.5 bg-white border border-slate-200 rounded-xl outline-none h-20"
@@ -220,10 +233,10 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
             <button 
               type="submit" 
               disabled={uploading} 
-              className="sm:col-span-2 py-3 bg-[#047857] hover:bg-[#065f46] text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
+              className="sm:col-span-2 py-3 bg-[#047857] hover:bg-[#065f46] text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 transition-all disabled:opacity-50 cursor-pointer shadow-md"
             >
               {uploading ? <span className="material-symbols-outlined animate-spin">sync</span> : <span className="material-symbols-outlined">publish</span>}
-              {uploading ? 'Téléversement en cours...' : 'Publier immédiatement sur le site'}
+              {uploading ? 'Téléversement groupé en cours...' : 'Publier toutes les photos sélectionnées'}
             </button>
           </form>
         </div>
@@ -259,7 +272,6 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
                 )}
 
                 <div>
-                  {/* Hauteur réduite à h-40 et aperçu PDF modernisé avec transparence/effet */}
                   <div className="relative h-40 overflow-hidden bg-slate-100 flex items-center justify-center">
                     {isPdf ? (
                       <div className="absolute inset-0 bg-gradient-to-br from-red-50 to-red-100/60 backdrop-blur-[1px] flex flex-col items-center justify-center p-4 text-center border-b border-red-100">
