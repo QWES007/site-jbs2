@@ -25,7 +25,6 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
     date_label: 'Septembre 2026',
     description: '',
   });
-  // Modification : on passe d'un fichier unique à un tableau de fichiers
   const [selectedFiles, setSelectedFiles] = useState<File[] | null>(null);
 
   const fetchActivities = async () => {
@@ -58,11 +57,9 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
 
     setUploading(true);
     try {
-      // Boucle sur chaque fichier sélectionné pour un import groupé
       for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i];
         const fileExt = file.name.split('.').pop();
-        // Si on importe plusieurs fichiers, on ajoute un suffixe numérique pour éviter les doublons de noms
         const fileName = `${Date.now()}_${i}.${fileExt}`;
 
         const { error: uploadError } = await supabase.storage
@@ -77,7 +74,6 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
 
         const imageUrl = publicUrlData.publicUrl;
 
-        // Si plusieurs photos sont sélectionnées, on peut numéroter le titre (ex: Titre (1/3)) pour garder de l'ordre
         const itemTitle = selectedFiles.length > 1 
           ? `${newActivity.title} (${i + 1}/${selectedFiles.length})` 
           : newActivity.title;
@@ -153,7 +149,7 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
           <button onClick={() => setSelectedCategory('pedagogie')} className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'pedagogie' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Pédagogie & Calendrier</button>
           <button onClick={() => setSelectedCategory('sorties')} className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'sorties' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Sorties & Visites</button>
           <button onClick={() => setSelectedCategory('fetes')} className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'fetes' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Fêtes & Culture</button>
-          <button onClick={() => setSelectedCategory('sports')} className=`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'sports' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Sports</button>
+          <button onClick={() => setSelectedCategory('sports')} className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${selectedCategory === 'sports' ? 'bg-[#0a2540] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>Sports</button>
         </div>
       </div>
 
