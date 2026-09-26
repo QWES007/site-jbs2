@@ -259,11 +259,12 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
                 )}
 
                 <div>
-                  <div className="relative h-48 overflow-hidden bg-slate-100 flex items-center justify-center">
+                  {/* Hauteur réduite à h-40 et aperçu PDF modernisé avec transparence/effet */}
+                  <div className="relative h-40 overflow-hidden bg-slate-100 flex items-center justify-center">
                     {isPdf ? (
-                      <div className="flex flex-col items-center justify-center p-4 text-center bg-red-50 w-full h-full">
-                        <span className="material-symbols-outlined text-5xl text-red-600 mb-1">picture_as_pdf</span>
-                        <span className="text-[10px] font-bold text-red-700 uppercase tracking-wider bg-red-100 px-2.5 py-0.5 rounded-full">
+                      <div className="absolute inset-0 bg-gradient-to-br from-red-50 to-red-100/60 backdrop-blur-[1px] flex flex-col items-center justify-center p-4 text-center border-b border-red-100">
+                        <span className="material-symbols-outlined text-4xl text-red-600 mb-1 drop-shadow-sm">picture_as_pdf</span>
+                        <span className="text-[9px] font-extrabold text-red-700 uppercase tracking-wider bg-white/90 px-2.5 py-0.5 rounded-full shadow-sm">
                           Document Officiel PDF
                         </span>
                       </div>
@@ -274,7 +275,7 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
                       />
                     )}
-                    <span className="absolute top-3 left-3 bg-[#0a2540]/90 backdrop-blur-md text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase">
+                    <span className="absolute top-2.5 left-2.5 z-20 bg-[#0a2540]/90 backdrop-blur-md text-white text-[9px] font-extrabold px-2 py-1 rounded uppercase shadow">
                       {act.date_label}
                     </span>
                   </div>
@@ -317,7 +318,7 @@ export const Activities: React.FC<ActivitiesProps> = ({ isAdmin, setIsAdmin }) =
         </div>
       )}
 
-      {/* MODAL AGRANDISSEMENT (POUR IMAGES & PREVIEW PDF) */}
+      {/* MODAL AGRANDISSEMENT */}
       {selectedPhoto && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md print:hidden">
           <div className="bg-white rounded-3xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl space-y-4 relative overflow-hidden">
