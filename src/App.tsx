@@ -180,12 +180,12 @@ export default function App() {
       <section id="formations" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8 print:hidden">
         <div className="grid lg:grid-cols-2 gap-6">
           
-          {/* CARTE ENSEIGNEMENT GÉNÉRAL CORRIGÉE */}
+          {/* CARTE ENSEIGNEMENT GÉNÉRAL */}
           <div className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between group">
             <div>
               <div className="relative h-60 overflow-hidden bg-slate-900">
                 <img 
-                  src={MEDIA_CONFIG.generalImage} 
+                  src="/enseignement-general.jpeg" 
                   alt="Enseignement Général" 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
                 />
