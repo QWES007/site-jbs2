@@ -118,7 +118,7 @@ export default function App() {
         )}
       </header>
 
-      {/* 2️⃣ BANDE DÉROULANTE DYNAMIQUE SUPABASE */}
+      {/* BANDE DÉROULANTE DYNAMIQUE SUPABASE */}
       <BandeauFlash />
 
       {/* 3. HERO SECTION */}
@@ -171,7 +171,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 3️⃣ SECTION CHIFFRES CLÉS (STATS) */}
+      {/* SECTION CHIFFRES CLÉS (STATS) */}
       <section className="max-w-7xl mx-auto px-4 lg:px-10 print:hidden">
         <Stats />
       </section>
@@ -179,18 +179,25 @@ export default function App() {
       {/* 4. FORMATIONS */}
       <section id="formations" className="max-w-7xl mx-auto px-4 lg:px-10 py-12 space-y-8 print:hidden">
         <div className="grid lg:grid-cols-2 gap-6">
-          <div className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between">
+          
+          {/* CARTE ENSEIGNEMENT GÉNÉRAL CORRIGÉE */}
+          <div className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between group">
             <div>
-              <div className="relative h-56 overflow-hidden">
-                <img src={MEDIA_CONFIG.generalImage} alt="Enseignement Général" className="w-full h-full object-cover" />
-                <span className="absolute top-3 left-3 bg-[#f59e0b] text-[#0a2540] text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">
+              <div className="relative h-60 overflow-hidden bg-slate-900">
+                <img 
+                  src={MEDIA_CONFIG.generalImage} 
+                  alt="Enseignement Général" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                <span className="absolute top-3 left-3 bg-[#f59e0b] text-[#0a2540] text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider shadow">
                   PREMIER & SECOND CYCLES
                 </span>
-                <div className="absolute bottom-3 left-3 text-white font-extrabold text-xl drop-shadow-md">
-                  Enseignement Général
+                <div className="absolute bottom-3 left-4 right-4 text-white">
+                  <h3 className="font-extrabold text-xl tracking-tight drop-shadow">Enseignement Général</h3>
                 </div>
               </div>
-              <div className="p-5 space-y-3">
+              <div className="p-5 space-y-2">
                 <p className="text-xs text-slate-600 leading-relaxed">
                   De la 6ème à la Terminale. Un encadrement pédagogique d'élite pour la réussite aux examens nationaux.
                 </p>
@@ -207,18 +214,24 @@ export default function App() {
             </div>
           </div>
 
-          <div className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between">
+          {/* CARTE TECHNIQUE TERTIAIRE */}
+          <div className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between group">
             <div>
-              <div className="relative h-56 overflow-hidden">
-                <img src={MEDIA_CONFIG.techniqueImage} alt="Technique Tertiaire" className="w-full h-full object-cover" />
-                <span className="absolute top-3 left-3 bg-[#047857] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">
+              <div className="relative h-60 overflow-hidden bg-slate-900">
+                <img 
+                  src={MEDIA_CONFIG.techniqueImage} 
+                  alt="Technique Tertiaire" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                <span className="absolute top-3 left-3 bg-[#047857] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider shadow">
                   PÔLE TERTIAIRE SPÉCIALISÉ
                 </span>
-                <div className="absolute bottom-3 left-3 text-white font-extrabold text-xl drop-shadow-md">
-                  Technique Tertiaire
+                <div className="absolute bottom-3 left-4 right-4 text-white">
+                  <h3 className="font-extrabold text-xl tracking-tight drop-shadow">Technique Tertiaire</h3>
                 </div>
               </div>
-              <div className="p-5 space-y-3">
+              <div className="p-5 space-y-2">
                 <p className="text-xs text-slate-600 leading-relaxed">
                   Formations professionnalisantes en G1, G2, Série B / AB.
                 </p>
@@ -234,6 +247,7 @@ export default function App() {
               </button>
             </div>
           </div>
+
         </div>
       </section>
 
@@ -363,4 +377,3 @@ export default function App() {
     </div>
   );
 }
-
